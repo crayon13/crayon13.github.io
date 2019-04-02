@@ -16,10 +16,10 @@ minimal_mistakes_skin    : "default" # "air", "aqua", "contrast", "dark", "dirt"
 
 # Site Settings
 locale                   : "en-US"
-title                    : "Site Title"
+title                    : "생각 많은 겸군"
 title_separator          : "-"
-name                     : "Your Name"
-description              : "An amazing website."
+name                     : "김성겸"
+description              : "겸군의 생각이 가득 "
 url                      : "crayon13.github.io"# the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
