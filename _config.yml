@@ -19,7 +19,7 @@ locale                   : "en-US"
 title                    : "생각 많은 겸군"
 title_separator          : "-"
 name                     : "김성겸"
-description              : "겸군의 생각이 가득 "
+description              : "겸군의 생각이 가득"
 url                      : "crayon13.github.io"# the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
@@ -106,24 +106,24 @@ analytics:
 
 # Site Author
 author:
-  name             : "Your Name"
+  name             : "김성겸"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "I am an amazing person."
+  bio              : "겸군의 생각이 가득 가득"
   location         : "Somewhere"
-  email            :
+  email            : skkim13@gmail.com
   links:
     - label: "Email"
       icon: "fas fa-fw fa-envelope-square"
-      # url: mailto:your.name@email.com
+      # url: mailto:skkim13@gmail.com
     - label: "Website"
       icon: "fas fa-fw fa-link"
-      # url: "https://your-website.com"
+      # url: "https://crayon13.githup.io"
     - label: "Twitter"
       icon: "fab fa-fw fa-twitter-square"
       # url: "https://twitter.com/"
-    - label: "Facebook"
+   - label: "Facebook"
       icon: "fab fa-fw fa-facebook-square"
-      # url: "https://facebook.com/"
+      # url: "https://www.facebook.com/people/김성겸/100001673202910"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
       # url: "https://github.com/"
