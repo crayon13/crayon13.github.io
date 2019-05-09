@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Hello Crayon13!"
-categories: 이야기
+categories: etc
 ---
 처음으로 github에 블로그 포스팅을 올립니다.
 [reference] 을 참고로 했습니다!!
