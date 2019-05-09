@@ -1,0 +1,736 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>생각 많은 겸군</title>
+    <description>겸군의 생각이 가득</description>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Fri, 10 May 2019 03:29:34 +0900</pubDate>
+    <lastBuildDate>Fri, 10 May 2019 03:29:34 +0900</lastBuildDate>
+    <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>읽기좋은 코드가 좋은 코드다</title>
+        <description>&lt;h2 id=&quot;도입&quot;&gt;도입&lt;/h2&gt;
+&lt;h3 id=&quot;1-코드는-이해하기-쉬워야-한다&quot;&gt;1. 코드는 이해하기 쉬워야 한다.&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;코드는 이해하기 쉬어야 한다.&lt;/li&gt;
+  &lt;li&gt;코드는 다른 사람이 그것을 이해하는데 들이는 시간을 최소화 하는 방식으로 작성되어야 한다.
+    &lt;ul&gt;
+      &lt;li&gt;미래의 내가 다른 사람이 될 수도 있다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;표면적-수준에서의-개선&quot;&gt;표면적 수준에서의 개선&lt;/h2&gt;
+&lt;h3 id=&quot;2-이름에-정보-담기&quot;&gt;2. 이름에 정보 담기&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;이름에 정보를 담아내라.
+    &lt;ul&gt;
+      &lt;li&gt;특정한 단어 고르기
+        &lt;ul&gt;
+          &lt;li&gt;매우 구체적인 단어를 선택하여 &lt;strong&gt;무의미한&lt;/strong&gt; 단어를 피하는 것이다.
+            &lt;ul&gt;
+              &lt;li&gt;&lt;strong&gt;get*&lt;/strong&gt; : 지나치게 보편 적이며, 단순히 가져오는 기능으로 유추될 수 있다.&lt;/li&gt;
+              &lt;li&gt;&lt;strong&gt;size&lt;/strong&gt; : Height, NumNodes, MemoryBytes 등 구체적인 이름으로 변경 될 수 있다.&lt;/li&gt;
+              &lt;li&gt;&lt;strong&gt;Stop()&lt;/strong&gt; : 만약 되돌릴 수 없는 최종 동작이라면 &lt;strong&gt;Kill&lt;/strong&gt;, Resume()을 호출하여 다시 돌이킬 수 있는 동작이라면 Rause() 가 더 좋을 것이다.&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;재치있는 이름보다 명확하고 간결한 이름이 더 좋다.
+    &lt;ul&gt;
+      &lt;li&gt;tmp나 retVal, foo 같은 보편적인 이름은 피한다.
+        &lt;ul&gt;
+          &lt;li&gt;tmp, it, retVal 같은 보편적인 이름을 사용하려면, 꼭 그렇게 해야 하는 이유가 있어야 한다.&lt;/li&gt;
+          &lt;li&gt;tmp를 임시 저장 변수로 사용하는데는 이슈가 없다만. 로직의 흐름에서 사용되어서는 안된다.
+            &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;c1&quot;&gt;// 임시 저장 변수&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;left&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;tmp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tmp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;c1&quot;&gt;// 로직 변수&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tmp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;tmp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot; &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getPhoneNumber&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;tmp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot; &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getEmail&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;template&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;userInfo&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tmp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;            &lt;/div&gt;
+          &lt;/li&gt;
+          &lt;li&gt;루프 반복자
+            &lt;ul&gt;
+              &lt;li&gt;i, j, k는 지양하자.&lt;/li&gt;
+              &lt;li&gt;userIndex, 이게 길면 ui 같은 형태로
+                &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;c1&quot;&gt;// ui 와 gi로 index 구분이 명확해 졌다.&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// 실제로 for 선언부에서 배열을 index로 접근하게 개발하지는 얺겠지만..&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;users&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getUsers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ui&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ui&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;users&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ui&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gi&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gi&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;users&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ui&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getGroups&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;users&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ui&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getNumber&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;equals!!!&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;                &lt;/div&gt;
+              &lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;추상적인 이름보다 구체적인 이름을 선호하라.
+    &lt;ul&gt;
+      &lt;li&gt;DISALLOW_EVILS_CONSTRUCTORS -&amp;gt; DISALLOW_COPY_AND_ASSIGN&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;추가적인 정보를 이름에 추가하기.
+    &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;c1&quot;&gt;// bad&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// Exsample : &quot;af84ef845cd8&quot;&lt;/span&gt;
+
+  &lt;span class=&quot;c1&quot;&gt;// good&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hexId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;ul&gt;
+      &lt;li&gt;단위를 포함하는 값들
+        &lt;ul&gt;
+          &lt;li&gt;변수가 시간의 양이나 바이트 수와 같은 측정치를 담고 있다면, 변수에 단위를 포함시키자.
+            &lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// bad&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;start&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getTime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;....&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;elapsed&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getTime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// good : 분인지, 초인지, 밀리초인지 고민할 필요가 없다.&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;startMilliSecond&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getTime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;....&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;elapsedMilliSecond&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getTime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;            &lt;/div&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;다른 중요한 속성 포함하기
+        &lt;ul&gt;
+          &lt;li&gt;암호화 되지 않은 패스워드 : password -&amp;gt; plainTextPassword&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;이름은 얼마나 길어야 하는가?
+    &lt;ul&gt;
+      &lt;li&gt;너무 긴 이름은 오히려 독이다.
+        &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newNavigationControllerWrappingViewControllerForDataSource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;......&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+      &lt;/li&gt;
+      &lt;li&gt;좁은 범위에서는 짧은 이름이 괜찮다.
+        &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// 좁은 범위에서는..&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;debug&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;lookUpNamesNumbers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+        &lt;ul&gt;
+          &lt;li&gt;클래스 멤버 번수 혹은 전역 변수일 경우는 안된다!! -&amp;gt; 변수 scope와 중요도의 문제.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;긴 이름 입력하기 - 더 이상 문제가 되지 않는다.
+        &lt;ul&gt;
+          &lt;li&gt;IDE에서 단어 완성기능 사용하기 : 처음 몇글자 입력 후 단축 키 입력, 맞는 단어가 나올 때까지 반복한다.
+            &lt;ul&gt;
+              &lt;li&gt;IntellJ IDEA : alt + /&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;약어와 축약형
+        &lt;ul&gt;
+          &lt;li&gt;상식적으로 타인이 이해 가능한 수준의 약어와 축약은 사용 가능
+            &lt;ul&gt;
+              &lt;li&gt;eval, doc, str….&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;불필요한 단어 제거하기
+        &lt;ul&gt;
+          &lt;li&gt;convertToString() -&amp;gt; toString()&lt;/li&gt;
+          &lt;li&gt;doServeLoop() -&amp;gt; serveLoop()&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;이름과 포맷팅으로 의미를 전달하라.
+    &lt;ul&gt;
+      &lt;li&gt;프로젝트나 언어마다 포맷팅 관습이 다르다.
+        &lt;ul&gt;
+          &lt;li&gt;java
+            &lt;ul&gt;
+              &lt;li&gt;class : pascalCase&lt;/li&gt;
+              &lt;li&gt;variable, method : camelCase&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li&gt;javascript
+            &lt;ul&gt;
+              &lt;li&gt;더글라스 크락포드는 “자바스크립트 핵심 가이드” 에서 생성자 함수는 pascalCase, 일반 함수는 camelCase을 사용
+                &lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;datePicker&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;DatePicker&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 생성자 함수&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;pageheight&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;calculatePageHeight&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 일반 함수&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;                &lt;/div&gt;
+              &lt;/li&gt;
+              &lt;li&gt;jQuery 객체는 $* 형태의 관습을 띠른다
+                &lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;$headElement&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;head&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;pageHeight&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;250&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;                &lt;/div&gt;
+              &lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;3-오해할-수-없는-이름들&quot;&gt;3. 오해할 수 없는 이름들&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;본인이 지은 이름을 “다른 사람들이 다른 의미로 해석할 수 있을까?”라는 질문을 던져보며 철저하게 확인해야 한다.&lt;/li&gt;
+  &lt;li&gt;미래의 내가 다른 사람이 될 수도 있다.&lt;/li&gt;
+  &lt;li&gt;배경지식이 없는 다른 사람이 될 수도 있다.
+    &lt;ul&gt;
+      &lt;li&gt;filter() : 통상적으로 해당되는 대상을 기준으로 한다.
+        &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;results = Database.allObjects.filter(&quot;year &amp;lt;= 2011&quot;);
+// year &amp;lt;= 2011 : true 인 대상을 가져온다.
+
+results = Database.allObjects.exclude(&quot;year &amp;lt;= 2011&quot;);
+// year &amp;lt;= 2011 : false 인 대상을 가져온다. -&amp;gt; true 인 대상을 제외한다.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+        &lt;ul&gt;
+          &lt;li&gt;긍정(true) 조건을 기준으로 하는 것이 흐름을 이해하는데 좋다.&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;clip() : 앞 기준으로 잘라내야 할지, 뒤 기준으로 잘라내야 할지..
+        &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// bad&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;clip&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{};&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// good&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;truncate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;maxBytes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{};&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+      &lt;/li&gt;
+      &lt;li&gt;경계값
+        &lt;ul&gt;
+          &lt;li&gt;경계값(처음과 마지막)에 포함 됨
+            &lt;ul&gt;
+              &lt;li&gt;min / max : 명확한 경계값일 경우&lt;/li&gt;
+              &lt;li&gt;first / last : 경계값이 불 분명 할 경우???&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li&gt;처음은 포함되고 마지막은 포함되지 않을 경우
+            &lt;ul&gt;
+              &lt;li&gt;begin / end : end는 종료 범위에 포함되지 않는다.
+                &lt;ul&gt;
+                  &lt;li&gt;endDate = 2019/05/01 00:00:00 일 경우 실제 유효한 last / max 값은 2019/04/30 23:59:59.999 이다.&lt;/li&gt;
+                  &lt;li&gt;11번가의 전시에서는 endDate를 경계값 포함으로 사용한다….&lt;/li&gt;
+                &lt;/ul&gt;
+              &lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;불리언 변수에 이름 붙이기
+        &lt;ul&gt;
+          &lt;li&gt;true와 false가 의미하는 것이 명확하게
+            &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;readPassword&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 패스워드를 읽을 필요가 있다는 것인지&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 패스워드가 이미 읽혔다는 것인지&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;needPassword&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;isAuthenticated&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;            &lt;/div&gt;
+          &lt;/li&gt;
+          &lt;li&gt;부정은 피해라
+            &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// bad&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;disableSsl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// good&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;useSsl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;            &lt;/div&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;사용자의 기대에 부응하기
+        &lt;ul&gt;
+          &lt;li&gt;관행적으로, 일반적인 의미를 왜곡시키지 않는다.&lt;/li&gt;
+          &lt;li&gt;&lt;strong&gt;get*&lt;/strong&gt; : 프로그래머들은 대개 get으로 시작되는 메서드는 &lt;em&gt;‘가벼운 접근자’&lt;/em&gt; 로, 단순히 내부 멤버를 반환한다고 관행적으로 생각한다.
+            &lt;ul&gt;
+              &lt;li&gt;가벼운 연산까지는 가능하다.&lt;/li&gt;
+              &lt;li&gt;복잡한 연산을 수행한다면. &lt;strong&gt;compute&lt;em&gt;__ / __calculate&lt;/em&gt;&lt;/strong&gt; 등을 사용하는 것이 좋다.&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+          &lt;li&gt;&lt;strong&gt;size()&lt;/strong&gt;, &lt;strong&gt;length()&lt;/strong&gt; : 단순 크기와 갯수를 구하는, O(1) 메서드로 기대한다.
+            &lt;ul&gt;
+              &lt;li&gt;내부적으로 복잡한 계산을 수행한다면 &lt;strong&gt;countSize&lt;/strong&gt;, &lt;strong&gt;countElement&lt;/strong&gt; 등으로 대체한다.&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;4-미학&quot;&gt;4. 미학&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;좋은 소스 코드는 &lt;em&gt;‘눈을 편하게’&lt;/em&gt; 해야한다.
+    &lt;ul&gt;
+      &lt;li&gt;코드를 읽는 사람이 이미 친숙한, 일관성 있는 레이아웃을 사용하라.&lt;/li&gt;
+      &lt;li&gt;비슷한 코드는 서로 비슷해 보이도록 만들어라.&lt;/li&gt;
+      &lt;li&gt;서로 연관된 코드는 하나의 블럭으로 묶어라.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;일관성과 간결성을 위해 줄 바꿈을 재정렬하기&lt;/li&gt;
+  &lt;li&gt;메서드를 활용하여 불규칙성을 정리하라.
+    &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// bad&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;usersMap&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getUsersMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;assertTrue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;usersMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;crayon1&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;usersMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;crayon1&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;assertTrue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;usersMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;crayon2&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;usersMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;crayon2&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;assertTrue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;usersMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;crayon3&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;usersMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;crayon3&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// good&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;usersMap&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getUsersMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;UsersMapValidator&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;usersMapValidator&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;UsersMapValidator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;usersMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;assertTrue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;usersMapValidator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;eqlausUserNumber&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;crayon1&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;assertTrue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;usersMapValidator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;eqlausUserNumber&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;crayon2&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;assertTrue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;usersMapValidator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;eqlausUserNumber&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;crayon3&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;도움이 된다면 코드의 열을 맞춰라.
+    &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// case 1&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;crayon13&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;김성겸&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gender&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;male&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+  
+&lt;span class=&quot;c1&quot;&gt;// case 2&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;         &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;crayon13&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;       &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;김성겸&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gender&lt;/span&gt;     &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;male&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;ul&gt;
+      &lt;li&gt;어떤 것이 좋을지는 함꼐 일하는 사람들과 합의를 해야 할듯…&lt;/li&gt;
+      &lt;li&gt;개인적으로 위 방식을 선호함.
+        &lt;ul&gt;
+          &lt;li&gt;기준 들여쓰기 보다 긴 변수가 추가 될 경우, 기존 들여쓰기를 모두 수정해야 해서…&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;의미 있는 순서를 선택하고 일관성 있게 사용하라.
+    &lt;ul&gt;
+      &lt;li&gt;html 폼에 있는 input 필드 순서대로 나열하라.&lt;/li&gt;
+      &lt;li&gt;‘가장 중요한 것’에서 시작해서 ‘가장 덜 중요한 것’까지 순서대로 나열하라.&lt;/li&gt;
+      &lt;li&gt;알파벳 순서대로 나열하라.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;선언문을 블럭으로 구성하라.
+    &lt;ul&gt;
+      &lt;li&gt;논리적 영역에 따라 그룹핑 해라.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;코드를 ‘문단’으로 쪼개라.
+    &lt;ul&gt;
+      &lt;li&gt;비슷한 생각을 하나로 묶어서, 성격이 다른 생각과 구분한다.&lt;/li&gt;
+      &lt;li&gt;문단은 ‘시각적 디딤돌’역할을 수행한다. 문단이 없으면 페이지 안에서 읽던 부분을 놓치기 쉽다.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;일관성 있는 스타일은 ‘올바른’ 스타일보다 더 중요하다.&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;5-주석에-담아야-하는-대상&quot;&gt;5. 주석에 담아야 하는 대상&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;주석의 목적은 코드를 읽는 사람이 코드를 작성한 사람만큼 코드를 잘 이해하게 돕는데 있다.&lt;/li&gt;
+  &lt;li&gt;코드에서 빠르게 유추할 수 있는 내용은 주석으로 달지 말라.
+    &lt;ul&gt;
+      &lt;li&gt;설명 자체를 위한 설명을 달지 말라.&lt;/li&gt;
+      &lt;li&gt;나쁜 이름에 주석을 달지 말라. 대신 이름을 고쳐라.
+        &lt;ul&gt;
+          &lt;li&gt;cleanReplay -&amp;gt; enforceLimitsFromRequest : clean의 구체적인 설명 주석 보다는&lt;/li&gt;
+          &lt;li&gt;deleteRegistry -&amp;gt; releaseRegistry : 실제 registry를 삭제하지 않는다는 주석보다는&lt;/li&gt;
+          &lt;li&gt;
+            &lt;hr /&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://www.gstatic.com/webp/gallery/5.jpg&quot; alt=&quot;대체 택스트&quot; title=&quot;링크 설명(title)을 작성하세요.&quot; /&gt;
+&lt;a href=&quot;https://google.com&quot;&gt;GOOGLE&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sat, 04 May 2019 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/%EB%8F%84%EC%84%9C/2019/05/04/%E1%84%8B%E1%85%B5%E1%86%B0%E1%84%80%E1%85%B5%E1%84%8C%E1%85%A9%E1%87%82%E1%84%8B%E1%85%B3%E1%86%AB%E1%84%8F%E1%85%A9%E1%84%83%E1%85%B3%E1%84%80%E1%85%A1-%E1%84%8C%E1%85%A9%E1%87%82%E1%84%8B%E1%85%B3%E1%86%AB%E1%84%8F%E1%85%A9%E1%84%83%E1%85%B3%E1%84%83%E1%85%A1.html</link>
+        <guid isPermaLink="true">http://localhost:4000/%EB%8F%84%EC%84%9C/2019/05/04/%E1%84%8B%E1%85%B5%E1%86%B0%E1%84%80%E1%85%B5%E1%84%8C%E1%85%A9%E1%87%82%E1%84%8B%E1%85%B3%E1%86%AB%E1%84%8F%E1%85%A9%E1%84%83%E1%85%B3%E1%84%80%E1%85%A1-%E1%84%8C%E1%85%A9%E1%87%82%E1%84%8B%E1%85%B3%E1%86%AB%E1%84%8F%E1%85%A9%E1%84%83%E1%85%B3%E1%84%83%E1%85%A1.html</guid>
+        
+        <category>개발</category>
+        
+        
+        <category>도서</category>
+        
+      </item>
+    
+      <item>
+        <title>겸군은</title>
+        <description>&lt;h1 id=&quot;김성겸-skkim13gmailcom&quot;&gt;김성겸 (skkim13@gmail.com)&lt;/h1&gt;
+&lt;hr /&gt;
+&lt;h2 id=&quot;개인신상&quot;&gt;개인신상&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;생년 : 1977년 1월&lt;/li&gt;
+  &lt;li&gt;성별 : 남&lt;/li&gt;
+  &lt;li&gt;결혼 : 기혼&lt;/li&gt;
+  &lt;li&gt;군대 : 면제
+    &lt;ul&gt;
+      &lt;li&gt;시력이 좋지 않아 제2국민역 판정 받음&lt;/li&gt;
+      &lt;li&gt;대학 동기들 보다 2년 빨리 사회 생활 시작&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;학력사항&quot;&gt;학력사항&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;한국항공대학교 항공기계공학과 졸업 (1995년 3월 ~ 2000년 2월)
+    &lt;ul&gt;
+      &lt;li&gt;4학년 2학기에 네띠앙에 개인 홈페이지를 만들며 웹에 입문&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;최근-관심사&quot;&gt;최근 관심사&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;코드 리뷰를 잘 하는 개발자&lt;/strong&gt;
+    &lt;ol&gt;
+      &lt;li&gt;최근 읽은 책
+        &lt;ol&gt;
+          &lt;li&gt;읽기 좋은 코드가 좋은 코드다
+            &lt;ol&gt;
+              &lt;li&gt;http://www.yes24.com/Product/Goods/6692314&lt;/li&gt;
+              &lt;li&gt;최근 고민하던 “잘 개발하는 것”의 내 정의와 일치하는 제목&lt;/li&gt;
+              &lt;li&gt;코드를 만들고 수정하는 것은 사람, 기계는 논리적 오류만 없다면 코드의 수준과 상관없이 실행&lt;/li&gt;
+              &lt;li&gt;프로그래밍 언어 구분없이 공통된 철학이라 생각&lt;/li&gt;
+            &lt;/ol&gt;
+          &lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+      &lt;li&gt;사놓고 못 읽은 책
+        &lt;ol&gt;
+          &lt;li&gt;Java 8 in Action
+            &lt;ol&gt;
+              &lt;li&gt;http://www.yes24.com/Product/goods/61262889&lt;/li&gt;
+              &lt;li&gt;java 1.7을 너무 오래 사용했다.&lt;/li&gt;
+            &lt;/ol&gt;
+          &lt;/li&gt;
+          &lt;li&gt;스프링 5 프로그래밍 입문
+            &lt;ol&gt;
+              &lt;li&gt;http://www.yes24.com/Product/Goods/62268795&lt;/li&gt;
+              &lt;li&gt;스프링 3.5을 너무 오래 사용했다.&lt;/li&gt;
+              &lt;li&gt;최범균님의 책은 부담스럽지 않게 시작할 수 있다.&lt;/li&gt;
+            &lt;/ol&gt;
+          &lt;/li&gt;
+          &lt;li&gt;Effective Java 3/E
+            &lt;ol&gt;
+              &lt;li&gt;http://www.yes24.com/Product/Goods/65551284&lt;/li&gt;
+              &lt;li&gt;더 간결하게, 더 명시적으로 개발할 수 있는 방법을 주관적 기준이 아닌, 객관적 기준으로 정리하고 싶다.&lt;/li&gt;
+            &lt;/ol&gt;
+          &lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;경력사항-총-18년&quot;&gt;경력사항 (총 18년)&lt;/h2&gt;
+&lt;h4 id=&quot;11번가--sk플래닛--커머스플래닛-200898--현재&quot;&gt;11번가 / SK플래닛 / 커머스플래닛 (2008.9.8 ~ 현재)&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;개발 / 서비스 환경&lt;/strong&gt;
+    &lt;ol&gt;
+      &lt;li&gt;java 1.5 -&amp;gt; 1.7 -&amp;gt; 1.8, Spring 2.5 / 3.5&lt;/li&gt;
+      &lt;li&gt;DBMS : oracle&lt;/li&gt;
+      &lt;li&gt;Apache + Weblogic / Tomcat&lt;/li&gt;
+      &lt;li&gt;Template Engine : Velocity, Handlebars&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;주요 성과&lt;/strong&gt;
+    &lt;ol&gt;
+      &lt;li&gt;2015년 8월  ~ 현재 : Front / Finding개발 팀장
+        &lt;ol&gt;
+          &lt;li&gt;PC / 모바일 웹 전시 / 매장 서비스 개발&lt;/li&gt;
+          &lt;li&gt;모바일 UI Platform ( PUI ) 개발&lt;/li&gt;
+          &lt;li&gt;서비스 효율 viewer ( Web Scouter ) 개발
+            &lt;ol&gt;
+              &lt;li&gt;Log 기반 효율 데이터 생성 (PV / Impression / Click)&lt;/li&gt;
+              &lt;li&gt;크롬 확장프로그램 기반 효율 데이터 뷰어&lt;/li&gt;
+            &lt;/ol&gt;
+          &lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+      &lt;li&gt;2012년 9월 ~ 2015년 7월 :  Listing개발 팀장
+        &lt;ol&gt;
+          &lt;li&gt;11번가 PC 전시 / 매장 서비스 개발
+            &lt;ol&gt;
+              &lt;li&gt;메인, GNB / Footer 외 공통영역&lt;/li&gt;
+              &lt;li&gt;상품 검색 / 카테고리 리스팅 서비스&lt;/li&gt;
+              &lt;li&gt;템플릿 모듈 조립 기반 매장 서비스 (전문관 / 기획전)&lt;/li&gt;
+              &lt;li&gt;쇼킹딜 서비스&lt;/li&gt;
+              &lt;li&gt;스토어(미니몰) 매장 서비스&lt;/li&gt;
+            &lt;/ol&gt;
+          &lt;/li&gt;
+          &lt;li&gt;전시 Platform 개발
+            &lt;ol&gt;
+              &lt;li&gt;동영상 관리 및 외부 스트리밍 솔루션 연계&lt;/li&gt;
+            &lt;/ol&gt;
+          &lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+      &lt;li&gt;2010년 ~ 2012년 : 가격 비교 서비스 (야후 쇼핑, 네이트 쇼핑, basket) 개발
+        &lt;ol&gt;
+          &lt;li&gt;프로젝트 개발 리더&lt;/li&gt;
+          &lt;li&gt;Best Buyer EP 기반  카탈로그, 매칭 상품 DB 설계&lt;/li&gt;
+          &lt;li&gt;Multi ASP 서비스를 위한 UI 구조 설계 및 개발&lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+      &lt;li&gt;2008년 ~ 2010년 : 11번가 전시/매장 서비스 개발
+        &lt;ol&gt;
+          &lt;li&gt;PC 11번가 메인 Front-end 최적화
+            &lt;ol&gt;
+              &lt;li&gt;Javascript merge 및 contents lazy loading 적용&lt;/li&gt;
+              &lt;li&gt;cookie less 도메인 분리&lt;/li&gt;
+              &lt;li&gt;“웹사이트 최적화 기법” , “초고속 웹사이트 구축” 참고
+                &lt;ul&gt;
+                  &lt;li&gt;http://www.yes24.com/Product/Goods/2961377&lt;/li&gt;
+                  &lt;li&gt;http://www.yes24.com/Product/Goods/3768154&lt;/li&gt;
+                &lt;/ul&gt;
+              &lt;/li&gt;
+            &lt;/ol&gt;
+          &lt;/li&gt;
+          &lt;li&gt;상품 검색, 카테고리 리스팅 개발&lt;/li&gt;
+          &lt;li&gt;DB 설정 기반 feature flag 공통 모듈 개발&lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;sk커뮤니케이션즈-2006819--2008-96&quot;&gt;SK커뮤니케이션즈 (2006.8.19 ~ 2008. 9.6)&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;회사 / 업무 소개&lt;/strong&gt;
+    &lt;ol&gt;
+      &lt;li&gt;싸이월드와 연계된 오픈쇼핑 서비스 - 싸이마켓&lt;/li&gt;
+      &lt;li&gt;네이트 내 오픈쇼핑 서비스 - 네이트몰
+        &lt;ol&gt;
+          &lt;li&gt;네이트몰은 전문 셀러 한정 쇼핑몰이었으나 싸이마켓과 상품을 통합&lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;퇴사 사유&lt;/strong&gt;
+    &lt;ol&gt;
+      &lt;li&gt;11번가 오픈에 따른 계열사 사업 정리&lt;/li&gt;
+      &lt;li&gt;사업 정리 후 네이트내의 가격비교 서비스를 준비했으나 외부 가격비교 서비스의 ASP 도입으로 무산&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;개발 / 서비스 환경&lt;/strong&gt;
+    &lt;ol&gt;
+      &lt;li&gt;java 1.4,  Spring framework&lt;/li&gt;
+      &lt;li&gt;DBMS : oracle&lt;/li&gt;
+      &lt;li&gt;Apache + resine&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;주요 성과&lt;/strong&gt;
+    &lt;ol&gt;
+      &lt;li&gt;네이트몰, 싸이마켓
+        &lt;ol&gt;
+          &lt;li&gt;전시 / 매장 서비스 개발&lt;/li&gt;
+          &lt;li&gt;상품 검색 , 카테고리 리스팅 서비스 개발&lt;/li&gt;
+          &lt;li&gt;GNB / Footer 공통 UI 요소 개발&lt;/li&gt;
+          &lt;li&gt;검색엔진 솔루션 운영 - 코리아 와이즈넛&lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+      &lt;li&gt;네이트몰 전면 개편
+        &lt;ol&gt;
+          &lt;li&gt;전시 상품 데이터 구축
+            &lt;ol&gt;
+              &lt;li&gt;빠른 전시 상품 조회를 위한 반정규화 테이블 생성&lt;/li&gt;
+            &lt;/ol&gt;
+          &lt;/li&gt;
+          &lt;li&gt;전시 상품 데이터 조회 공통 모듈 개발
+            &lt;ol&gt;
+              &lt;li&gt;전시 소재, 상품 데이터 join 시 Full Scan 발생하여 오픈 연기
+                &lt;ol&gt;
+                  &lt;li&gt;전시 소재를 인라인 뷰로 처리하여 join 대상을 최적화&lt;/li&gt;
+                &lt;/ol&gt;
+              &lt;/li&gt;
+            &lt;/ol&gt;
+          &lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;다음-dshop-2005104--2006818&quot;&gt;다음 d&amp;amp;shop (2005.10.4 ~ 2006.8.18)&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;회사 / 업무 소개&lt;/strong&gt;
+    &lt;ol&gt;
+      &lt;li&gt;다음에서 분사한 eCommerce 전문회사&lt;/li&gt;
+      &lt;li&gt;쇼핑몰 서비스인 d&amp;amp;shop과 경매 서비스인 온켓으로 구성&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;퇴사 사유&lt;/strong&gt;
+    &lt;ol&gt;
+      &lt;li&gt;포털 내의 커머스 서비스를 기대했으나 커머스 전문회사로 분사&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;개발 / 서비스 환경&lt;/strong&gt;
+    &lt;ol&gt;
+      &lt;li&gt;java 1.4, Struts&lt;/li&gt;
+      &lt;li&gt;DBMS : oracle&lt;/li&gt;
+      &lt;li&gt;Apache + resine&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;주요 성과&lt;/strong&gt;
+    &lt;ol&gt;
+      &lt;li&gt;온켓 메인 서비스 개발&lt;/li&gt;
+      &lt;li&gt;온켓 상품 검색 서비스 개발&lt;/li&gt;
+      &lt;li&gt;GNB 검색창 자동완성 기능 개발&lt;/li&gt;
+      &lt;li&gt;검색엔진 솔루션 운영 - 코리아 와이즈넛&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;버추얼텍--와와컴-200451--200593&quot;&gt;버추얼텍 / 와와컴 (2004.5.1 ~ 2005.9.3)&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;회사 / 업무 소개&lt;/strong&gt;
+    &lt;ol&gt;
+      &lt;li&gt;와와컴을 버추얼텍에서 인수&lt;/li&gt;
+      &lt;li&gt;1년간의 개인 사업 종료 후 ASP기반 서비스의 유지보수를 위해 재 입사.&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;퇴사 사유&lt;/strong&gt;
+    &lt;ol&gt;
+      &lt;li&gt;소규모 쇼핑몰 사업자에게 피인수 되어, 개발 성장성 없다고 판단&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;개발 / 서비스 환경&lt;/strong&gt;
+    &lt;ol&gt;
+      &lt;li&gt;java 1.4&lt;/li&gt;
+      &lt;li&gt;DBMS : oracle&lt;/li&gt;
+      &lt;li&gt;Webtobe + jeus&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;주요 성과&lt;/strong&gt;
+    &lt;ol&gt;
+      &lt;li&gt;UI 전면 개편 전시 / 매장 서비스 개발
+        &lt;ul&gt;
+          &lt;li&gt;GNB / Footer 등 공통 영역 개발&lt;/li&gt;
+          &lt;li&gt;메인 페이지 개발&lt;/li&gt;
+          &lt;li&gt;카테고리 및 상품 검색 서비스 개발&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;ASP -&amp;gt; java 전환에서 매장 서비스 개발&lt;/li&gt;
+      &lt;li&gt;상품 검색 서비스 개발 및 검색엔진 솔루션 운영&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;와와컴-200022--2003331&quot;&gt;와와컴 (2000.2.2 ~ 2003.3.31)&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;회사 / 업무 소개&lt;/strong&gt;
+    &lt;ol&gt;
+      &lt;li&gt;인터넷 경매 서비스&lt;/li&gt;
+      &lt;li&gt;1999년에 서비스 시작하여 한때 옥션과 양강 구도 형성&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;퇴사 사유&lt;/strong&gt;
+    &lt;ol&gt;
+      &lt;li&gt;20대에 개인 사업을 해보고 싶었음&lt;/li&gt;
+      &lt;li&gt;절친과 인터넷 쇼핑몰 창업 : 1년 후 사업 종료
+        &lt;ol&gt;
+          &lt;li&gt;pszzang.co.kr : 콘솔 게임 H/W, S/W 판매&lt;/li&gt;
+          &lt;li&gt;gumgum.co.kr : 생활소품 판매. 1300K 처럼 되고 싶었음&lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;개발 / 서비스 환경&lt;/strong&gt;
+    &lt;ol&gt;
+      &lt;li&gt;언어 : ASP&lt;/li&gt;
+      &lt;li&gt;DBMS : MS-SQL 7.0&lt;/li&gt;
+      &lt;li&gt;IIS&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;주요 성과&lt;/strong&gt;
+    &lt;ol&gt;
+      &lt;li&gt;기획전 매장 서비스 개발
+        &lt;ol&gt;
+          &lt;li&gt;기획전 메타 정보 및 상품 DB 설계&lt;/li&gt;
+          &lt;li&gt;기획전 메타 정보 및 상품 관리 Backoffice 개발&lt;/li&gt;
+          &lt;li&gt;기획전 매장 개발&lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+      &lt;li&gt;클럽 서비스 개편
+        &lt;ol&gt;
+          &lt;li&gt;클럽 관리 기능 구현
+            &lt;ol&gt;
+              &lt;li&gt;클럽 생성, 수정,&lt;/li&gt;
+              &lt;li&gt;회원 및 등급 관리&lt;/li&gt;
+              &lt;li&gt;클럽 게시물 관리&lt;/li&gt;
+            &lt;/ol&gt;
+          &lt;/li&gt;
+        &lt;/ol&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Tue, 02 Apr 2019 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/%EC%9D%B4%EC%95%BC%EA%B8%B0/2019/04/02/profile.html</link>
+        <guid isPermaLink="true">http://localhost:4000/%EC%9D%B4%EC%95%BC%EA%B8%B0/2019/04/02/profile.html</guid>
+        
+        <category>자기소개</category>
+        
+        
+        <category>이야기</category>
+        
+      </item>
+    
+      <item>
+        <title>Hello Crayon13!</title>
+        <description>&lt;p&gt;처음으로 github에 블로그 포스팅을 올립니다.
+&lt;a href=&quot;https://dreamgonfly.github.io/2018/01/27/jekyll-remote-theme.html&quot;&gt;reference&lt;/a&gt; 을 참고로 했습니다!!&lt;/p&gt;
+
+&lt;p&gt;You’ll find this post in your &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
+
+&lt;p&gt;To add new posts, simply add a file in the &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory that follows the convention &lt;code class=&quot;highlighter-rouge&quot;&gt;YYYY-MM-DD-name-of-post.ext&lt;/code&gt; and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
+
+&lt;p&gt;Jekyll also offers powerful support for code snippets:&lt;/p&gt;
+
+&lt;p&gt;​&lt;code class=&quot;highlighter-rouge&quot;&gt;python
+def print_hi(name):
+  print(&quot;hello&quot;, name)
+print_hi('Tom')
+​&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Check out the &lt;a href=&quot;https://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;
+
+</description>
+        <pubDate>Fri, 15 Feb 2019 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000/%EC%9D%B4%EC%95%BC%EA%B8%B0/2019/02/15/first-post.html</link>
+        <guid isPermaLink="true">http://localhost:4000/%EC%9D%B4%EC%95%BC%EA%B8%B0/2019/02/15/first-post.html</guid>
+        
+        
+        <category>이야기</category>
+        
+      </item>
+    
+  </channel>
+</rss>

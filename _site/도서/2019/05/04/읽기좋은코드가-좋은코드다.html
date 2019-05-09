@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>읽기좋은 코드가 좋은 코드다</title>
+  <meta name="description" content="도입1. 코드는 이해하기 쉬워야 한다.  코드는 이해하기 쉬어야 한다.  코드는 다른 사람이 그것을 이해하는데 들이는 시간을 최소화 하는 방식으로 작성되어야 한다.          미래의 내가 다른 사람이 될 수도 있다.      표면적 수준에서의 개선2. 이름에 정보 담기  이름...">
+  
+  <meta name="author" content="김성겸">
+  <meta name="copyright" content="&copy; 김성겸 2019">
+  
+
+  <!-- External libraries -->
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/monokai-sublime.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css">
+
+  <!-- Favicon and other icons (made with http://www.favicon-generator.org/) -->
+  <link rel="shortcut icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="57x57" href="/assets/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/assets/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/assets/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/assets/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/assets/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/assets/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/assets/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/assets/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/assets/icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/assets/icons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <!-- Facebook OGP cards -->
+  <meta property="og:description" content="도입1. 코드는 이해하기 쉬워야 한다.  코드는 이해하기 쉬어야 한다.  코드는 다른 사람이 그것을 이해하는데 들이는 시간을 최소화 하는 방식으로 작성되어야 한다.          미래의 내가 다른 사람이 될 수도 있다.      표면적 수준에서의 개선2. 이름에 정보 담기  이름..." />
+  <meta property="og:url" content="http://localhost:4000" />
+  <meta property="og:site_name" content="생각 많은 겸군" />
+  <meta property="og:title" content="읽기좋은 코드가 좋은 코드다" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="http://localhost:4000/assets/instacode.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="612" />
+  <meta property="og:image:height" content="605" />
+  
+
+  
+  <!-- Twitter: card tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="읽기좋은 코드가 좋은 코드다">
+  <meta name="twitter:description" content="도입1. 코드는 이해하기 쉬워야 한다.  코드는 이해하기 쉬어야 한다.  코드는 다른 사람이 그것을 이해하는데 들이는 시간을 최소화 하는 방식으로 작성되어야 한다.          미래의 내가 다른 사람이 될 수도 있다.      표면적 수준에서의 개선2. 이름에 정보 담기  이름...">
+  <meta name="twitter:image" content="http://localhost:4000/assets/instacode.png">
+  <meta name="twitter:url" content="http://localhost:4000">
+  
+
+  
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://localhost:4000/%EB%8F%84%EC%84%9C/2019/05/04/%E1%84%8B%E1%85%B5%E1%86%B0%E1%84%80%E1%85%B5%E1%84%8C%E1%85%A9%E1%87%82%E1%84%8B%E1%85%B3%E1%86%AB%E1%84%8F%E1%85%A9%E1%84%83%E1%85%B3%E1%84%80%E1%85%A1-%E1%84%8C%E1%85%A9%E1%87%82%E1%84%8B%E1%85%B3%E1%86%AB%E1%84%8F%E1%85%A9%E1%84%83%E1%85%B3%E1%84%83%E1%85%A1.html">
+  <link rel="alternate" type="application/rss+xml" title="생각 많은 겸군" href="http://localhost:4000/feed.xml" />
+</head>
+
+
+  <body>
+
+    <header class="navigation" role="banner">
+  <div class="navigation-wrapper">
+    <a href="/" class="logo">
+      
+      <img src="/assets/logo.png" alt="생각 많은 겸군">
+      
+    </a>
+    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">
+      <i class="fa fa-bars"></i>
+    </a>
+    <nav role="navigation">
+      <ul id="js-navigation-menu" class="navigation-menu show">
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <li class="nav-link"><a href="/posts/">Posts</a>
+          
+        
+          
+          <li class="nav-link"><a href="/typography/">Typography</a>
+          
+        
+          
+          <li class="nav-link"><a href="/tag/%EC%9E%90%EA%B8%B0%EC%86%8C%EA%B0%9C/">자기소개</a>
+          
+        
+          
+          <li class="nav-link"><a href="/tag/%EA%B0%9C%EB%B0%9C/">개발</a>
+          
+        
+          
+          <li class="nav-link"><a href="/category/%EC%9D%B4%EC%95%BC%EA%B8%B0/">이야기</a>
+          
+        
+          
+          <li class="nav-link"><a href="/category/%EB%8F%84%EC%84%9C/">도서</a>
+          
+        
+          
+        
+          
+        
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+    <div class="page-content">
+        <div class="post">
+
+<div class="post-header-container has-cover" style="background-image: url(/assets/instacode.png);">
+  <div class="scrim has-cover">
+    <header class="post-header">
+      <h1 class="title">읽기좋은 코드가 좋은 코드다</h1>
+      <p class="info">by <strong>Ben Centra</strong></p>
+    </header>
+  </div>
+</div>
+
+<div class="wrapper">
+
+
+
+<section class="post-meta">
+  <div class="post-date">May 4, 2019</div>
+  <div class="post-categories">
+  in 
+    
+    <a href="/category/도서">도서</a>
+    
+  
+  </div>
+</section>
+
+<article class="post-content">
+  <h2 id="도입">도입</h2>
+<h3 id="1-코드는-이해하기-쉬워야-한다">1. 코드는 이해하기 쉬워야 한다.</h3>
+<ul>
+  <li>코드는 이해하기 쉬어야 한다.</li>
+  <li>코드는 다른 사람이 그것을 이해하는데 들이는 시간을 최소화 하는 방식으로 작성되어야 한다.
+    <ul>
+      <li>미래의 내가 다른 사람이 될 수도 있다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="표면적-수준에서의-개선">표면적 수준에서의 개선</h2>
+<h3 id="2-이름에-정보-담기">2. 이름에 정보 담기</h3>
+<ul>
+  <li>이름에 정보를 담아내라.
+    <ul>
+      <li>특정한 단어 고르기
+        <ul>
+          <li>매우 구체적인 단어를 선택하여 <strong>무의미한</strong> 단어를 피하는 것이다.
+            <ul>
+              <li><strong>get*</strong> : 지나치게 보편 적이며, 단순히 가져오는 기능으로 유추될 수 있다.</li>
+              <li><strong>size</strong> : Height, NumNodes, MemoryBytes 등 구체적인 이름으로 변경 될 수 있다.</li>
+              <li><strong>Stop()</strong> : 만약 되돌릴 수 없는 최종 동작이라면 <strong>Kill</strong>, Resume()을 호출하여 다시 돌이킬 수 있는 동작이라면 Rause() 가 더 좋을 것이다.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>재치있는 이름보다 명확하고 간결한 이름이 더 좋다.
+    <ul>
+      <li>tmp나 retVal, foo 같은 보편적인 이름은 피한다.
+        <ul>
+          <li>tmp, it, retVal 같은 보편적인 이름을 사용하려면, 꼭 그렇게 해야 하는 이유가 있어야 한다.</li>
+          <li>tmp를 임시 저장 변수로 사용하는데는 이슈가 없다만. 로직의 흐름에서 사용되어서는 안된다.
+            <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c1">// 임시 저장 변수</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">tmp</span> <span class="o">=</span> <span class="n">right</span><span class="o">;</span>
+      <span class="n">right</span> <span class="o">=</span> <span class="n">left</span><span class="o">;</span>
+      <span class="n">left</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="c1">// 로직 변수</span>
+  <span class="n">String</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>
+  <span class="n">tmp</span> <span class="o">+=</span> <span class="s">" "</span> <span class="o">+</span> <span class="n">user</span><span class="o">.</span><span class="na">getPhoneNumber</span><span class="o">();</span>
+  <span class="n">tmp</span> <span class="o">+=</span> <span class="s">" "</span> <span class="o">+</span> <span class="n">user</span><span class="o">.</span><span class="na">getEmail</span><span class="o">();</span>
+  <span class="n">template</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="s">"userInfo"</span><span class="o">,</span> <span class="n">tmp</span><span class="o">);</span>
+</code></pre></div>            </div>
+          </li>
+          <li>루프 반복자
+            <ul>
+              <li>i, j, k는 지양하자.</li>
+              <li>userIndex, 이게 길면 ui 같은 형태로
+                <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// ui 와 gi로 index 구분이 명확해 졌다.</span>
+    <span class="c1">// 실제로 for 선언부에서 배열을 index로 접근하게 개발하지는 얺겠지만..</span>
+    <span class="n">User</span><span class="o">[]</span> <span class="n">users</span> <span class="o">=</span> <span class="n">getUsers</span><span class="o">();</span>
+    <span class="k">for</span> <span class="o">(</span> <span class="kt">int</span> <span class="n">ui</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">ui</span> <span class="o">&lt;</span> <span class="n">users</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="n">ui</span><span class="o">++</span> <span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span> <span class="kt">int</span> <span class="n">gi</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">gi</span> <span class="o">&lt;</span> <span class="n">users</span><span class="o">[</span><span class="n">ui</span><span class="o">].</span><span class="na">getGroups</span><span class="o">().</span><span class="na">length</span><span class="o">();</span> <span class="n">gi</span><span class="o">++</span> <span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span> <span class="n">users</span><span class="o">[</span><span class="n">ui</span><span class="o">].</span><span class="na">group</span><span class="o">[</span><span class="n">gi</span><span class="o">].</span><span class="na">getNumber</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"equals!!!"</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div>                </div>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>추상적인 이름보다 구체적인 이름을 선호하라.
+    <ul>
+      <li>DISALLOW_EVILS_CONSTRUCTORS -&gt; DISALLOW_COPY_AND_ASSIGN</li>
+    </ul>
+  </li>
+  <li>추가적인 정보를 이름에 추가하기.
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c1">// bad</span>
+  <span class="n">String</span> <span class="n">id</span><span class="o">;</span> <span class="c1">// Exsample : "af84ef845cd8"</span>
+
+  <span class="c1">// good</span>
+  <span class="n">String</span> <span class="n">hexId</span><span class="o">;</span>
+</code></pre></div>    </div>
+    <ul>
+      <li>단위를 포함하는 값들
+        <ul>
+          <li>변수가 시간의 양이나 바이트 수와 같은 측정치를 담고 있다면, 변수에 단위를 포함시키자.
+            <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// bad</span>
+<span class="kd">var</span> <span class="nx">start</span> <span class="o">=</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">()).</span><span class="nx">getTime</span><span class="p">();</span>
+<span class="p">....</span>
+<span class="kd">var</span> <span class="nx">elapsed</span> <span class="o">=</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">()).</span><span class="nx">getTime</span><span class="p">()</span> <span class="o">-</span> <span class="nx">start</span><span class="p">();</span>
+
+<span class="c1">// good : 분인지, 초인지, 밀리초인지 고민할 필요가 없다.</span>
+<span class="kd">var</span> <span class="nx">startMilliSecond</span> <span class="o">=</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">()).</span><span class="nx">getTime</span><span class="p">();</span>
+<span class="p">....</span>
+<span class="kd">var</span> <span class="nx">elapsedMilliSecond</span> <span class="o">=</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">()).</span><span class="nx">getTime</span><span class="p">()</span> <span class="o">-</span> <span class="nx">start</span><span class="p">();</span>
+</code></pre></div>            </div>
+          </li>
+        </ul>
+      </li>
+      <li>다른 중요한 속성 포함하기
+        <ul>
+          <li>암호화 되지 않은 패스워드 : password -&gt; plainTextPassword</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>이름은 얼마나 길어야 하는가?
+    <ul>
+      <li>너무 긴 이름은 오히려 독이다.
+        <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">String</span> <span class="n">newNavigationControllerWrappingViewControllerForDataSource</span><span class="o">......</span>
+</code></pre></div>        </div>
+      </li>
+      <li>좁은 범위에서는 짧은 이름이 괜찮다.
+        <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 좁은 범위에서는..</span>
+<span class="k">if</span> <span class="o">(</span><span class="n">debug</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="n">m</span><span class="o">;</span>
+    <span class="n">lookUpNamesNumbers</span><span class="o">(</span><span class="n">m</span><span class="o">);</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">m</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div>        </div>
+        <ul>
+          <li>클래스 멤버 번수 혹은 전역 변수일 경우는 안된다!! -&gt; 변수 scope와 중요도의 문제.</li>
+        </ul>
+      </li>
+      <li>긴 이름 입력하기 - 더 이상 문제가 되지 않는다.
+        <ul>
+          <li>IDE에서 단어 완성기능 사용하기 : 처음 몇글자 입력 후 단축 키 입력, 맞는 단어가 나올 때까지 반복한다.
+            <ul>
+              <li>IntellJ IDEA : alt + /</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>약어와 축약형
+        <ul>
+          <li>상식적으로 타인이 이해 가능한 수준의 약어와 축약은 사용 가능
+            <ul>
+              <li>eval, doc, str….</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>불필요한 단어 제거하기
+        <ul>
+          <li>convertToString() -&gt; toString()</li>
+          <li>doServeLoop() -&gt; serveLoop()</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>이름과 포맷팅으로 의미를 전달하라.
+    <ul>
+      <li>프로젝트나 언어마다 포맷팅 관습이 다르다.
+        <ul>
+          <li>java
+            <ul>
+              <li>class : pascalCase</li>
+              <li>variable, method : camelCase</li>
+            </ul>
+          </li>
+          <li>javascript
+            <ul>
+              <li>더글라스 크락포드는 “자바스크립트 핵심 가이드” 에서 생성자 함수는 pascalCase, 일반 함수는 camelCase을 사용
+                <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">datePicker</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">DatePicker</span><span class="p">();</span>  <span class="c1">// 생성자 함수</span>
+<span class="kd">var</span> <span class="nx">pageheight</span> <span class="o">=</span> <span class="nx">calculatePageHeight</span><span class="p">();</span> <span class="c1">// 일반 함수</span>
+</code></pre></div>                </div>
+              </li>
+              <li>jQuery 객체는 $* 형태의 관습을 띠른다
+                <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">$headElement</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">"head"</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">pageHeight</span> <span class="o">=</span> <span class="mi">250</span><span class="p">;</span>
+</code></pre></div>                </div>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="3-오해할-수-없는-이름들">3. 오해할 수 없는 이름들</h3>
+<ul>
+  <li>본인이 지은 이름을 “다른 사람들이 다른 의미로 해석할 수 있을까?”라는 질문을 던져보며 철저하게 확인해야 한다.</li>
+  <li>미래의 내가 다른 사람이 될 수도 있다.</li>
+  <li>배경지식이 없는 다른 사람이 될 수도 있다.
+    <ul>
+      <li>filter() : 통상적으로 해당되는 대상을 기준으로 한다.
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>results = Database.allObjects.filter("year &lt;= 2011");
+// year &lt;= 2011 : true 인 대상을 가져온다.
+
+results = Database.allObjects.exclude("year &lt;= 2011");
+// year &lt;= 2011 : false 인 대상을 가져온다. -&gt; true 인 대상을 제외한다.
+</code></pre></div>        </div>
+        <ul>
+          <li>긍정(true) 조건을 기준으로 하는 것이 흐름을 이해하는데 좋다.</li>
+        </ul>
+      </li>
+      <li>clip() : 앞 기준으로 잘라내야 할지, 뒤 기준으로 잘라내야 할지..
+        <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// bad</span>
+<span class="kd">public</span> <span class="n">String</span> <span class="nf">clip</span><span class="o">(</span><span class="n">String</span> <span class="n">text</span><span class="o">,</span> <span class="kt">int</span> <span class="n">length</span><span class="o">)</span> <span class="o">{};</span>
+
+<span class="c1">// good</span>
+<span class="kd">public</span> <span class="n">String</span> <span class="nf">truncate</span><span class="o">(</span><span class="n">String</span> <span class="n">text</span><span class="o">,</span> <span class="kt">int</span> <span class="n">maxBytes</span><span class="o">)</span> <span class="o">{};</span>
+</code></pre></div>        </div>
+      </li>
+      <li>경계값
+        <ul>
+          <li>경계값(처음과 마지막)에 포함 됨
+            <ul>
+              <li>min / max : 명확한 경계값일 경우</li>
+              <li>first / last : 경계값이 불 분명 할 경우???</li>
+            </ul>
+          </li>
+          <li>처음은 포함되고 마지막은 포함되지 않을 경우
+            <ul>
+              <li>begin / end : end는 종료 범위에 포함되지 않는다.
+                <ul>
+                  <li>endDate = 2019/05/01 00:00:00 일 경우 실제 유효한 last / max 값은 2019/04/30 23:59:59.999 이다.</li>
+                  <li>11번가의 전시에서는 endDate를 경계값 포함으로 사용한다….</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>불리언 변수에 이름 붙이기
+        <ul>
+          <li>true와 false가 의미하는 것이 명확하게
+            <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">boolean</span> <span class="n">readPassword</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+<span class="c1">// 패스워드를 읽을 필요가 있다는 것인지</span>
+<span class="c1">// 패스워드가 이미 읽혔다는 것인지</span>
+
+<span class="kt">boolean</span> <span class="n">needPassword</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+<span class="kt">boolean</span> <span class="n">isAuthenticated</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+</code></pre></div>            </div>
+          </li>
+          <li>부정은 피해라
+            <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// bad</span>
+<span class="kt">boolean</span> <span class="n">disableSsl</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+<span class="c1">// good</span>
+<span class="kt">boolean</span> <span class="n">useSsl</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+</code></pre></div>            </div>
+          </li>
+        </ul>
+      </li>
+      <li>사용자의 기대에 부응하기
+        <ul>
+          <li>관행적으로, 일반적인 의미를 왜곡시키지 않는다.</li>
+          <li><strong>get*</strong> : 프로그래머들은 대개 get으로 시작되는 메서드는 <em>‘가벼운 접근자’</em> 로, 단순히 내부 멤버를 반환한다고 관행적으로 생각한다.
+            <ul>
+              <li>가벼운 연산까지는 가능하다.</li>
+              <li>복잡한 연산을 수행한다면. <strong>compute<em>__ / __calculate</em></strong> 등을 사용하는 것이 좋다.</li>
+            </ul>
+          </li>
+          <li><strong>size()</strong>, <strong>length()</strong> : 단순 크기와 갯수를 구하는, O(1) 메서드로 기대한다.
+            <ul>
+              <li>내부적으로 복잡한 계산을 수행한다면 <strong>countSize</strong>, <strong>countElement</strong> 등으로 대체한다.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="4-미학">4. 미학</h3>
+<ul>
+  <li>좋은 소스 코드는 <em>‘눈을 편하게’</em> 해야한다.
+    <ul>
+      <li>코드를 읽는 사람이 이미 친숙한, 일관성 있는 레이아웃을 사용하라.</li>
+      <li>비슷한 코드는 서로 비슷해 보이도록 만들어라.</li>
+      <li>서로 연관된 코드는 하나의 블럭으로 묶어라.</li>
+    </ul>
+  </li>
+  <li>일관성과 간결성을 위해 줄 바꿈을 재정렬하기</li>
+  <li>메서드를 활용하여 불규칙성을 정리하라.
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// bad</span>
+<span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">User</span><span class="o">&gt;</span> <span class="n">usersMap</span> <span class="o">=</span> <span class="n">getUsersMap</span><span class="o">();</span>
+
+<span class="n">assertTrue</span><span class="o">(</span><span class="n">usersMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"crayon1"</span><span class="o">)</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">usersMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"crayon1"</span><span class="o">)</span> <span class="o">==</span> <span class="mi">1</span><span class="o">);</span>
+<span class="n">assertTrue</span><span class="o">(</span><span class="n">usersMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"crayon2"</span><span class="o">)</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">usersMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"crayon2"</span><span class="o">)</span> <span class="o">==</span> <span class="mi">2</span><span class="o">);</span>
+<span class="n">assertTrue</span><span class="o">(</span><span class="n">usersMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"crayon3"</span><span class="o">)</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">usersMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"crayon3"</span><span class="o">)</span> <span class="o">==</span> <span class="mi">3</span><span class="o">);</span>
+
+<span class="c1">// good</span>
+<span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">User</span><span class="o">&gt;</span> <span class="n">usersMap</span> <span class="o">=</span> <span class="n">getUsersMap</span><span class="o">();</span>
+<span class="n">UsersMapValidator</span> <span class="n">usersMapValidator</span> <span class="o">=</span> <span class="k">new</span> <span class="n">UsersMapValidator</span><span class="o">(</span><span class="n">usersMap</span><span class="o">);</span>
+
+<span class="n">assertTrue</span><span class="o">(</span><span class="n">usersMapValidator</span><span class="o">.</span><span class="na">eqlausUserNumber</span><span class="o">(</span><span class="s">"crayon1"</span><span class="o">,</span> <span class="mi">1</span><span class="o">));</span>
+<span class="n">assertTrue</span><span class="o">(</span><span class="n">usersMapValidator</span><span class="o">.</span><span class="na">eqlausUserNumber</span><span class="o">(</span><span class="s">"crayon2"</span><span class="o">,</span> <span class="mi">2</span><span class="o">));</span>
+<span class="n">assertTrue</span><span class="o">(</span><span class="n">usersMapValidator</span><span class="o">.</span><span class="na">eqlausUserNumber</span><span class="o">(</span><span class="s">"crayon3"</span><span class="o">,</span> <span class="mi">3</span><span class="o">));</span>
+</code></pre></div>    </div>
+  </li>
+  <li>도움이 된다면 코드의 열을 맞춰라.
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// case 1</span>
+<span class="n">String</span> <span class="n">id</span> <span class="o">=</span> <span class="s">"crayon13"</span><span class="o">;</span>
+<span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="s">"김성겸"</span><span class="o">;</span>
+<span class="n">String</span> <span class="n">gender</span> <span class="o">=</span> <span class="s">"male"</span><span class="o">;</span>
+  
+<span class="c1">// case 2</span>
+<span class="n">String</span> <span class="n">id</span>         <span class="o">=</span> <span class="s">"crayon13"</span><span class="o">;</span>
+<span class="n">String</span> <span class="n">name</span>       <span class="o">=</span> <span class="s">"김성겸"</span><span class="o">;</span>
+<span class="n">String</span> <span class="n">gender</span>     <span class="o">=</span> <span class="s">"male"</span><span class="o">;</span>
+</code></pre></div>    </div>
+    <ul>
+      <li>어떤 것이 좋을지는 함꼐 일하는 사람들과 합의를 해야 할듯…</li>
+      <li>개인적으로 위 방식을 선호함.
+        <ul>
+          <li>기준 들여쓰기 보다 긴 변수가 추가 될 경우, 기존 들여쓰기를 모두 수정해야 해서…</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>의미 있는 순서를 선택하고 일관성 있게 사용하라.
+    <ul>
+      <li>html 폼에 있는 input 필드 순서대로 나열하라.</li>
+      <li>‘가장 중요한 것’에서 시작해서 ‘가장 덜 중요한 것’까지 순서대로 나열하라.</li>
+      <li>알파벳 순서대로 나열하라.</li>
+    </ul>
+  </li>
+  <li>선언문을 블럭으로 구성하라.
+    <ul>
+      <li>논리적 영역에 따라 그룹핑 해라.</li>
+    </ul>
+  </li>
+  <li>코드를 ‘문단’으로 쪼개라.
+    <ul>
+      <li>비슷한 생각을 하나로 묶어서, 성격이 다른 생각과 구분한다.</li>
+      <li>문단은 ‘시각적 디딤돌’역할을 수행한다. 문단이 없으면 페이지 안에서 읽던 부분을 놓치기 쉽다.</li>
+    </ul>
+  </li>
+  <li><strong>일관성 있는 스타일은 ‘올바른’ 스타일보다 더 중요하다.</strong></li>
+</ul>
+
+<h3 id="5-주석에-담아야-하는-대상">5. 주석에 담아야 하는 대상</h3>
+<ul>
+  <li>주석의 목적은 코드를 읽는 사람이 코드를 작성한 사람만큼 코드를 잘 이해하게 돕는데 있다.</li>
+  <li>코드에서 빠르게 유추할 수 있는 내용은 주석으로 달지 말라.
+    <ul>
+      <li>설명 자체를 위한 설명을 달지 말라.</li>
+      <li>나쁜 이름에 주석을 달지 말라. 대신 이름을 고쳐라.
+        <ul>
+          <li>cleanReplay -&gt; enforceLimitsFromRequest : clean의 구체적인 설명 주석 보다는</li>
+          <li>deleteRegistry -&gt; releaseRegistry : 실제 registry를 삭제하지 않는다는 주석보다는</li>
+          <li>
+            <hr />
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="http://www.gstatic.com/webp/gallery/5.jpg" alt="대체 택스트" title="링크 설명(title)을 작성하세요." />
+<a href="https://google.com">GOOGLE</a></p>
+
+</article>
+
+
+
+<section class="tags">
+  <strong>Tags:</strong> <a href="/tag/개발">개발</a>
+</section>
+
+
+
+<section class="rss">
+  <p class="rss-subscribe text"><strong>Subscribe <a href="/feed.xml">via RSS</a></strong></p>
+</section>
+
+<section class="share">
+  <span>Share: </span>
+  
+    
+    
+    
+      <a href="//www.facebook.com/sharer.php?t=%EC%9D%BD%EA%B8%B0%EC%A2%8B%EC%9D%80+%EC%BD%94%EB%93%9C%EA%B0%80+%EC%A2%8B%EC%9D%80+%EC%BD%94%EB%93%9C%EB%8B%A4&u=http%3A%2F%2Flocalhost%3A4000%2F%25EB%258F%2584%25EC%2584%259C%2F2019%2F05%2F04%2F%25E1%2584%258B%25E1%2585%25B5%25E1%2586%25B0%25E1%2584%2580%25E1%2585%25B5%25E1%2584%258C%25E1%2585%25A9%25E1%2587%2582%25E1%2584%258B%25E1%2585%25B3%25E1%2586%25AB%25E1%2584%258F%25E1%2585%25A9%25E1%2584%2583%25E1%2585%25B3%25E1%2584%2580%25E1%2585%25A1-%25E1%2584%258C%25E1%2585%25A9%25E1%2587%2582%25E1%2584%258B%25E1%2585%25B3%25E1%2586%25AB%25E1%2584%258F%25E1%2585%25A9%25E1%2584%2583%25E1%2585%25B3%25E1%2584%2583%25E1%2585%25A1.html"
+        onclick="window.open(this.href, 'facebook-share', 'width=550,height=255');return false;">
+        <i class="fa fa-facebook-square fa-lg"></i>
+      </a>
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+</section>
+
+
+
+
+</div>
+</div>
+
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h3 class="footer-heading">생각 많은 겸군</h3>
+
+    <div class="site-navigation">
+
+      <p><strong>Site Map</strong></p>
+      <ul class="pages">
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+          <li class="nav-link"><a href="/posts/">Posts</a>
+        
+        
+        
+          <li class="nav-link"><a href="/typography/">Typography</a>
+        
+        
+        
+          <li class="nav-link"><a href="/tag/%EC%9E%90%EA%B8%B0%EC%86%8C%EA%B0%9C/">자기소개</a>
+        
+        
+        
+          <li class="nav-link"><a href="/tag/%EA%B0%9C%EB%B0%9C/">개발</a>
+        
+        
+        
+          <li class="nav-link"><a href="/category/%EC%9D%B4%EC%95%BC%EA%B8%B0/">이야기</a>
+        
+        
+        
+          <li class="nav-link"><a href="/category/%EB%8F%84%EC%84%9C/">도서</a>
+        
+        
+        
+        
+        
+        
+      </ul>
+    </div>
+
+    <div class="site-contact">
+
+      <p><strong>Contact</strong></p>
+      <ul class="social-media-list">
+        <li>
+          <a href="mailto:">
+            <i class="fa fa-envelope-o"></i>
+            <span class="username"></span>
+          </a>
+        </li>
+
+        
+          
+          <li>
+            <a href="https://www.facebook.com/profile.php?id=100001673202910" title="Friend me on Facebook">
+              <i class="fa fa-facebook"></i>
+              <span class="username">crayon13</span>
+            </a>
+          </li>
+          
+        
+          
+          <li>
+            <a href="https://github.com/crayon13" title="Fork me on GitHub">
+              <i class="fa fa-github"></i>
+              <span class="username">crayon13</span>
+            </a>
+          </li>
+          
+        
+
+      </ul>
+    </div>
+
+    <div class="site-signature">
+      <p class="rss-subscribe text"><strong>Subscribe <a href="/feed.xml">via RSS</a></strong></p>
+      <p class="text">겸군의 생각이 가득</p>
+    </div>
+
+  </div>
+
+</footer>
+
+<!-- Scripts -->
+<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/js/lightbox.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Default syntax highlighting
+  hljs.initHighlightingOnLoad();
+
+  // Header
+  var menuToggle = $('#js-mobile-menu').unbind();
+  $('#js-navigation-menu').removeClass("show");
+  menuToggle.on('click', function(e) {
+    e.preventDefault();
+    $('#js-navigation-menu').slideToggle(function(){
+      if($('#js-navigation-menu').is(':hidden')) {
+        $('#js-navigation-menu').removeAttr('style');
+      }
+    });
+  });
+});
+
+</script>
+
+
+
+
+
+
+  </body>
+
+</html>
