@@ -267,8 +267,10 @@ PLATFORMS
 
 DEPENDENCIES
   github-pages
+  jekyll
   jekyll-admin
   jekyll-paginate
+  jekyll-sitemap
 
 BUNDLED WITH
    2.0.1
