@@ -1,17 +1,23 @@
-name: 생각 많은 겸군
+title: 생각 많은 겸군
 url: 'https://crayon13.github.io'
 description: 겸군의 생각이 가득가득
+author: crayon13
+disqus_shortname: crayon13
+google_analytics: ''
+# Build settings
+plugins:
+  - jekyll-gist
+  - jekyll-sitemap
+  - jekyll-paginate
+markdown: kramdown
+paginate: 5
+paginate_path: "/page:num/"
+inter_post_navigation: false
+highlightjs_theme: "monokai-sublime"
 exclude:
   - Gemfile
   - Gemfile.lock
   - README.md
-markdown: kramdown
-author: crayon13
-disqus_shortname: crayon13
-google_analytics: ''
-gems:
-  - jekyll-gist
-  - jekyll-sitemap
 sass:
   sass_dir: _sass
   style: ':compressed'

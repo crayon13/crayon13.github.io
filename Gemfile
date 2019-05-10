@@ -4,3 +4,4 @@ gem 'github-pages', group: :jekyll_plugins
 
 # crayon13 add
 gem 'jekyll-admin', group: :jekyll_plugins
+gem 'jekyll-paginate', group: :jekyll_plugins
