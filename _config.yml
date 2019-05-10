@@ -1,53 +1,17 @@
-gems:
-  - jekyll-archives
-  - jekyll-sitemap
-  - jekyll-paginate
+name: 생각 많은 겸군
+url: 'https://crayon13.github.io'
+description: 겸군의 생각이 가득가득
 exclude:
-  - /vendor/
-title: 생각 많은 겸군
-subtitle: ''
-email: ''
-name: 김성겸
-description: 겸군의 생각이 가득
-baseurl: ''
-url: 'http://crayon13.github.io'
-cover: /assets/header_image.jpg
-logo: /assets/logo.png
+  - Gemfile
+  - Gemfile.lock
+  - README.md
 markdown: kramdown
-paginate: 5
-paginate_path: '/page:num/'
-inter_post_navigation: false
-highlightjs_theme: monokai-sublime
-jekyll-archives:
-  enabled:
-    - categories
-    - tags
-  layout: archive
-  permalinks:
-    category: '/category/:name/'
-    tag: '/tag/:name/'
-descriptions:
-  - cat: jekyll
-    desc: Posts describing Jekyll setup techniques.
-social:
-  - name: Facebook
-    icon: facebook
-    username: crayon13
-    url: 'https://www.facebook.com/profile.php?id=100001673202910'
-    desc: Friend me on Facebook
-    share: true
-  - name: GitHub
-    icon: github
-    username: crayon13
-    url: 'https://github.com/crayon13'
-    desc: Fork me on GitHub
-    share: false
-protocols:
-  fb_image: /assets/logo.png
-  fb_image_width: 612
-  fb_image_height: 605
-  fb_image_type: image/png
-  twitter_image: /assets/logo.png
-  os_repo: 'https://github.com/bencentra/centrarium.com'
-  os_rcs_type: git
-  os_src: 'git@github.com:bencentra/centrarium.com.git'
+author: crayon13
+disqus_shortname: crayon13
+google_analytics: ''
+gems:
+  - jekyll-gist
+  - jekyll-sitemap
+sass:
+  sass_dir: _sass
+  style: ':compressed'
