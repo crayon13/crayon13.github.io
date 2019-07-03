@@ -4,7 +4,7 @@ title: "git project 한방에 pull 받기"
 category: tips
 tags: git,tip
 ---
-#혹시 git source project를 N개 사용 하고 있고 한방에 pull 받고 싶다면.
+# 혹시 git source project를 N개 사용 하고 있고 한방에 pull 받고 싶다면.
 ```
 #!/bin/sh
 ARR_GIT_HOME_PATH=("/Users/crayon13/Workspace/");
