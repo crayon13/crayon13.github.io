@@ -2,7 +2,9 @@
 layout: post
 title: "git project 한방에 pull 받기"
 category: tips
-tags: git,tip
+tags: 
+    - git
+    - tip
 ---
 # 혹시 git source project를 N개 사용 하고 있고 한방에 pull 받고 싶다면.
 ```
