@@ -9,9 +9,9 @@ title: About
     <ul class="posts">
         {% for post in site.posts %}
         {% if post.category == "about" %}
-            <% if post.title != "겸군은" %>
+            {% if post.title != "겸군은" %}
         <li><a href="{{ post.url }}">{{ post.title }}</a><span> &raquo; {{ post.date | date: "%B %d, %Y" }}</span></li>
-            <% endif %>
+            {% endif %}
         {% endif %}
         {% endfor %}
     </ul>
