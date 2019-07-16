@@ -2,18 +2,61 @@ musinsa = window.musinsa || {};
 
 musinsa.gnb = (function() {
     'use strict';
+    function _log(functionName, message) {
+        console.log(functionName + ':'  + message);
+    };
 
-    var _config = {
+    var config = {
         service : 'musinsa',
         serviceHost : 'http://store.musinsa.com'
     };
 
-    var _keywordRankList = [];
-    var _campaignList = [];
+    var data = {
+        keywordRankList : [],
+        campaignList :[]
+    }
 
-    function log(functionName, message) {
-        console.log(functionName + ':'  + message);
-    };
+    // 기존 html상으로 존재하던 script를 내부에 등록한다.
+    var func = {
+        addSearchKeywordAreaMsg : function() {
+            _log('addSearchKeywordAreaMsg', 'start')
+            $.ajax({
+                type: "POST",
+                url: "/app/svc/search_kwd",
+                success: function(msg) {
+                    $("#search_kwd").html(msg);
+                }
+            });
+        }, closeLayer : function(obj){
+            $('.layer-keyword-top').css('display','none');
+            if(obj.length == 0){
+                $('.layer-keyword-top').toggle();
+                $('#recommend_kwd').toggle();
+            }
+        }, SearchKwd : function() {
+            // 검색
+            var ff = document.getElementById("search_form");
+            var kwd_type = Suggestions.kwd_type;
+            var kwd = ff.q.value;
+            if(kwd_type == "url") {
+                document.location.href = Suggestions.kwd_value;
+                return false;
+            } else {
+                if ( kwd == "" ) {
+                    if(ff.q.value == "" || ff.q.value == "검색단어입력") {
+                        alert("검색어를 입력하세요.");
+                        ff.q.focus();
+                        return false;
+                    }
+                } else {
+                    ff.q.value = kwd;
+                }
+                ff.submit();
+            }
+        }
+    }
+
+    var htmlFragments = {};
 
     var HtmlFragment = function(htmlFragment, bindEvent) {
         function _getHtmlFragment() {
@@ -36,18 +79,19 @@ musinsa.gnb = (function() {
 
         return {
             getHtmlFragment : _getHtmlFragment,
+            bindEvent : _bindEvent,
             render : _render
         };
     };    
 
     // 상단 확장 배너
-    var extendBanner = new HtmlFragment(
+    htmlFragments.extendBanner = new HtmlFragment(
         function() {
             return (
                 '<div class="extend_banner" style="text-align:center; ">' + 
                 '   <div class="btn_banner_close" style="display:;">' + 
                 '       <a id="extend_banner_close" href="javascript:void(0)">' +  
-                '           <img src="' + _config.serviceHost + '/skin/musinsa/images/top_banner_close.png" alt="배너 닫기" /></a>' + 
+                '           <img src="' + config.serviceHost + '/skin/musinsa/images/top_banner_close.png" alt="배너 닫기" /></a>' + 
                 '   </div>' + 
                 '</div>'
             );
@@ -63,15 +107,15 @@ musinsa.gnb = (function() {
     );
     
     // 검색창
-    var searchInput = new HtmlFragment(
+    htmlFragments.searchInput = new HtmlFragment(
         function() {
             return (
                 '				<!--검색창-->' +
                 '				<div class="fl searchInput-box box">' +
                 '					<form id="search_form" method="get" action="/app/product/search">' +
                 '						<input id="search_type" type="hidden" name="type" value="">' +
-                '						<input id="search_query" class="search head-search-inp" type="text" name="q" maxlength="30" autocomplete="off" onkeyup="closeLayer(this.value); Suggestions.Do(this.value,\'search_layer\',\'suggest_keyword\',\'suggest_brand\',\'suggest_items\',\'suggest_goods\');" onkeydown="Suggestions.Go();"/>' +
-                '						<span class="search-btn btn ui-head-search-btn" onclick="SearchKwd(); return false;"><i class="ico ico-search">검색</i></span>' +
+                '						<input id="search_query" class="search head-search-inp" type="text" name="q" maxlength="30" autocomplete="off"/>' +
+                '						<span  id="search_button" class="search-btn btn ui-head-search-btn"><i class="ico ico-search">검색</i></span>' +
                 '						<!-- [D] 이미지 검색 버튼 -->' +
                 '						<span class="cam-btn btn ui-head-search-btn"><i class="ico ico-cam">이미지 검색</i></span>' +
                 '					</form>' +
@@ -79,10 +123,50 @@ musinsa.gnb = (function() {
                 '				<!--//검색창-->' 
             );
         }
+        , function() {
+            _log('searchInput', 'bind');
+            $('#search_query').on('keyup keydown click', 
+                function(event) {
+                    _log('searchInput', 'event : ' + event.type);
+                    switch(event.type) {
+                        case 'keyup' :
+                            _log('searchInput', 'keyup value :' + this.value);
+                            func.closeLayer(this.value);
+                            //closeLayer(this.value);
+                            //Suggestions.Do(this.value,'search_layer','suggest_keyword','suggest_brand','suggest_items','suggest_goods');
+                            break;
+                        case 'keydown' :
+                            _log('searchInput', 'keyup value : ' + this.value);
+                            //Suggestions.Go();
+                            break;
+                        case 'click' :
+                                if($('#recommend_kwd').css('display') == 'none') {
+                                    if($('.layer-keyword-top').css("display") == "none") {
+                                        if(($("#search_kwd div").length == 0)){
+                                            func.addSearchKeywordAreaMsg();
+                                            //search_kwd();
+                                        }
+                                        $('.layer-keyword-top').toggle();
+                                    }
+                                }                             
+                            break;
+                    }
+
+                }
+            );
+
+            $('#search_button').on('click', 
+                function() {
+                    _log('searchInput', 'search_button : ' + event.type);
+                    //SearchKwd(); 
+                    return false;
+                }
+            );
+        }
     );   
     
     // 키워드 랭킹
-    var keywordRanking = new HtmlFragment(
+    htmlFragments.keywordRanking = new HtmlFragment(
         function() {
             var htmlFragment = 
                 '				<!--검색어 랭킹-->' +
@@ -91,8 +175,8 @@ musinsa.gnb = (function() {
                 '					<div class="rollingRanking">' +
                 '						<dl class="bxSlider" id="hotkeyword">';
 
-                if ( _keywordRankList ) {
-                    _keywordRankList.forEach(
+                if ( data.keywordRankList ) {
+                    data.keywordRankList.forEach(
                         function(keyword) {
                             htmlFragment += 
                             '	                        <dd class="listItem">' +
@@ -116,15 +200,31 @@ musinsa.gnb = (function() {
                 '				<!--//검색어 랭킹-->';
 
             return htmlFragment;
+        }, function() {
+            // 인기 검색어 mouseenter
+            $('#hotkeyword').mouseenter(function() {
+                if($('#recommend_kwd').css('display') == 'none'){
+                    if(($("#search_kwd div").length == 0)){
+                        func.addSearchKeywordAreaMsg();
+                        //search_kwd();
+                    }
+                    $('.layer-keyword-top').css("display","block");
+                }
+            });
+
+            // 인기 검색어 mouseleave
+            $('.layer-keyword-top').mouseleave(function() {
+                $('.layer-keyword-top').css("display","none");
+            });            
         }
     );    
 
     // 캠페인
-    var campaign = new HtmlFragment(
+    htmlFragments.campaign = new HtmlFragment(
         function() {
             var htmlFragment = '';
-            if ( _campaignList ) {
-                _campaignList.forEach(
+            if ( data.campaignList ) {
+                data.campaignList.forEach(
                     function(campaign) {
                         htmlFragment += '<li><a href="' + campaign.url + '" style="color:' + campaign.color + '">'
                         + campaign.title + '</a></li>';
@@ -136,24 +236,24 @@ musinsa.gnb = (function() {
     );
 
 
-    var topColum = new HtmlFragment(
+    htmlFragments.baseArea = new HtmlFragment(
         function() {
-            var campaignHtmlFragment = campaign.getHtmlFragment();
+            var campaignHtmlFragment = htmlFragments.campaign.getHtmlFragment();
             var htmlFragment =
                 '<div class="main-wrapper wrapper">' +
                 '	<h1 class="title"><a href="/">MUSINSA STORE</a></h1>' +
                 '	<div class="search-wrapper wrapper clearfix">' +
-                searchInput.getHtmlFragment() +
-                keywordRanking.getHtmlFragment() + 
+                htmlFragments.searchInput.getHtmlFragment() +
+                htmlFragments.keywordRanking.getHtmlFragment() + 
                 '	</div>' +
                 '	<!--오른쪽 상단 메뉴-->' +
                 '	<div class="gnb wrapper clearfix">' +
                 '		<ul class="gnb-list clearfix gnb-list-wrap">' +
-                campaignHtmlFragment +
+                htmlFragments.campaignHtmlFragment +
                 '			<!-- [D] 캠페인이 없을 경우 랭킹 li에 style="padding-left:10px" 추가 -->' + 
                 '';
             
-            if ( campaignHtmlFragment ) {
+            if ( htmlFragments.campaignHtmlFragment ) {
                 htmlFragment +=
                 '			<li class="hovering gnb-ranking-list">';
             } else {
@@ -308,22 +408,25 @@ musinsa.gnb = (function() {
                 // '<!--//image search layer--></div>';
 
             return htmlFragment;
+        },
+        function() {
+            htmlFragments.searchInput.bindEvent();
         }
     );    
 
     function _setKeywordRankList(keywordRankList) {
-        _keywordRankList = keywordRankList || _keywordRankList;
+        data.keywordRankList = keywordRankList || data.keywordRankList;
     }
 
     function _setCampaignList(campaignList) {
-        _campaignList = campaignList || _campaignList;
+        data.campaignList = campaignList || data.campaignList;
     }
 
     // gnb 전체 그리기
     function _render(config) {
-        _config = config || _config;
-        extendBanner.render();
-        topColum.render();
+        config = config || config;
+        htmlFragments.extendBanner.render();
+        htmlFragments.baseArea.render();
     }
 
     return {
@@ -333,6 +436,8 @@ musinsa.gnb = (function() {
     }
 }());
 
+// 만약 gnb.js를 gnb.php로 구현 한다면
+// 다음처럼 데이터를 musinsa.gnb 내로 주입 할 수 있을 듯 합니다.
 musinsa.gnb.setKeywordRankList(
     [
         {"rank" : "1등","keyword" : "반팔","variation" : "even:-"},
