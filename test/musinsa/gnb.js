@@ -56,9 +56,17 @@ musinsa.gnb = (function() {
         }
     }
 
+    // htmlFragment들이 등록될 Object 입니다.
     var htmlFragments = {};
 
+    // htmlFragment 구조체 입니다. htmlFragment은 HtmlFragment의 인스턴스를 생성합니다.
+    // htmlFragment : htmlFragment의 html태그 입니다.
+    //  - string 과 function을 사용 할 수 있습니다.
+    //      - function은 html string을 만들때 로직이 필요한 경우 사용합니다.
+    //  - bindEvent : htmlFragment 출력 후 binding 할 Event를 정의합니다.
+    //      - 개별로 호출하거나 render() 호출하면 함께 실행합니다.
     var HtmlFragment = function(htmlFragment, bindEvent) {
+ 
         function _getHtmlFragment() {
             if ( typeof htmlFragment === 'function' ) {
                 return htmlFragment();
@@ -97,6 +105,8 @@ musinsa.gnb = (function() {
             );
         } ,
         function() {
+            // html에 inline으로 선언 된 script를 bindEvent로 옮겼습니다.
+            //      - html에 inline으로 선언 된 script를 삭제 해야 합니다.
             $('#extend_banner_close').on('click', 
                 function(){
                     $('.extend_banner').hide();
@@ -125,6 +135,7 @@ musinsa.gnb = (function() {
         }
         , function() {
             _log('searchInput', 'bind');
+            // html에 onclick으로 선언 된 script를 bindEvent로 옮겼습니다.         
             $('#search_query').on('keyup keydown click', 
                 function(event) {
                     _log('searchInput', 'event : ' + event.type);
@@ -154,7 +165,8 @@ musinsa.gnb = (function() {
 
                 }
             );
-
+            
+            // html에 onclick으로 선언 된 script를 bindEvent로 옮겼습니다.
             $('#search_button').on('click', 
                 function() {
                     _log('searchInput', 'search_button : ' + event.type);
@@ -202,19 +214,24 @@ musinsa.gnb = (function() {
             return htmlFragment;
         }, function() {
             // 인기 검색어 mouseenter
+            // html에 inline으로 선언 된 script를 bindEvent로 옮겼습니다.
+            //      - html에 inline으로 선언 된 script를 삭제 해야 합니다.            
             $('#hotkeyword').mouseenter(function() {
-                if($('#recommend_kwd').css('display') == 'none'){
+                if($('#recommend_kwd').css('display') === 'none'){
                     if(($("#search_kwd div").length == 0)){
-                        func.addSearchKeywordAreaMsg();
                         //search_kwd();
+                        // html에 inline으로 선언 된 search_kwd를 func내에 새로운 이름으로 추가 했습니다.
+                        func.addSearchKeywordAreaMsg();
                     }
-                    $('.layer-keyword-top').css("display","block");
+                    $('.layer-keyword-top').css('display', 'block');
                 }
             });
 
             // 인기 검색어 mouseleave
+            // html에 inline으로 선언 된 script를 bindEvent로 옮겼습니다.
+            //      - html에 inline으로 선언 된 script를 삭제 해야 합니다.                   
             $('.layer-keyword-top').mouseleave(function() {
-                $('.layer-keyword-top').css("display","none");
+                $('.layer-keyword-top').css('display','none');
             });            
         }
     );    
@@ -366,7 +383,7 @@ musinsa.gnb = (function() {
                 '			<dl class="recommendProduct-list list store_list">' +
                 '				<dt class="title-listItem listItem clearfix">' +
                 '					<span class="title">추천 상품</span>' +
-                '					<span class="closeBtn btn" onclick="Suggestions.Close(\'search_layer\'); return false;">닫기</span>' +
+                '					<span id="suggest_goods_close" class="closeBtn btn">닫기</span>' +
                 '				</dt>' +
                 '				<div id="suggest_goods">' +
                 '				</div>' +
@@ -410,7 +427,16 @@ musinsa.gnb = (function() {
             return htmlFragment;
         },
         function() {
+            // searchInput 은 baseArea 에 포함되어 있기 때문에 baseArea 에서 searchInput의 bindEvent를 실행합니다.
             htmlFragments.searchInput.bindEvent();
+
+            // html에 onclick으로 선언 된 script를 bindEvent로 옮겼습니다.
+            $('#suggest_goods_close').on('click', 
+                function() {
+                    Suggestions.Close('search_layer');
+                    return false;
+                }
+            )
         }
     );    
 
@@ -423,8 +449,8 @@ musinsa.gnb = (function() {
     }
 
     // gnb 전체 그리기
-    function _render(config) {
-        config = config || config;
+    function _render(configForCreator) {
+        config = configForCreator || config;
         htmlFragments.extendBanner.render();
         htmlFragments.baseArea.render();
     }
