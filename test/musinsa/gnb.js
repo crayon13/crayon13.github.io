@@ -4,13 +4,15 @@ musinsa.ui = window.musinsa.ui || {};
 musinsa.ui.gnb = (function() {
     'use strict';
     function _log(functionName, message) {
-        console.log(functionName + ':'  + message);
+        var log = functionName +  (message ? ':' + message : '');
+        console.log(log);
     };
 
     var config = {
         service : 'musinsa',
         storeHost : 'http://store.musinsa.com',
-        wusinsaHost : 'http://wusinsa.musinsa.com'
+        wusinsaHost : 'http://wusinsa.musinsa.com',
+        showHeaderGroupArea : false
     };
 
     var data = {
@@ -265,7 +267,7 @@ musinsa.ui.gnb = (function() {
                         // html에 inline으로 선언 된 search_kwd를 func내에 새로운 이름으로 추가 했습니다.
                         func.addSearchKeywordAreaMsg();
                     }
-                    
+
                     $('.layer-keyword-top').css('display', 'block');
                 }
             });
@@ -294,7 +296,6 @@ musinsa.ui.gnb = (function() {
             return htmlFragment;
         }
     );
-
 
     htmlFragments.baseArea = new HtmlFragment(
         function() {
@@ -438,7 +439,10 @@ musinsa.ui.gnb = (function() {
                 '	<div id="search_kwd" class="store-searchWord-box searchWord-box box clearfix ui-search-recommend-area ui-search-recommend-area-result layer-keyword-top"></div>' +
                 '</div>' +
                 '		<!--<div class="layerbanner_repeat outerFsetival"><a href="/app/campaign/main/34">아우터</a></div>-->' +
-                '' +
+                '';
+
+            if ( config.showHeaderGroupArea ) {
+                htmlFragment += 
                 '<!-- 성별 선택 부분 -->' +
                 '<div class="header_group_area">' +
                 '    <ul class="group_list">' +
@@ -447,7 +451,10 @@ musinsa.ui.gnb = (function() {
                 '        <li><a href="'+ config.storeHost + '/app/standards/lists">스탠다드</a></li>' +
                 '    </ul>' +
                 '</div>' +
-                '<!--//성별 선택 부분-->' +             
+                '<!--//성별 선택 부분-->';
+            }
+
+            htmlFragment +=
                 '<!--image search layer-->' +
                 '<form id="frm_image_search" method="POST" action="" enctype="multipart/form-data" style="display:none;">' +
                 '	<input id="image_file" name="image_file" type="file">' +
@@ -500,7 +507,14 @@ musinsa.ui.gnb = (function() {
 
     // gnb 전체 그리기
     function _render(configForCreator) {
-        config = configForCreator || config;
+        if ( configForCreator )  {
+            $.each(configForCreator, 
+                function(key, value) {
+                    config[key] = value;
+                }
+            );
+        }
+
         htmlFragments.extendBanner.render();
         htmlFragments.baseArea.render();
     }
