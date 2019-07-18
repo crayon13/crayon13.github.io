@@ -11,12 +11,12 @@ tags:
 #!/bin/sh
 ARR_GIT_HOME_PATH=("/Users/crayon13/Workspace/");
 
-for rootPath in ${ARR_GIT_HOME_PATH[@]}; do
-    if [ "x${rootPath}" != "x" -a -d ${rootPath} ];then
+for homePath in ${ARR_GIT_HOME_PATH[@]}; do
+    if [ "x${homePath}" != "x" -a -d ${homePath} ];then
         echo "++++++++++++++++++++++++++++++++++++";
-        echo "scan root path : ${rootPath}";
+        echo "scan root path : ${homePath}";
 
-        for gitPath in `find ${rootPath} -type d -name '.git'`; do
+        for gitPath in `find ${homePath} -type d -name '.git'`; do
             targetPath=`echo ${gitPath} | sed -e 's/.git$//g'`;
 
             echo "[SART] ${targetPath} pull";
