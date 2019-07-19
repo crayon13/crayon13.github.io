@@ -571,6 +571,8 @@ mss.ui.gnb = (function() {
 
 // 만약 gnb.js를 gnb.php로 구현 한다면
 // 다음처럼 데이터를 mss.gnb 내로 주입 할 수 있을 듯 합니다.
+
+// 확장 배너 데이터 주입
 mss.ui.gnb.setExtendBanner(
     {
         title : '무신사 역시즌 캠페인',
@@ -580,7 +582,7 @@ mss.ui.gnb.setExtendBanner(
     }
 );
 
-
+// 키워드 순위 데이터 주입
 mss.ui.gnb.setKeywordRankList(
     [
         {"rank" : "1등","keyword" : "반팔","variation" : "even:-"},
@@ -646,6 +648,7 @@ mss.ui.gnb.setKeywordRankList(
     ]   
 );
 
+// 캠페인 데이터 주입
 mss.ui.gnb.setCampaignList(
     [
         {"linkUrl" : "https://store.musinsa.com/app/event/s/2019summersale/93", "color" : "#ff0000", "title" : "여름세일"},
