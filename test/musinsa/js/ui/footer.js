@@ -116,7 +116,7 @@ mss.ui.footer = (function() {
 
         $('#footer_kcp_escrow').on('click', 
             function() {
-                window.open('http://admin.kcp.co.kr/Modules/escrow/kcp_pop.jsp?site_cd=N5624','escro','top=10.left=10,width=500,height=450');
+                window.open('http://admin.kcp.co.kr/Modules/escrow/kcp_pop.jsp?site_cd=N5624','escrow','top=10.left=10,width=500,height=450');
             }
         );
 
