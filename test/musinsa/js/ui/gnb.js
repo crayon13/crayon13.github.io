@@ -483,8 +483,8 @@ mss.ui.gnb = (function() {
                     '<!-- 성별 선택 부분 -->' +
                     '<div class="header_group_area">' +
                     '    <ul class="group_list">' +
-                    '        <li><a href="'+ config.storeHost + '/app/"  class="selected">전체</a></li>' +
-                    '        <li><a href="' + config.wusinsaHost + '/app/" >우신사(여성)</a></li>' +
+                    '        <li><a href="'+ config.storeHost + '/app/" class="' + ( config.service === 'musinsa' ? 'selected' : '') + '">전체</a></li>' +
+                    '        <li><a href="' + config.wusinsaHost + '/app/" class="' + ( config.service === 'wusinsa' ? 'selected' : '') + '">우신사(여성)</a></li>' +
                     '        <li><a href="'+ config.storeHost + '/app/standards/lists">스탠다드</a></li>' +
                     '    </ul>' +
                     '</div>' +
@@ -561,11 +561,16 @@ mss.ui.gnb = (function() {
         htmlFragments.baseArea.render();
     }
 
+    function _getConfig() {
+        return config;
+    }
+
     return {
         setExtendBanner : _setExtendBanner,
         setKeywordRankList : _setKeywordRankList,
         setCampaignList : _setCampaignList,
-        render : _render
+        render : _render,
+        getConfig : _getConfig
     }
 }());
 
