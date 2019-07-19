@@ -1,7 +1,7 @@
-musinsa = window.musinsa || {};
-musinsa.ui = window.musinsa.ui || {};
+mss = window.mss || {};
+mss.ui = window.mss.ui || {};
 
-musinsa.ui.gnb = (function() {
+mss.ui.gnb = (function() {
     'use strict';
     function _log(functionName, message) {
         var log = functionName +  (message ? ':' + message : '');
@@ -527,8 +527,8 @@ musinsa.ui.gnb = (function() {
 }());
 
 // 만약 gnb.js를 gnb.php로 구현 한다면
-// 다음처럼 데이터를 musinsa.gnb 내로 주입 할 수 있을 듯 합니다.
-musinsa.ui.gnb.setKeywordRankList(
+// 다음처럼 데이터를 mss.gnb 내로 주입 할 수 있을 듯 합니다.
+mss.ui.gnb.setKeywordRankList(
     [
         {"rank" : "1등","keyword" : "반팔","variation" : "even:-"},
         {"rank" : "2등","keyword" : "반바지","variation" : "even:-"},
@@ -593,7 +593,7 @@ musinsa.ui.gnb.setKeywordRankList(
     ]   
 );
 
-musinsa.ui.gnb.setCampaignList(
+mss.ui.gnb.setCampaignList(
     [
         {"url" : "https://store.musinsa.com/app/event/s/2019summersale/93", "color" : "#ff0000", "title" : "여름세일"},
         {"url" : "https://store.musinsa.com/app/plan/views/6974", "color" : "#1d67c3", "title" : "역시즌"}
