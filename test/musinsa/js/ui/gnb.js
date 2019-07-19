@@ -10,8 +10,9 @@ mss.ui.gnb = (function() {
 
     var config = {
         service : 'musinsa',
-        storeHost : 'http://store.musinsa.com',
-        wusinsaHost : 'http://wusinsa.musinsa.com',
+        magazineHost : 'https://www.musinsa.com',
+        storeHost : 'https://store.musinsa.com',
+        wusinsaHost : 'https://wusinsa.musinsa.com',
         showHeaderGroupArea : false
     };
 
@@ -422,19 +423,19 @@ mss.ui.gnb = (function() {
                     '				</a>' +
                     '				<ul class="hoverTarget">' +
                     '					<li><a href="/app/content/s/usr/membership"><span>천원 이벤트</span></a></li>' +
-                    '					<li><a href="https://www.musinsa.com/invitation/friend/"><span>친구 초대</span></a></li>' +
+                    '					<li><a href="' + config.magazineHost + '/invitation/friend/"><span>친구 초대</span></a></li>' +
                     '				</ul>' +
                     '			</li>' +
                     '			<li class="emphasis-blue hovering magazine">' +
-                    '				<a href="https://www.musinsa.com">매거진</a>' +
+                    '				<a href="' + config.magazineHost + '">매거진</a>' +
                     '				<ul class="hoverTarget ">' +
-                    '					<li><a href="https://www.musinsa.com/?m=news"><span>뉴스</span></a></li>' +
-                    '					<li><a href="https://www.musinsa.com/?m=magazine"><span>매거진</span></a></li>' +
-                    '					<li><a href="https://www.musinsa.com/?m=lookbook"><span>룩북</span></a></li>' +
-                    '					<li><a href="https://www.musinsa.com/?m=street"><span>스트릿 스냅</span></a></li>' +
-                    '					<li><a href="https://www.musinsa.com/?m=gallery"><span>갤러리</span></a></li>' +
-                    '					<li><a href="https://www.musinsa.com/?m=market"><span>중고장터</span></a></li>' +
-                    '					<li><a href="https://www.musinsa.com/?m=forum"><span>커뮤니티</span></a></li>' +
+                    '					<li><a href="' + config.magazineHost + '/?m=news"><span>뉴스</span></a></li>' +
+                    '					<li><a href="' + config.magazineHost + '/?m=magazine"><span>매거진</span></a></li>' +
+                    '					<li><a href="' + config.magazineHost + '/?m=lookbook"><span>룩북</span></a></li>' +
+                    '					<li><a href="' + config.magazineHost + '/?m=street"><span>스트릿 스냅</span></a></li>' +
+                    '					<li><a href="' + config.magazineHost + '/?m=gallery"><span>갤러리</span></a></li>' +
+                    '					<li><a href="' + config.magazineHost + '/?m=market"><span>중고장터</span></a></li>' +
+                    '					<li><a href="' + config.magazineHost + '/?m=forum"><span>커뮤니티</span></a></li>' +
                     '				</ul>' +
                     '			</li>' +
                     '		</ul>' +
