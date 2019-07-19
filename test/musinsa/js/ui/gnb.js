@@ -3,10 +3,6 @@ mss.ui = window.mss.ui || {};
 
 mss.ui.gnb = (function() {
     'use strict';
-    function _log(functionName, message) {
-        var log = functionName +  (message ? ':' + message : '');
-        console.log(log);
-    };
 
     var config = {
         service : 'musinsa',
@@ -17,15 +13,19 @@ mss.ui.gnb = (function() {
     };
 
     var data = {
-        extendBanner : {},
+        extendBannerList : [],
         keywordRankList : [],
         campaignList :[]
     }
 
     // 기존 html상으로 존재하던 script를 내부에 등록한다.
     var func = {
+        log : function(functionName, message) {
+            var log = functionName +  (message ? ':' + message : '');
+            console.log(log);
+        },
         addSearchKeywordAreaMsg : function() {
-            _log('addSearchKeywordAreaMsg', 'start')
+            func.log('addSearchKeywordAreaMsg', 'start')
             $.ajax({
                 type: "POST",
                 url: func.getServiceHost() + "/app/svc/search_kwd",
@@ -119,17 +119,23 @@ mss.ui.gnb = (function() {
                 var htmlFragment = 
                     '<div class="extend_banner" style="text-align:center;display:none;">';
 
-                var _data = data.extendBanner ;
-                if ( _data
-                    && _data.title                            
-                    && _data.linkUrl 
-                    && _data.imageUrl 
-                    && _data.bgcolor        
-                     ) {
-                    htmlFragment +=
-                        '<a href="/app/banner/check/16MAIN_UP_2_1/1" target="_blank">' + 
-                        '<span style="display:block;overflow:hidden; height:70px;background-color:#' + _data.bgcolor + '" href="' + _data.linkUrl  + '">' +
-                        '<img src="' + _data.imageUrl + '" alt="' + _data.title + '"></span></a>'
+                if ( data.extendBannerList && data.extendBannerList.length > 0 ) {
+                    var selectedIndex = Math.floor(Math.random() * (data.extendBannerList.length - 0)) + 0;
+
+                    var banner = data.extendBannerList[selectedIndex];
+
+                    if ( banner
+                        && banner.title                            
+                        && banner.linkUrl1
+                        && banner.linkUrl2
+                        && banner.imageUrl 
+                        && banner.bgcolor        
+                         ) {
+                        htmlFragment +=
+                            '<a href="' + config.storeHost + banner.linkUrl1 + '" target="_blank">' + 
+                            '<span style="display:block;overflow:hidden; height:70px;background-color:#' + banner.bgcolor + '" href="' + banner.linkUrl2 + '">' +
+                            '<img id="extend_banner_image" src="' + banner.imageUrl + '" alt="' + banner.title + '"></span></a>'
+                    }
                 }
                     
                 htmlFragment +=
@@ -157,7 +163,7 @@ mss.ui.gnb = (function() {
                     var musinsa_banner_close = getCookie("musinsa_banner_close");
                 
                     if ( special_top_open_yn == 'Y' ) {
-                        if ( musinsa_banner_close != "1") {
+                        if ( musinsa_banner_close != "1" && $('#extend_banner_image').length > 0 ) {
                             $('.extend_banner').show();
                         }
                     }
@@ -169,7 +175,11 @@ mss.ui.gnb = (function() {
             }, 
             render : function() {
                 // gnb.js가 <div class="top-column column"> 내부로 옮겨저서 extendBanner 를 top-column 위로 올리는 작업이 먼저 되어야 합니다.
-                $(htmlFragments.extendBanner.getHtmlFragment()).insertBefore('.top-column').show();
+                $(htmlFragments.extendBanner.getHtmlFragment()).insertBefore('.top-column');
+
+                if ( $('#extend_banner_image').length > 0  ) {
+                    $('.extend_banner').show();
+                }
             }
         }
     );
@@ -193,12 +203,12 @@ mss.ui.gnb = (function() {
                 );
             }
             , bindEvent : function() {
-                _log('searchInput', 'bind');
+                func.log('searchInput', 'bind');
 
                 // html에 onclick으로 선언 된 script를 bindEvent로 옮겼습니다.         
                 $('#search_query').on('click keydown keyup', 
                     function(event) {
-                        _log('searchInput', 'event : ' + event.type);
+                        func.log('searchInput', 'event : ' + event.type);
 
                         switch(event.type) {
                             case 'click' :
@@ -213,7 +223,7 @@ mss.ui.gnb = (function() {
                                     }                             
                                 break;       
                             case 'keydown' :
-                                _log('searchInput', 'keyup value : ' + this.value + ' : ' + event.keyCode );
+                                func.log('searchInput', 'keyup value : ' + this.value + ' : ' + event.keyCode );
 
                                 if ( event.keyCode === 13 ) {
                                     func.searchKeyword();                    
@@ -223,7 +233,7 @@ mss.ui.gnb = (function() {
                                 //Suggestions.Go();
                                 break;                                             
                             case 'keyup' :
-                                _log('searchInput', 'keyup value :' + this.value);
+                                func.log('searchInput', 'keyup value :' + this.value);
 
                             //closeLayer(this.value);                            
                                 func.closeLayer(this.value);
@@ -237,7 +247,7 @@ mss.ui.gnb = (function() {
                 // html에 onclick으로 선언 된 script를 bindEvent로 옮겼습니다.
                 $('#search_button').on('click', 
                     function() {
-                        _log('searchInput', 'search_button : ' + event.type);
+                        func.log('searchInput', 'search_button : ' + event.type);
 
                         //SearchKwd(); 
                         func.searchKeyword();                    
@@ -361,68 +371,68 @@ mss.ui.gnb = (function() {
                 }
                 
                 htmlFragment +=
-                    '				<a href="/app/contents/bestranking">랭킹</a>' +
+                    '				<a href="' + config.storeHost + '/app/contents/bestranking">랭킹</a>' +
                     '				<ul class="hoverTarget">' +
-                    '					<li><a href="/app/contents/bestranking"><span>상품</span></a></li>' +
-                    '					<li><a href="/app/usr/brand_rank"><span>브랜드</span></a></li>' +
+                    '					<li><a href="' + config.storeHost + '/app/contents/bestranking"><span>상품</span></a></li>' +
+                    '					<li><a href="' + config.storeHost + '/app/usr/brand_rank"><span>브랜드</span></a></li>' +
                     '				</ul>' +
                     '			</li>' +
                     '			<li class="hovering">' +
-                    '				<a href="/app/news/lists">신상품</a>' +
+                    '				<a href="' + config.storeHost + '/app/news/lists">신상품</a>' +
                     '				<ul class="hoverTarget">' +
-                    '					<li><a href="/app/news/lists"><span>신상품</span></a></li>' +
-                    '					<li><a href="/app/brand_event/lists"><span>신규 브랜드</span></a></li>' +
+                    '					<li><a href="' + config.storeHost + '/app/news/lists"><span>신상품</span></a></li>' +
+                    '					<li><a href="' + config.storeHost + '/app/brand_event/lists"><span>신규 브랜드</span></a></li>' +
                     '				</ul>' +
                     '			</li>' +
                     '			<li class="hovering">' +
-                    '				<a href="/app/contents/brandshop">브랜드</a>' +
+                    '				<a href="' + config.storeHost + '/app/contents/brandshop">브랜드</a>' +
                     '				<ul class="hoverTarget">' +
-                    '					<li><a href="/app/contents/brandshop"><span>브랜드</span></a></li>' +
-                    '					<li><a href="/app/designer/lists"><span>디자이너</span></a></li>' +
-                    '					<li><a href="/app/select"><span>셀렉트숍</span></a></li>' +
+                    '					<li><a href="' + config.storeHost + '/app/contents/brandshop"><span>브랜드</span></a></li>' +
+                    '					<li><a href="' + config.storeHost + '/app/designer/lists"><span>디자이너</span></a></li>' +
+                    '					<li><a href="' + config.storeHost + '/app/select"><span>셀렉트숍</span></a></li>' +
                     '				</ul>' +
                     '			</li>' +
                     '			<li class="hovering gnb-style-list">' +
-                    '				<a href="/app/styles/lists">코디</a>' +
+                    '				<a href="' + config.storeHost + '/app/styles/lists">코디</a>' +
                     '				<ul class="hoverTarget">' +
-                    '					<li><a href="/app/styles/lists"><span>스타일링</span></a></li>' +
-                    '					<li><a href="/app/staff/lists"><span>스태프 스냅</span></a></li>' +
+                    '					<li><a href="' + config.storeHost + '/app/styles/lists"><span>스타일링</span></a></li>' +
+                    '					<li><a href="' + config.storeHost + '/app/staff/lists"><span>스태프 스냅</span></a></li>' +
                     '				</ul>' +
                     '			</li>' +
                     '			<li class="hovering gnb-special">' +
-                    '				<a href="/app/showcase/lists">스페셜</a>' +
+                    '				<a href="' + config.storeHost + '/app/showcase/lists">스페셜</a>' +
                     '				<ul class="hoverTarget">' +
-                    '					<li><a href="/app/showcase/lists"><span>쇼케이스</span></a></li>' +
-                    '					<li><a href="/app/specialissue/lists"><span>스페셜 이슈</span></a></li>' +
-                    '					<li><a href="/app/exclusive/lists"><span>단독 상품</span></a></li>' +
+                    '					<li><a href="' + config.storeHost + '/app/showcase/lists"><span>쇼케이스</span></a></li>' +
+                    '					<li><a href="' + config.storeHost + '/app/specialissue/lists"><span>스페셜 이슈</span></a></li>' +
+                    '					<li><a href="' + config.storeHost + '/app/exclusive/lists"><span>단독 상품</span></a></li>' +
                     '											</ul>' +
                     '			</li>' +
                     '			<li class="hovering gnb-contents">' +
-                    '				<a href="/app/curating/lists">콘텐츠</a>' +
+                    '				<a href="' + config.storeHost + '/app/curating/lists">콘텐츠</a>' +
                     '				<ul class="hoverTarget">' +
-                    '					<li><a href="/app/curating/lists"><span>큐레이팅</span></a></li>' +
-                    '					<li><a href="/app/video/lists"><span>비디오</span></a></li>' +
-                    '					<li><a href="/app/celebrity/lists"><span>셀러브리티</span></a></li>' +
-                    '					<li><a href="/app/reviews/lists"><span>회원 후기</span></a></li>' +
+                    '					<li><a href="' + config.storeHost + '/app/curating/lists"><span>큐레이팅</span></a></li>' +
+                    '					<li><a href="' + config.storeHost + '/app/video/lists"><span>비디오</span></a></li>' +
+                    '					<li><a href="' + config.storeHost + '/app/celebrity/lists"><span>셀러브리티</span></a></li>' +
+                    '					<li><a href="' + config.storeHost + '/app/reviews/lists"><span>회원 후기</span></a></li>' +
                     '				</ul>' +
                     '			</li>' +
                     '			<li class="hovering gnb-onsale">' +
-                    '				<a href="/app/contents/onsale">세일</a>' +
+                    '				<a href="' + config.storeHost + '/app/contents/onsale">세일</a>' +
                     '				<ul class="hoverTarget">' +
-                    '					<li><a href="/app/contents/onsale"><span>세일</span></a></li>' +
-                    '					<li><a href="/app/contents/onsale?sale_yn=Y&sale_dt_yn=Y&chk_timesale=on"><span>타임세일</span></a></li>' +
-                    '					<li class="list_clearance"><a href="/app/clearance/lists"><span>클리어런스</span></a></li>' +
-                    '					<li><a href="/app/plan/lists"><span>기획전</span></a></li>' +
-                    '					<li><a href="/app/contents/coupon_online"><span>쿠폰</span></a></li>' +
-                    '					<li><a href="/app/contents/gift_list">사은품</a></li>' +
+                    '					<li><a href="' + config.storeHost + '/app/contents/onsale"><span>세일</span></a></li>' +
+                    '					<li><a href="' + config.storeHost + '/app/contents/onsale?sale_yn=Y&sale_dt_yn=Y&chk_timesale=on"><span>타임세일</span></a></li>' +
+                    '					<li class="list_clearance"><a href="' + config.storeHost + '/app/clearance/lists"><span>클리어런스</span></a></li>' +
+                    '					<li><a href="' + config.storeHost + '/app/plan/lists"><span>기획전</span></a></li>' +
+                    '					<li><a href="' + config.storeHost + '/app/contents/coupon_online"><span>쿠폰</span></a></li>' +
+                    '					<li><a href="' + config.storeHost + '/app/contents/gift_list">사은품</a></li>' +
                     '				</ul>' +
                     '			</li>' +
                     '			<li class="hovering gnb-event">' +
-                    '										<a href="/app/content/s/usr/membership">' +
+                    '										<a href="' + config.storeHost + '/app/content/s/usr/membership">' +
                     '											이벤트' +
                     '				</a>' +
                     '				<ul class="hoverTarget">' +
-                    '					<li><a href="/app/content/s/usr/membership"><span>천원 이벤트</span></a></li>' +
+                    '					<li><a href="' + config.storeHost + '/app/content/s/usr/membership"><span>천원 이벤트</span></a></li>' +
                     '					<li><a href="' + config.magazineHost + '/invitation/friend/"><span>친구 초대</span></a></li>' +
                     '				</ul>' +
                     '			</li>' +
@@ -476,7 +486,7 @@ mss.ui.gnb = (function() {
                     '' +
                     '	<div id="search_kwd" class="store-searchWord-box searchWord-box box clearfix ui-search-recommend-area ui-search-recommend-area-result layer-keyword-top"></div>' +
                     '</div>' +
-                    '		<!--<div class="layerbanner_repeat outerFsetival"><a href="/app/campaign/main/34">아우터</a></div>-->' +
+                    '		<!--<div class="layerbanner_repeat outerFsetival"><a href="' + config.storeHost + '/app/campaign/main/34">아우터</a></div>-->' +
                     '';
 
                 if ( config.showHeaderGroupArea ) {
@@ -536,42 +546,31 @@ mss.ui.gnb = (function() {
         }
     );    
 
-    function _setExtendBanner(extendBanner) {
-        data.extendBanner = extendBanner || data.extendBanner;
-    }
-
-    function _setKeywordRankList(keywordRankList) {
-        data.keywordRankList = keywordRankList || data.keywordRankList;
-    }
-
-    function _setCampaignList(campaignList) {
-        data.campaignList = campaignList || data.campaignList;
-    }
-
-    // gnb 전체 그리기
-    function _render(configForCreator) {
-        if ( configForCreator )  {
-            $.each(configForCreator, 
-                function(key, value) {
-                    config[key] = value;
-                }
-            );
-        }
-
-        htmlFragments.extendBanner.render();
-        htmlFragments.baseArea.render();
-    }
-
-    function _getConfig() {
-        return config;
-    }
-
     return {
-        setExtendBanner : _setExtendBanner,
-        setKeywordRankList : _setKeywordRankList,
-        setCampaignList : _setCampaignList,
-        render : _render,
-        getConfig : _getConfig
+        setExtendBannerList : function(extendBannerList) {
+            data.extendBannerList = extendBannerList || data.extendBannerList;
+        },
+        setKeywordRankList : function(keywordRankList) {
+            data.keywordRankList = keywordRankList || data.keywordRankList;
+        },
+        setCampaignList : function(campaignList) {
+            data.campaignList = campaignList || data.campaignList;
+        },
+        render : function(configForCreator) {
+            if ( configForCreator )  {
+                $.each(configForCreator, 
+                    function(key, value) {
+                        config[key] = value;
+                    }
+                );
+            }
+    
+            htmlFragments.extendBanner.render();
+            htmlFragments.baseArea.render();
+        },
+        getConfig : function() {
+            return config;
+        }
     }
 }());
 
@@ -579,13 +578,23 @@ mss.ui.gnb = (function() {
 // 다음처럼 데이터를 mss.gnb 내로 주입 할 수 있을 듯 합니다.
 
 // 확장 배너 데이터 주입
-mss.ui.gnb.setExtendBanner(
-    {
-        title : '무신사 역시즌 캠페인',
-        linkUrl : 'https://store.musinsa.com/app/plan/views/6974',
-        imageUrl : '//image.musinsa.com/images/banner/2019071614003800000091806.jpg',
-        bgcolor : '#8b7c62'
-    }
+mss.ui.gnb.setExtendBannerList(
+    [
+        {
+            title : '무신사 역시즌 캠페인',
+            linkUrl1 : '/app/banner/check/16MAIN_UP_2_1/1',
+            linkUrl2 : 'https://store.musinsa.com/app/plan/views/6974',
+            imageUrl : '//image.musinsa.com/images/banner/2019071614003800000091806.jpg',
+            bgcolor : '#8b7c62'
+        },
+        {
+            title : '무신사 여름 세일',
+            linkUrl1 : '/app/banner/check/16MAIN_UP_1_2/1',
+            linkUrl2 : 'https://store.musinsa.com/app/event/s/2019summersale/93',
+            imageUrl : '//image.musinsa.com/images/banner/2019071611005800000081191.jpg',
+            bgcolor : '#e2e2ea'
+        }
+    ]
 );
 
 // 키워드 순위 데이터 주입
