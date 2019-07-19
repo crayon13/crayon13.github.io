@@ -16,6 +16,7 @@ mss.ui.gnb = (function() {
     };
 
     var data = {
+        extendBanner : {},
         keywordRankList : [],
         campaignList :[]
     }
@@ -83,7 +84,7 @@ mss.ui.gnb = (function() {
             if ( typeof htmlFragmentConfig.htmlFragment === 'function' ) {
                 return htmlFragmentConfig.htmlFragment();
             }
-            
+
             return htmlFragment;
         };
 
@@ -114,14 +115,30 @@ mss.ui.gnb = (function() {
     htmlFragments.extendBanner = new HtmlFragment(
         {
             htmlFragment : function() {
-                return (
-                    '<div class="extend_banner" style="text-align:center; ">' + 
-                    '   <div class="btn_banner_close" style="display:none;">' + 
+                var htmlFragment = 
+                    '<div class="extend_banner" style="text-align:center;display:none;">';
+
+                var _data = data.extendBanner ;
+                if ( _data
+                    && _data.title                            
+                    && _data.linkUrl 
+                    && _data.imageUrl 
+                    && _data.bgcolor        
+                     ) {
+                    htmlFragment +=
+                        '<a href="/app/banner/check/16MAIN_UP_2_1/1" target="_blank">' + 
+                        '<span style="display:block;overflow:hidden; height:70px;background-color:#' + _data.bgcolor + '" href="' + _data.linkUrl  + '">' +
+                        '<img src="' + _data.imageUrl + '" alt="' + _data.title + '"></span></a>'
+                }
+                    
+                htmlFragment +=
+                    '   <div class="btn_banner_close">' + 
                     '       <a id="extend_banner_close" href="javascript:void(0)">' +  
                     '           <img src="' + config.storeHost + '/skin/musinsa/images/top_banner_close.png" alt="배너 닫기" /></a>' + 
                     '   </div>' + 
-                    '</div>'
-                );
+                    '</div>'; 
+
+                    return htmlFragment;
             },
             bindEvent : function() {
                 // html에 inline으로 선언 된 script를 bindEvent로 옮겼습니다.
@@ -151,7 +168,7 @@ mss.ui.gnb = (function() {
             }, 
             render : function() {
                 // gnb.js가 <div class="top-column column"> 내부로 옮겨저서 extendBanner 를 top-column 위로 올리는 작업이 먼저 되어야 합니다.
-                $(htmlFragments.extendBanner.getHtmlFragment()).insertBefore('.top-column');
+                $(htmlFragments.extendBanner.getHtmlFragment()).insertBefore('.top-column').show();
             }
         }
     );
@@ -306,7 +323,7 @@ mss.ui.gnb = (function() {
                 if ( data.campaignList ) {
                     data.campaignList.forEach(
                         function(campaign) {
-                            htmlFragment += '<li><a href="' + campaign.url + '" style="color:' + campaign.color + '">'
+                            htmlFragment += '<li><a href="' + campaign.linkUrl + '" style="color:' + campaign.color + '">'
                             + campaign.title + '</a></li>';
                         }
                     )
@@ -518,6 +535,10 @@ mss.ui.gnb = (function() {
         }
     );    
 
+    function _setExtendBanner(extendBanner) {
+        data.extendBanner = extendBanner || data.extendBanner;
+    }
+
     function _setKeywordRankList(keywordRankList) {
         data.keywordRankList = keywordRankList || data.keywordRankList;
     }
@@ -541,6 +562,7 @@ mss.ui.gnb = (function() {
     }
 
     return {
+        setExtendBanner : _setExtendBanner,
         setKeywordRankList : _setKeywordRankList,
         setCampaignList : _setCampaignList,
         render : _render
@@ -549,6 +571,16 @@ mss.ui.gnb = (function() {
 
 // 만약 gnb.js를 gnb.php로 구현 한다면
 // 다음처럼 데이터를 mss.gnb 내로 주입 할 수 있을 듯 합니다.
+mss.ui.gnb.setExtendBanner(
+    {
+        title : '무신사 역시즌 캠페인',
+        linkUrl : 'https://store.musinsa.com/app/plan/views/6974',
+        imageUrl : '//image.musinsa.com/images/banner/2019071614003800000091806.jpg',
+        bgcolor : '#8b7c62'
+    }
+);
+
+
 mss.ui.gnb.setKeywordRankList(
     [
         {"rank" : "1등","keyword" : "반팔","variation" : "even:-"},
@@ -616,7 +648,7 @@ mss.ui.gnb.setKeywordRankList(
 
 mss.ui.gnb.setCampaignList(
     [
-        {"url" : "https://store.musinsa.com/app/event/s/2019summersale/93", "color" : "#ff0000", "title" : "여름세일"},
-        {"url" : "https://store.musinsa.com/app/plan/views/6974", "color" : "#1d67c3", "title" : "역시즌"}
+        {"linkUrl" : "https://store.musinsa.com/app/event/s/2019summersale/93", "color" : "#ff0000", "title" : "여름세일"},
+        {"linkUrl" : "https://store.musinsa.com/app/plan/views/6974", "color" : "#1d67c3", "title" : "역시즌"}
     ]
 );
