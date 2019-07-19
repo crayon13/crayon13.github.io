@@ -3,14 +3,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
 <head>
 
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-TXDSFSF');</script>
-<!-- End Google Tag Manager -->
-
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="description" content="디스이즈네버댓, 커버낫, 엘엠씨, 아디다스, 반스, 휠라, 키르시, 5252 바이 오아이오아이" />
@@ -144,30 +136,30 @@ function blackfridayTopAnimation() {
 <body>
 <!-- 팝업 공지사항 -->
 
-	<form name=f1>
-		<input type="hidden" name="popup" />
-		<input type="hidden" name="sex" value="" />
-		<input type="hidden" name="u_cat_cd" value=""/>
-	</form>
-	<!-- 상단 배너 -->
-	<!-- 임시 주석 처리
-	<div class="top_banner"><img src="//image.msscdn.net/skin/musinsa/images/banner_top.jpg" width="1167" height="50" border="0" alt=""></div>
-	--><!-- //상단 배너 -->
-	<!-- 상단 콘텐츠 영역 -->
-	<script src="gnb.js"></script>
-	<div class="top-column column">
-		<!--헤더 header start-->
-		<div id="default_top" class="header store_header clearfix" >
-			<script>
-				mss.ui.gnb.render(         
-					{
-						service : 'musinsa',
-						storeHost : 'http://store.musinsa.com',
-						wusinsaHost : 'http://wusinsa.musinsa.com'
-					}
-				);            
-			</script>
-		</div>
-	</div>
+<form name=f1>
+	<input type="hidden" name="popup" />
+	<input type="hidden" name="sex" value="" />
+	<input type="hidden" name="u_cat_cd" value=""/>
+</form>
+<!-- 상단 배너 -->
+<!-- 임시 주석 처리
+<div class="top_banner"><img src="//image.msscdn.net/skin/musinsa/images/banner_top.jpg" width="1167" height="50" border="0" alt=""></div>
+--><!-- //상단 배너 -->
+<!-- 상단 콘텐츠 영역 -->
+
+
+
+
+    <script src="../gnb2.js"></script>
+    <script>
+
+
+        musinsa.gnb(
+            {
+                service : 'musinsa',
+                imageHost : 'http://store.musinsa.com'
+            }
+        ).render();            
+    </script>
 </body>
 </html>
