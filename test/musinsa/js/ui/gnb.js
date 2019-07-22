@@ -19,16 +19,16 @@ mss.ui.gnb = (function() {
     }
 
     // 기존 html상으로 존재하던 script를 내부에 등록한다.
-    var func = {
+    var fn = {
         log : function(functionName, message) {
             var log = functionName +  (message ? ':' + message : '');
             console.log(log);
         },
         addSearchKeywordAreaMsg : function() {
-            func.log('addSearchKeywordAreaMsg', 'start')
+            fn.log('addSearchKeywordAreaMsg', 'start')
             $.ajax({
                 type: "POST",
-                url: func.getServiceHost() + "/app/svc/search_kwd",
+                url: fn.getServiceHost() + "/app/svc/search_kwd",
                 success: function(msg) {
                     $("#search_kwd").html(msg);
                 }
@@ -191,7 +191,7 @@ mss.ui.gnb = (function() {
                 return (
                     '				<!--검색창-->' +
                     '				<div class="fl searchInput-box box">' +
-                    '					<form id="search_form" method="get" action="'+ func.getServiceHost() + '/app/product/search">' +
+                    '					<form id="search_form" method="get" action="'+ fn.getServiceHost() + '/app/product/search">' +
                     '						<input id="search_type" type="hidden" name="type" value="">' +
                     '						<input id="search_query" class="search head-search-inp" type="text" name="q" maxlength="30" autocomplete="off"/>' +
                     '						<span  id="search_button" class="search-btn btn ui-head-search-btn"><i class="ico ico-search">검색</i></span>' +
@@ -203,19 +203,19 @@ mss.ui.gnb = (function() {
                 );
             }
             , bindEvent : function() {
-                func.log('searchInput', 'bind');
+                fn.log('searchInput', 'bind');
 
                 // html에 onclick으로 선언 된 script를 bindEvent로 옮겼습니다.         
                 $('#search_query').on('click keydown keyup', 
                     function(event) {
-                        func.log('searchInput', 'event : ' + event.type);
+                        fn.log('searchInput', 'event : ' + event.type);
 
                         switch(event.type) {
                             case 'click' :
                                     if ($('#recommend_kwd').css('display') == 'none') {
                                         if ($('.layer-keyword-top').css("display") == "none") {
                                             if (($("#search_kwd div").length == 0)){
-                                                func.addSearchKeywordAreaMsg();
+                                                fn.addSearchKeywordAreaMsg();
                                                 //search_kwd();
                                             }
                                             $('.layer-keyword-top').toggle();
@@ -223,20 +223,20 @@ mss.ui.gnb = (function() {
                                     }                             
                                 break;       
                             case 'keydown' :
-                                func.log('searchInput', 'keyup value : ' + this.value + ' : ' + event.keyCode );
+                                fn.log('searchInput', 'keyup value : ' + this.value + ' : ' + event.keyCode );
 
                                 if ( event.keyCode === 13 ) {
-                                    func.searchKeyword();                    
+                                    fn.searchKeyword();                    
                                     return false;
                                 }
 
                                 //Suggestions.Go();
                                 break;                                             
                             case 'keyup' :
-                                func.log('searchInput', 'keyup value :' + this.value);
+                                fn.log('searchInput', 'keyup value :' + this.value);
 
                             //closeLayer(this.value);                            
-                                func.closeLayer(this.value);
+                                fn.closeLayer(this.value);
                                 //Suggestions.Do(this.value,'search_layer','suggest_keyword','suggest_brand','suggest_items','suggest_goods');
                                 break;
                         }
@@ -247,10 +247,10 @@ mss.ui.gnb = (function() {
                 // html에 onclick으로 선언 된 script를 bindEvent로 옮겼습니다.
                 $('#search_button').on('click', 
                     function() {
-                        func.log('searchInput', 'search_button : ' + event.type);
+                        fn.log('searchInput', 'search_button : ' + event.type);
 
                         //SearchKwd(); 
-                        func.searchKeyword();                    
+                        fn.searchKeyword();                    
                         return false;
                     }
                 );
@@ -309,7 +309,7 @@ mss.ui.gnb = (function() {
                         if (($("#search_kwd div").length == 0)){
                             //search_kwd();
                             // html에 inline으로 선언 된 search_kwd를 func내에 새로운 이름으로 추가 했습니다.
-                            func.addSearchKeywordAreaMsg();
+                            fn.addSearchKeywordAreaMsg();
                         }
 
                         $('.layer-keyword-top').css('display', 'block');
