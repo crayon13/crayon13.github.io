@@ -3,9 +3,6 @@ mss.ui = window.mss.ui || {};
 
 mss.ui.footer = (function() {
     var config = (mss.ui.gnb ? mss.ui.gnb.getConfig() : {}) || {};
-
-    // htmlFragment들이 등록될 Object 입니다.
-    var htmlFragments = {};
     
     // footer는 gnb에 비해 단순하여 복잡한 HtmlFragment Object를 구현하지 않습니다.
     function getHtmlFragment() {
@@ -127,12 +124,10 @@ mss.ui.footer = (function() {
         );        
     }
 
-    function _render() {
-        document.write(getHtmlFragment());
-        bindEvent();
-    }
-
     return {
-        render : _render
+        render : function() {
+            document.write(getHtmlFragment());
+            bindEvent();
+        }
     };
 }());
