@@ -78,7 +78,10 @@
 <!-- salebox start -->
 <script src="../timesale.js"></script>
 <script>
-	mss.ui.timesale.render(5);
+    // remainShapTimeSec는 현재시간과 다음 정시까지의 차이 (초) 입니다.
+    // 서버쪽에서 출력해 줘야 합니다.
+    var remainShapTimeSec = 5 ;
+    mss.ui.timesale.render(remainShapTimeSec);
 </script>
 <!-- salebox end -->
 <!-- footer start -->
