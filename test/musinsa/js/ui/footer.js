@@ -1,17 +1,29 @@
-mss = window.mss || {};
-mss.ui = window.mss.ui || {};
-
 mss.ui.footer = (function() {
-    var config = (mss.ui.gnb ? mss.ui.gnb.getConfig() : {}) || {};
-    config.isMobileDevice = false;
+    'use strict';
 
-    var isStandardPage = window.location.pathname.indexOf('/app/standards/') == 0;
+    var config = mss.ui.config.get();
+
+    var footerConfig = {
+        isStandardPage : (window.location.pathname.indexOf('/app/standards/') === 0),
+        isMobileDevice : (function() {
+            var userAgent = navigator.userAgent;
+            var mobileAgentWords = ['iPhone', 'iPod', 'Android', 'IEMobile', 'Mobile', 'lgtelecom', 'PPC'];
+
+            for ( var wordsIndex = 0; wordsIndex < mobileAgentWords.length; wordsIndex++ ) {
+                if ( userAgent.indexOf(mobileAgentWords[wordsIndex]) > -1 ) {
+                    return true;
+                }
+            }
+
+            return false;
+        }())
+    }
 
     // footer는 gnb에 비해 단순하여 복잡한 HtmlFragment Object를 구현하지 않습니다.
     function getHtmlFragment() {
         var htmlFragment = '';
 
-        if ( !isStandardPage ) {
+        if ( !footerConfig.isStandardPage ) {
             htmlFragment += '' +
                 '<footer id="bot" class="clear">' +
                 '   <div class="footer">' +
@@ -22,11 +34,11 @@ mss.ui.footer = (function() {
                 '			    <li class="division"><a href="' + config.storeHost + '/app/cs/notice_list">스토어공지</a></li>' +
                 '			    <li class="division"><a href="' + config.storeHost + '/app/company/partner">입점/제휴 문의</a></li>' +
                 '               <li class="division"><a href="' + config.magazineHost + '/?mod=private"><strong>개인정보처리방침</strong></a></li>' +
-                '               <li class="' + (config.isMobileDevice ? 'division' : '') + '">' +
+                '               <li class="' + (footerConfig.isMobileDevice ? 'division' : '') + '">' +
                 '                   <a href="' + config.magazineHost + '/?mod=agreement">이용약관</a>' +
                 '               </li>';
 
-            if (config.isMobileDevice) {
+            if (footerConfig.isMobileDevice) {
                 htmlFragment += '<li><a href="' + config.magazineHost + '/?mod=agreement">모바일버전</a></li>';
             }
 
@@ -112,7 +124,7 @@ mss.ui.footer = (function() {
                 '        </div>' +
                 '    </div>';
 
-            if (config.isMobileDevice) {
+            if (footerConfig.isMobileDevice) {
                 var requestURI = window.location.pathname +
                     window.location.search.replace('?device=pc', '')
                         .replace('&device=pc', '');
@@ -129,7 +141,7 @@ mss.ui.footer = (function() {
 
         htmlFragment += '' +
             '<div class="ui-layer-close fixed"></div>';
-            
+
         return htmlFragment;
     }
 
@@ -154,8 +166,7 @@ mss.ui.footer = (function() {
     }
 
     return {
-        render : function(isMobileDevice) {
-            config.isMobileDevice = isMobileDevice;
+        render : function() {
             document.write(getHtmlFragment());
             bindEvent();
         }

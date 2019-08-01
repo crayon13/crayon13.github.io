@@ -1,16 +1,6 @@
-mss = window.mss || {};
-mss.ui = window.mss.ui || {};
-
 mss.ui.gnb = (function() {
     'use strict';
-
-    var config = {
-        service : 'musinsa',
-        magazineHost : 'https://www.musinsa.com',
-        storeHost : 'https://store.musinsa.com',
-        wusinsaHost : 'https://wusinsa.musinsa.com',
-        showHeaderGroupArea : false
-    };
+    var config = mss.ui.config.get();
 
     var data = {
         extendBannerList : [],
@@ -64,7 +54,7 @@ mss.ui.gnb = (function() {
         }, getServiceHost : function() {
             if ( !config.serviceHost ) {
                 config.serviceHost = ( config.service === 'musinsa' ) ? config.storeHost : config.wusinsaHost;
-             }
+            }
 
             return config.serviceHost;
         }
@@ -80,7 +70,7 @@ mss.ui.gnb = (function() {
     //  - bindEvent : htmlFragment 출력 후 binding 할 Event를 정의합니다.
     //      - 개별로 호출하거나 render() 호출하면 함께 실행합니다.
     var HtmlFragment = function(htmlFragmentConfig) {
- 
+
         function _getHtmlFragment() {
             if ( typeof htmlFragmentConfig.htmlFragment === 'function' ) {
                 return htmlFragmentConfig.htmlFragment();
@@ -110,13 +100,13 @@ mss.ui.gnb = (function() {
             bindEvent : _bindEvent,
             render : _render
         };
-    };    
+    };
 
     // 상단 확장 배너
     htmlFragments.extendBanner = new HtmlFragment(
         {
             htmlFragment : function() {
-                var htmlFragment = 
+                var htmlFragment =
                     '<div class="extend_banner" style="text-align:center;display:none;">';
 
                 if ( data.extendBannerList && data.extendBannerList.length > 0 ) {
@@ -125,54 +115,54 @@ mss.ui.gnb = (function() {
                     var banner = data.extendBannerList[selectedIndex];
 
                     if ( banner
-                        && banner.title                            
+                        && banner.title
                         && banner.linkUrl1
                         && banner.linkUrl2
-                        && banner.imageUrl 
-                        && banner.bgcolor        
-                         ) {
+                        && banner.imageUrl
+                        && banner.bgcolor
+                    ) {
                         htmlFragment +=
-                            '<a href="' + config.storeHost + banner.linkUrl1 + '" target="_blank">' + 
+                            '<a href="' + config.storeHost + banner.linkUrl1 + '" target="_blank">' +
                             '<span style="display:block;overflow:hidden; height:70px;background-color:#' + banner.bgcolor + '" href="' + banner.linkUrl2 + '">' +
                             '<img id="extend_banner_image" src="' + banner.imageUrl + '" alt="' + banner.title + '"></span></a>'
                     }
                 }
-                    
-                htmlFragment +=
-                    '   <div class="btn_banner_close">' + 
-                    '       <a id="extend_banner_close" href="javascript:void(0)">' +  
-                    '           <img src="' + config.storeHost + '/skin/musinsa/images/top_banner_close.png" alt="배너 닫기" /></a>' + 
-                    '   </div>' + 
-                    '</div>'; 
 
-                    return htmlFragment;
+                htmlFragment +=
+                    '   <div class="btn_banner_close">' +
+                    '       <a id="extend_banner_close" href="javascript:void(0)">' +
+                    '           <img src="' + config.storeHost + '/skin/musinsa/images/top_banner_close.png" alt="배너 닫기" /></a>' +
+                    '   </div>' +
+                    '</div>';
+
+                return htmlFragment;
             },
             bindEvent : function() {
                 // html에 inline으로 선언 된 script를 bindEvent로 옮겼습니다.
                 //      - html에 inline으로 선언 된 script를 삭제 해야 합니다.
-                $('#extend_banner_close').on('click', 
+                $('#extend_banner_close').on('click',
                     function() {
                         $('.extend_banner').hide();
                         setCookie("musinsa_banner_close", "1", 1);
-                    } 
+                    }
                 )
                 // html에 inline으로 선언 된 script를 bindEvent로 옮겼습니다.
                 //      - html에 inline으로 선언 된 script를 삭제 해야 합니다.
                 $(function() {
                     var special_top_open_yn = getCookie("special_top_open_yn");
                     var musinsa_banner_close = getCookie("musinsa_banner_close");
-                
+
                     if ( special_top_open_yn == 'Y' ) {
                         if ( musinsa_banner_close != "1" && $('#extend_banner_image').length > 0 ) {
                             $('.extend_banner').show();
                         }
                     }
-                
+
                     if (getCookie("tvcf_close") != "done"){
                         $('#tvcf_close').show();
                     }
-                });            
-            }, 
+                });
+            },
             render : function() {
                 // gnb.js가 <div class="top-column column"> 내부로 옮겨저서 extendBanner 를 top-column 위로 올리는 작업이 먼저 되어야 합니다.
                 $(htmlFragments.extendBanner.getHtmlFragment()).insertBefore('.top-column');
@@ -183,7 +173,7 @@ mss.ui.gnb = (function() {
             }
         }
     );
-    
+
     // 검색창
     htmlFragments.searchInput = new HtmlFragment(
         {
@@ -199,43 +189,43 @@ mss.ui.gnb = (function() {
                     '						<span class="cam-btn btn ui-head-search-btn"><i class="ico ico-cam">이미지 검색</i></span>' +
                     '					</form>' +
                     '				</div>' +
-                    '				<!--//검색창-->' 
+                    '				<!--//검색창-->'
                 );
             }
             , bindEvent : function() {
                 fn.log('searchInput', 'bind');
 
-                // html에 onclick으로 선언 된 script를 bindEvent로 옮겼습니다.         
-                $('#search_query').on('click keydown keyup', 
+                // html에 onclick으로 선언 된 script를 bindEvent로 옮겼습니다.
+                $('#search_query').on('click keydown keyup',
                     function(event) {
                         fn.log('searchInput', 'event : ' + event.type);
 
                         switch(event.type) {
                             case 'click' :
-                                    if ($('#recommend_kwd').css('display') == 'none') {
-                                        if ($('.layer-keyword-top').css("display") == "none") {
-                                            if (($("#search_kwd div").length == 0)){
-                                                fn.addSearchKeywordAreaMsg();
-                                                //search_kwd();
-                                            }
-                                            $('.layer-keyword-top').toggle();
+                                if ($('#recommend_kwd').css('display') == 'none') {
+                                    if ($('.layer-keyword-top').css("display") == "none") {
+                                        if (($("#search_kwd div").length == 0)){
+                                            fn.addSearchKeywordAreaMsg();
+                                            //search_kwd();
                                         }
-                                    }                             
-                                break;       
+                                        $('.layer-keyword-top').toggle();
+                                    }
+                                }
+                                break;
                             case 'keydown' :
                                 fn.log('searchInput', 'keyup value : ' + this.value + ' : ' + event.keyCode );
 
                                 if ( event.keyCode === 13 ) {
-                                    fn.searchKeyword();                    
+                                    fn.searchKeyword();
                                     return false;
                                 }
 
                                 //Suggestions.Go();
-                                break;                                             
+                                break;
                             case 'keyup' :
                                 fn.log('searchInput', 'keyup value :' + this.value);
 
-                            //closeLayer(this.value);                            
+                                //closeLayer(this.value);
                                 fn.closeLayer(this.value);
                                 //Suggestions.Do(this.value,'search_layer','suggest_keyword','suggest_brand','suggest_items','suggest_goods');
                                 break;
@@ -243,41 +233,41 @@ mss.ui.gnb = (function() {
 
                     }
                 );
-                
+
                 // html에 onclick으로 선언 된 script를 bindEvent로 옮겼습니다.
-                $('#search_button').on('click', 
+                $('#search_button').on('click',
                     function() {
                         fn.log('searchInput', 'search_button : ' + event.type);
 
-                        //SearchKwd(); 
-                        fn.searchKeyword();                    
+                        //SearchKwd();
+                        fn.searchKeyword();
                         return false;
                     }
                 );
             }
         }
-    );   
-    
+    );
+
     // 키워드 랭킹
     htmlFragments.keywordRanking = new HtmlFragment(
         {
             htmlFragment : function() {
-                var htmlFragment = 
+                var htmlFragment =
                     '				<!--검색어 랭킹-->' +
                     '				<div class="popularSearchWord-ranking-list-wrapper">' +
                     '					<!--롤링 랭킹-->' +
                     '					<div class="rollingRanking">' +
                     '						<dl class="bxSlider" id="hotkeyword">';
 
-                    if ( data.keywordRankList ) {
-                        data.keywordRankList.forEach(
-                            function(keyword) {
-                                var variation = keyword.variation.split(':');
-                                var variattonStatus = variation[0];
-                                var variattonStatusClass = (variattonStatus === 'even') ? variattonStatus : 'rank-variation-' + variattonStatus;
-                                var variationText = variation[1];
+                if ( data.keywordRankList ) {
+                    data.keywordRankList.forEach(
+                        function(keyword) {
+                            var variation = keyword.variation.split(':');
+                            var variattonStatus = variation[0];
+                            var variattonStatusClass = (variattonStatus === 'even') ? variattonStatus : 'rank-variation-' + variattonStatus;
+                            var variationText = variation[1];
 
-                                htmlFragment += 
+                            htmlFragment +=
                                 '	                        <dd class="listItem">' +
                                 '								<a href="javascript:void(0)">' +
                                 '									<span class="rank">' + keyword.rank + '&nbsp;:&nbsp;</span>' +
@@ -285,12 +275,12 @@ mss.ui.gnb = (function() {
                                 '									<span class="rank-variation-even rank-variation"><em class="'+ variattonStatusClass + '">' + variationText + '</em></span>' +
                                 '								</a>' +
                                 '							</dd>';
-                            }
-                        )
-                    }
+                        }
+                    )
+                }
 
-                    htmlFragment +=
-                    '						</dl>' +                
+                htmlFragment +=
+                    '						</dl>' +
                     '					</div>' +
                     '					<!--//롤링 랭킹-->' +
                     '					<!--랭킹 팝업 : 개선 후 삭제-->' +
@@ -299,11 +289,11 @@ mss.ui.gnb = (function() {
                     '				<!--//검색어 랭킹-->';
 
                 return htmlFragment;
-            }, 
+            },
             bindEvent : function() {
                 // 인기 검색어 mouseenter
                 // html에 inline으로 선언 된 script를 bindEvent로 옮겼습니다.
-                //      - html에 inline으로 선언 된 script를 삭제 해야 합니다.            
+                //      - html에 inline으로 선언 된 script를 삭제 해야 합니다.
                 $('#hotkeyword').mouseenter(function() {
                     if ($('#recommend_kwd').css('display') === 'none'){
                         if (($("#search_kwd div").length == 0)){
@@ -318,13 +308,13 @@ mss.ui.gnb = (function() {
 
                 // 인기 검색어 mouseleave
                 // html에 inline으로 선언 된 script를 bindEvent로 옮겼습니다.
-                //      - html에 inline으로 선언 된 script를 삭제 해야 합니다.                   
+                //      - html에 inline으로 선언 된 script를 삭제 해야 합니다.
                 $('.layer-keyword-top').mouseleave(function() {
                     $('.layer-keyword-top').css('display','none');
-                });            
+                });
             }
         }
-    );    
+    );
 
     // 캠페인
     htmlFragments.campaign = new HtmlFragment(
@@ -335,7 +325,7 @@ mss.ui.gnb = (function() {
                     data.campaignList.forEach(
                         function(campaign) {
                             htmlFragment += '<li><a href="' + campaign.linkUrl + '" style="color:' + campaign.color + '">'
-                            + campaign.title + '</a></li>';
+                                + campaign.title + '</a></li>';
                         }
                     )
                 }
@@ -353,23 +343,23 @@ mss.ui.gnb = (function() {
                     '	<h1 class="title"><a href="/">MUSINSA STORE</a></h1>' +
                     '	<div class="search-wrapper wrapper clearfix">' +
                     htmlFragments.searchInput.getHtmlFragment() +
-                    htmlFragments.keywordRanking.getHtmlFragment() + 
+                    htmlFragments.keywordRanking.getHtmlFragment() +
                     '	</div>' +
                     '	<!--오른쪽 상단 메뉴-->' +
                     '	<div class="gnb wrapper clearfix">' +
                     '		<ul class="gnb-list clearfix gnb-list-wrap">' +
                     htmlFragments.campaignHtmlFragment +
-                    '			<!-- [D] 캠페인이 없을 경우 랭킹 li에 style="padding-left:10px" 추가 -->' + 
+                    '			<!-- [D] 캠페인이 없을 경우 랭킹 li에 style="padding-left:10px" 추가 -->' +
                     '';
-                
+
                 if ( htmlFragments.campaignHtmlFragment ) {
                     htmlFragment +=
-                    '			<li class="hovering gnb-ranking-list">';
+                        '			<li class="hovering gnb-ranking-list">';
                 } else {
                     htmlFragment +=
-                    '			<li class="hovering gnb-ranking-list" style="padding-left:10px">';
+                        '			<li class="hovering gnb-ranking-list" style="padding-left:10px">';
                 }
-                
+
                 htmlFragment +=
                     '				<a href="' + config.storeHost + '/app/contents/bestranking">랭킹</a>' +
                     '				<ul class="hoverTarget">' +
@@ -490,16 +480,16 @@ mss.ui.gnb = (function() {
                     '';
 
                 if ( config.showHeaderGroupArea ) {
-                    htmlFragment += 
-                    '<!-- 성별 선택 부분 -->' +
-                    '<div class="header_group_area">' +
-                    '    <ul class="group_list">' +
-                    '        <li><a href="'+ config.storeHost + '/app/" class="' + ( config.service === 'musinsa' ? 'selected' : '') + '">전체</a></li>' +
-                    '        <li><a href="' + config.wusinsaHost + '/app/" class="' + ( config.service === 'wusinsa' ? 'selected' : '') + '">우신사(여성)</a></li>' +
-                    '        <li><a href="'+ config.storeHost + '/app/standards/lists">스탠다드</a></li>' +
-                    '    </ul>' +
-                    '</div>' +
-                    '<!--//성별 선택 부분-->';
+                    htmlFragment +=
+                        '<!-- 성별 선택 부분 -->' +
+                        '<div class="header_group_area">' +
+                        '    <ul class="group_list">' +
+                        '        <li><a href="'+ config.storeHost + '/app/" class="' + ( config.service === 'musinsa' ? 'selected' : '') + '">전체</a></li>' +
+                        '        <li><a href="' + config.wusinsaHost + '/app/" class="' + ( config.service === 'wusinsa' ? 'selected' : '') + '">우신사(여성)</a></li>' +
+                        '        <li><a href="'+ config.storeHost + '/app/standards/lists">스탠다드</a></li>' +
+                        '    </ul>' +
+                        '</div>' +
+                        '<!--//성별 선택 부분-->';
                 }
 
                 htmlFragment +=
@@ -516,7 +506,7 @@ mss.ui.gnb = (function() {
                     '	<div class="content">' +
                     '		<div class="c1">' +
                     '			<input type="text" name="image_url" class="image_url">' +
-                    '			<input type="button" class="image_url_btn" value="이미지로 검색">' +		
+                    '			<input type="button" class="image_url_btn" value="이미지로 검색">' +
                     '       </div>' +
                     '		<div class="c2">' +
                     '			<span class="image_file_btn">파일 선택</span>' +
@@ -536,7 +526,7 @@ mss.ui.gnb = (function() {
                 htmlFragments.searchInput.bindEvent();
 
                 // html에 onclick으로 선언 된 script를 bindEvent로 옮겼습니다.
-                $('#suggest_goods_close').on('click', 
+                $('#suggest_goods_close').on('click',
                     function() {
                         Suggestions.Close('search_layer');
                         return false;
@@ -544,7 +534,7 @@ mss.ui.gnb = (function() {
                 )
             }
         }
-    );    
+    );
 
     return {
         setExtendBannerList : function(extendBannerList) {
@@ -556,20 +546,10 @@ mss.ui.gnb = (function() {
         setCampaignList : function(campaignList) {
             data.campaignList = campaignList || data.campaignList;
         },
-        render : function(configForCreator) {
-            if ( configForCreator )  {
-                $.each(configForCreator, 
-                    function(key, value) {
-                        config[key] = value;
-                    }
-                );
-            }
-    
+        render : function(configForConstructor) {
+            mss.ui.config.set(configForConstructor);
             htmlFragments.extendBanner.render();
             htmlFragments.baseArea.render();
-        },
-        getConfig : function() {
-            return config;
         }
     }
 }());
@@ -660,7 +640,7 @@ mss.ui.gnb.setKeywordRankList(
         {"rank" : "58등","keyword" : "신발","variation" : "down:▼ 5"},
         {"rank" : "59등","keyword" : "티셔츠","variation" : "up:▲ 52"},
         {"rank" : "60등","keyword" : "하와이안 셔츠","variation" : "up:▲ 39"}
-    ]   
+    ]
 );
 
 // 캠페인 데이터 주입
