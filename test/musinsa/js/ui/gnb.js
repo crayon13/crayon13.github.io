@@ -17,7 +17,7 @@ mss.ui.gnb = (function() {
     var fn = {
         log : function(functionName, message) {
             var log = functionName +  (message ? ':' + message : '');
-            //console.log(log);
+            // console.log(log);
         },
         addSearchKeywordAreaMsg : function() {
             fn.log('addSearchKeywordAreaMsg', 'start')
