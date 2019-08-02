@@ -115,7 +115,7 @@ mss.ui.timesale = (function() {
     // footer는 gnb에 비해 단순하여 복잡한 HtmlFragment Object를 구현하지 않습니다.
     function getHtmlFragment() {
         var htmlFragment = '' +
-            '<div class="layer_salebox" id="layer_timesale" style="display:">' + 
+            '<div class="layer_salebox" id="layer_timesale" style="display:none">' + 
             '	<strong class="box_tit">타임 세일</strong>' + 
             '	<div id="ad_time_sale" style="width:100%"></div>' + 
             '	<button class="btn nav-btn prev" id="ad_time_sale_prev">이전 상품 보기</button>' + 
