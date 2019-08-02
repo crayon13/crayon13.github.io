@@ -10,7 +10,7 @@ mss.my.ajax = (function () {
 
     var loadingImg = '' +
         '<div id="loadingImg" class="n-loading-page">' +
-        '<img src="' + config.storeHost + '/skin/musinsa/images/loading.png"/>' +
+        '<img src="' + config.storeHost + '/skin/musinsa/images/loading.png" class="loading" alt=""/>' +
         '</div>';
 
 
