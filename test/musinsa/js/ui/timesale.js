@@ -3,14 +3,15 @@ mss.ui.timesale = (function() {
 
     var config = mss.ui.config.get();
 
-    var footerConfig = {
+    var settings = {
         sharpTimeCheckIntervalSec : 600,
-        cookieKey : 'is_ad_time_sale'
-    }
+        cookieKey : 'is_ad_time_sale',
+        remainShapTimeSec : 0
+    };
 
     var fn = {
         isViewTimeSale : function() {
-            if ( getCookie(footerConfig.cookieKey) ) {
+            if ( getCookie(settings.cookieKey) ) {
                 return true;
             }
 
@@ -32,18 +33,18 @@ mss.ui.timesale = (function() {
                 setTimeout(function(){countDownAdTimeSale(goodsNo, remainTimeSec);},1000);
             }
         }, 
-        countDownSharpTime : function(remainShapTimeSec) {
-            remainShapTimeSec = parseInt(remainShapTimeSec, 10) - 1;
+        countDownSharpTime : function() {
+            settings.remainShapTimeSec = parseInt(settings.remainShapTimeSec, 10) - 1;
   
-            if(footerConfig.sharpTimeCheckIntervalSec === 0) {
+            if(settings.sharpTimeCheckIntervalSec === 0) {
               return false;
             }
           
-            if(remainShapTimeSec > 0) {
+            if(settings.remainShapTimeSec > 0) {
               setTimeout(function(){
-                fn.countDownSharpTime(remainShapTimeSec);
+                fn.countDownSharpTime();
               }, 1000);
-              footerConfig.sharpTimeCheckIntervalSec--;
+              settings.sharpTimeCheckIntervalSec--;
             } else {
                 fn.getAdTimeSale();
             }            
@@ -100,8 +101,8 @@ mss.ui.timesale = (function() {
                                 prev : '#ad_time_sale_prev'
                             });
     
-                            if(getCookie(footerConfig.cookieKey) === '') {
-                                setCookie(footerConfig.cookieKey, 1, 1);
+                            if(getCookie(settings.cookieKey) === '') {
+                                setCookie(settings.cookieKey, 1, 1);
                             }
                         });
                     }
@@ -114,7 +115,7 @@ mss.ui.timesale = (function() {
     // footer는 gnb에 비해 단순하여 복잡한 HtmlFragment Object를 구현하지 않습니다.
     function getHtmlFragment() {
         var htmlFragment = '' +
-            '<div class="layer_salebox" id="layer_timesale" style="display:none">' + 
+            '<div class="layer_salebox" id="layer_timesale" style="display:">' + 
             '	<strong class="box_tit">타임 세일</strong>' + 
             '	<div id="ad_time_sale" style="width:100%"></div>' + 
             '	<button class="btn nav-btn prev" id="ad_time_sale_prev">이전 상품 보기</button>' + 
@@ -128,7 +129,7 @@ mss.ui.timesale = (function() {
         return htmlFragment;
     }
 
-    function bindEvent(remainShapTimeSec) {
+    function bindEvent() {
         $('.close', '#layer_timesale').on('click', 
             function() {
                 $('#layer_timesale').hide(200);
@@ -142,15 +143,16 @@ mss.ui.timesale = (function() {
             if( fn.isViewTimeSale() ) {
                 fn.getAdTimeSale();
             } else {
-                fn.countDownSharpTime(remainShapTimeSec);
+                fn.countDownSharpTime();
             }
         });
     }
 
     return {
-        render : function(remainShapTimeSec) {
+        render : function(timeSaleSettings) {
+            mss.ui.config.replaceObjectValue(settings, timeSaleSettings);
             document.write(getHtmlFragment());
-            bindEvent(remainShapTimeSec);
+            bindEvent();
         }
     };
 }());

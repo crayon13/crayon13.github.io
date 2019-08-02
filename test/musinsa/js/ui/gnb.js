@@ -1,8 +1,13 @@
 mss.ui.gnb = (function() {
     'use strict';
+
     var config = mss.ui.config.get();
 
-    var data = {
+    var settings = {
+        showHeaderGroupArea : false
+    }
+
+    var datas = {
         extendBannerList : [],
         keywordRankList : [],
         campaignList :[]
@@ -109,10 +114,10 @@ mss.ui.gnb = (function() {
                 var htmlFragment =
                     '<div class="extend_banner" style="text-align:center;display:none;">';
 
-                if ( data.extendBannerList && data.extendBannerList.length > 0 ) {
-                    var selectedIndex = Math.floor(Math.random() * (data.extendBannerList.length - 0)) + 0;
+                if ( datas.extendBannerList && datas.extendBannerList.length > 0 ) {
+                    var selectedIndex = Math.floor(Math.random() * (datas.extendBannerList.length - 0)) + 0;
 
-                    var banner = data.extendBannerList[selectedIndex];
+                    var banner = datas.extendBannerList[selectedIndex];
 
                     if ( banner
                         && banner.title
@@ -259,8 +264,8 @@ mss.ui.gnb = (function() {
                     '					<div class="rollingRanking">' +
                     '						<dl class="bxSlider" id="hotkeyword">';
 
-                if ( data.keywordRankList ) {
-                    data.keywordRankList.forEach(
+                if ( datas.keywordRankList ) {
+                    datas.keywordRankList.forEach(
                         function(keyword) {
                             var variation = keyword.variation.split(':');
                             var variattonStatus = variation[0];
@@ -321,8 +326,8 @@ mss.ui.gnb = (function() {
         {
             htmlFragment : function() {
                 var htmlFragment = '';
-                if ( data.campaignList ) {
-                    data.campaignList.forEach(
+                if ( datas.campaignList ) {
+                    datas.campaignList.forEach(
                         function(campaign) {
                             htmlFragment += '<li><a href="' + campaign.linkUrl + '" style="color:' + campaign.color + '">'
                                 + campaign.title + '</a></li>';
@@ -479,7 +484,7 @@ mss.ui.gnb = (function() {
                     '		<!--<div class="layerbanner_repeat outerFsetival"><a href="' + config.storeHost + '/app/campaign/main/34">아우터</a></div>-->' +
                     '';
 
-                if ( config.showHeaderGroupArea ) {
+                if ( settings.showHeaderGroupArea ) {
                     htmlFragment +=
                         '<!-- 성별 선택 부분 -->' +
                         '<div class="header_group_area">' +
@@ -538,16 +543,16 @@ mss.ui.gnb = (function() {
 
     return {
         setExtendBannerList : function(extendBannerList) {
-            data.extendBannerList = extendBannerList || data.extendBannerList;
+            datas.extendBannerList = extendBannerList || datas.extendBannerList;
         },
         setKeywordRankList : function(keywordRankList) {
-            data.keywordRankList = keywordRankList || data.keywordRankList;
+            datas.keywordRankList = keywordRankList || datas.keywordRankList;
         },
         setCampaignList : function(campaignList) {
-            data.campaignList = campaignList || data.campaignList;
+            datas.campaignList = campaignList || datas.campaignList;
         },
-        render : function(configForConstructor) {
-            mss.ui.config.set(configForConstructor);
+        render : function(gnbSettings) {
+            mss.ui.config.replaceObjectValue(settings, gnbSettings);
             htmlFragments.extendBanner.render();
             htmlFragments.baseArea.render();
         }

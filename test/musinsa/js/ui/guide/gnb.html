@@ -51,20 +51,30 @@
 
 <div class="top-column column">
     <div id="default_top" class="header store_header clearfix" >
-		<!-- gnb start -->
+		<!-- mss.ui : global config start -->
 		<script src="../config.js"></script>
+		<script>
+			// mss.ui.config 내의 기본 속성값을 대치하기 위한 Object
+			var uiConfig = {
+				service : 'musinsa',
+				magazineHost : 'https://www.musinsa.com',
+				storeHost : 'https://1dstore.musinsa.com',
+				wusinsaHost : 'https://wusinsa.musinsa.com'
+			};
+
+			mss.ui.config.set(uiConfig);
+		</script>
+		<!-- mss.ui : global config end -->
+		<!-- mss.ui : gnb start -->
         <script src="../gnb.js"></script>
         <script>
-            mss.ui.gnb.render(
-                {
-                    service : 'musinsa',
-                    magazineHost : 'https://www.musinsa.com',
-                    storeHost : 'https://1dstore.musinsa.com',
-                    wusinsaHost : 'https://wusinsa.musinsa.com'
-                }
-            );
+			// GNB Header group 노출 설정 : 기본은값은 true
+			var gnbSettings = {
+				showHeaderGroupArea : false
+			};
+            mss.ui.gnb.render(gnbSettings);
         </script>
-        <!-- gnb end -->
+        <!-- mss.ui : gnb end -->
     </div>
 </div>
 
@@ -75,21 +85,24 @@
 <br/>
 <br/>
 
-<!-- salebox start -->
+<!-- mss.ui : timesale start -->
 <script src="../timesale.js"></script>
 <script>
     // remainShapTimeSec는 현재시간과 다음 정시까지의 차이 (초) 입니다.
-    // 서버쪽에서 출력해 줘야 합니다.
-    var remainShapTimeSec = 5 ;
-    mss.ui.timesale.render(remainShapTimeSec);
+	// 서버쪽에서 출력해 줘야 합니다.
+	// GNB Header group 노출 설정 : 기본은값은 true
+	var timesaleSettings = {
+		remainShapTimeSec : 5
+	};	
+    mss.ui.timesale.render(timesaleSettings);
 </script>
-<!-- salebox end -->
-<!-- footer start -->
+<!-- mss.ui : timesale end -->
+<!-- mss.ui : footer start -->
 <script src="../footer.js"></script>
 <script>
     mss.ui.footer.render();
 </script>
-<!-- footer end -->
+<!-- mss.ui : footer end -->
 
 </body>
 </html>

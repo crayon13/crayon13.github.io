@@ -3,7 +3,7 @@ mss.ui.footer = (function() {
 
     var config = mss.ui.config.get();
 
-    var footerConfig = {
+    var settings = {
         isStandardPage : (window.location.pathname.indexOf('/app/standards/') === 0),
         isMobileDevice : (function() {
             var userAgent = navigator.userAgent;
@@ -23,7 +23,7 @@ mss.ui.footer = (function() {
     function getHtmlFragment() {
         var htmlFragment = '';
 
-        if ( !footerConfig.isStandardPage ) {
+        if ( !settings.isStandardPage ) {
             htmlFragment += '' +
                 '<footer id="bot" class="clear">' +
                 '   <div class="footer">' +
@@ -34,11 +34,11 @@ mss.ui.footer = (function() {
                 '			    <li class="division"><a href="' + config.storeHost + '/app/cs/notice_list">스토어공지</a></li>' +
                 '			    <li class="division"><a href="' + config.storeHost + '/app/company/partner">입점/제휴 문의</a></li>' +
                 '               <li class="division"><a href="' + config.magazineHost + '/?mod=private"><strong>개인정보처리방침</strong></a></li>' +
-                '               <li class="' + (footerConfig.isMobileDevice ? 'division' : '') + '">' +
+                '               <li class="' + (settings.isMobileDevice ? 'division' : '') + '">' +
                 '                   <a href="' + config.magazineHost + '/?mod=agreement">이용약관</a>' +
                 '               </li>';
 
-            if (footerConfig.isMobileDevice) {
+            if (settings.isMobileDevice) {
                 htmlFragment += '<li><a href="' + config.magazineHost + '/?mod=agreement">모바일버전</a></li>';
             }
 
@@ -124,7 +124,7 @@ mss.ui.footer = (function() {
                 '        </div>' +
                 '    </div>';
 
-            if (footerConfig.isMobileDevice) {
+            if (settings.isMobileDevice) {
                 var requestURI = window.location.pathname +
                     window.location.search.replace('?device=pc', '')
                         .replace('&device=pc', '');
