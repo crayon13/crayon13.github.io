@@ -51,27 +51,30 @@
 
 <div class="top-column column">
     <div id="default_top" class="header store_header clearfix" >
-		<!-- mss.ui : global config start -->
-		<script src="../config.js"></script>
-		<script>
-			// mss.ui.config 내의 기본 속성값을 대치하기 위한 Object
-			var uiConfig = {
-				service : 'musinsa',
-				magazineHost : 'https://www.musinsa.com',
-				storeHost : 'https://1dstore.musinsa.com',
-				wusinsaHost : 'https://wusinsa.musinsa.com'
-			};
+        <!-- mss.ui : global config start -->
+        <script src="../config.js"></script>
+        <script>
+            // mss.ui.config 내의 기본 속성값을 대치하기 위한 Object
+            // 서버쪽에서 출력해 줘야 합니다.
+            var uiConfig = {
+                service : 'musinsa',
+                magazineHost : 'https://www.musinsa.com',
+                storeHost : 'https://1dstore.musinsa.com',
+                wusinsaHost : 'https://wusinsa.musinsa.com'
+            };
 
-			mss.ui.config.set(uiConfig);
-		</script>
-		<!-- mss.ui : global config end -->
-		<!-- mss.ui : gnb start -->
+            mss.ui.config.set(uiConfig);
+        </script>
+        <!-- mss.ui : global config end -->
+        <!-- mss.ui : gnb start -->
         <script src="../gnb.js"></script>
         <script>
-			// GNB Header group 노출 설정 : 기본은값은 true
-			var gnbSettings = {
-				showHeaderGroupArea : false
-			};
+            // GNB Header group 노출 설정 : 기본은값은 true
+            // 서버쪽에서 출력해 줘야 합니다.
+            var gnbSettings = {
+                showHeaderGroupArea : false
+            };
+
             mss.ui.gnb.render(gnbSettings);
         </script>
         <!-- mss.ui : gnb end -->
@@ -89,11 +92,11 @@
 <script src="../timesale.js"></script>
 <script>
     // remainShapTimeSec는 현재시간과 다음 정시까지의 차이 (초) 입니다.
-	// 서버쪽에서 출력해 줘야 합니다.
-	// GNB Header group 노출 설정 : 기본은값은 true
-	var timesaleSettings = {
-		remainShapTimeSec : 5
-	};	
+    // 서버쪽에서 출력해 줘야 합니다.
+    var timesaleSettings = {
+        remainShapTimeSec : 5
+    };
+    
     mss.ui.timesale.render(timesaleSettings);
 </script>
 <!-- mss.ui : timesale end -->
