@@ -4,44 +4,40 @@ mss.my = window.mss.my || {};
 mss.my.ajax = (function () {
     'use strict';
 
-    var config = mss.ui.config.get();
+    var _config = mss.ui.config.get(),
+        _mask = '<div id="mask" style="position:absolute; z-index:9000; background-color:#000000; display:none; left:0; top:0;"></div>',
+        _loadingImg = '' +
+            '<div id="loadingImg" class="n-loading-page">' +
+            '<img src="' + _config.storeHost + '/skin/musinsa/images/loading.png" class="loading" alt=""/>' +
+            '</div>',
+        _fn = {
+            showLoadingBar: function () {
+                var maskHeight = $(document).height(),
+                    maskWidth = window.document.body.clientWidth;
 
-    var mask = '<div id="mask" style="position:absolute; z-index:9000; background-color:#000000; display:none; left:0; top:0;"></div>';
+                $('body').append(_mask).append(_loadingImg);
 
-    var loadingImg = '' +
-        '<div id="loadingImg" class="n-loading-page">' +
-        '<img src="' + config.storeHost + '/skin/musinsa/images/loading.png" class="loading" alt=""/>' +
-        '</div>';
-
-
-    var fn = {
-        showLoadingBar: function () {
-            var maskHeight = $(document).height();
-            var maskWidth = window.document.body.clientWidth;
-
-            $('body').append(mask).append(loadingImg);
-
-            $('#mask')
-                .css({'width': maskWidth, 'height': maskHeight, 'opacity': '0.3'})
-                .show();
-            $('#loadingImg').show();
-        },
-        hideLoadingBar: function () {
-            $('#mask, #loadingImg')
-                .hide()
-                .remove();
+                $('#mask')
+                    .css({'width': maskWidth, 'height': maskHeight, 'opacity': '0.3'})
+                    .show();
+                $('#loadingImg').show();
+            },
+            hideLoadingBar: function () {
+                $('#mask, #loadingImg')
+                    .hide()
+                    .remove();
+            }
         }
-    }
 
     return {
         call: function (jQueryAjaxSettings, isUseLoading) {
             if(isUseLoading) {
                 jQueryAjaxSettings.beforeSend = function () {
-                    fn.showLoadingBar();
+                    _fn.showLoadingBar();
                 }
 
                 jQueryAjaxSettings.complete =  function () {
-                    fn.hideLoadingBar();
+                    _fn.hideLoadingBar();
                 }
             }
 

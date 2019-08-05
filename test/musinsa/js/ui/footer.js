@@ -1,45 +1,44 @@
 mss.ui.footer = (function() {
     'use strict';
 
-    var config = mss.ui.config.get();
+    var _config = mss.ui.config.get(),
+        _settings = {
+            isStandardPage : (window.location.pathname.indexOf('/app/standards/') === 0),
+            isMobileDevice : (function() {
+                var userAgent = navigator.userAgent;
+                var mobileAgentWords = ['iPhone', 'iPod', 'Android', 'IEMobile', 'Mobile', 'lgtelecom', 'PPC'];
 
-    var settings = {
-        isStandardPage : (window.location.pathname.indexOf('/app/standards/') === 0),
-        isMobileDevice : (function() {
-            var userAgent = navigator.userAgent;
-            var mobileAgentWords = ['iPhone', 'iPod', 'Android', 'IEMobile', 'Mobile', 'lgtelecom', 'PPC'];
-
-            for ( var wordsIndex = 0; wordsIndex < mobileAgentWords.length; wordsIndex++ ) {
-                if ( userAgent.indexOf(mobileAgentWords[wordsIndex]) > -1 ) {
-                    return true;
+                for ( var wordsIndex = 0; wordsIndex < mobileAgentWords.length; wordsIndex++ ) {
+                    if ( userAgent.indexOf(mobileAgentWords[wordsIndex]) > -1 ) {
+                        return true;
+                    }
                 }
-            }
 
-            return false;
-        }())
-    }
+                return false;
+            }())
+        }
 
     // footer는 gnb에 비해 단순하여 복잡한 HtmlFragment Object를 구현하지 않습니다.
-    function getHtmlFragment() {
+    function _getHtmlFragment() {
         var htmlFragment = '';
 
-        if ( !settings.isStandardPage ) {
+        if ( !_settings.isStandardPage ) {
             htmlFragment += '' +
                 '<footer id="bot" class="clear">' +
                 '   <div class="footer">' +
                 '       <div class="snb snb_store">' +
                 '           <ul class="clearfix_store">' +
-                '               <li class="division"><a href="' + config.magazineHost + '/company/" target="_blank">회사소개</a></li>' +
-                '               <li class="division"><a href="' + config.magazineHost + '/?m=forum&bid=event_notice">공지사항</a></li>' +
-                '			    <li class="division"><a href="' + config.storeHost + '/app/cs/notice_list">스토어공지</a></li>' +
-                '			    <li class="division"><a href="' + config.storeHost + '/app/company/partner">입점/제휴 문의</a></li>' +
-                '               <li class="division"><a href="' + config.magazineHost + '/?mod=private"><strong>개인정보처리방침</strong></a></li>' +
-                '               <li class="' + (settings.isMobileDevice ? 'division' : '') + '">' +
-                '                   <a href="' + config.magazineHost + '/?mod=agreement">이용약관</a>' +
+                '               <li class="division"><a href="' + _config.magazineHost + '/company/" target="_blank">회사소개</a></li>' +
+                '               <li class="division"><a href="' + _config.magazineHost + '/?m=forum&bid=event_notice">공지사항</a></li>' +
+                '			    <li class="division"><a href="' + _config.storeHost + '/app/cs/notice_list">스토어공지</a></li>' +
+                '			    <li class="division"><a href="' + _config.storeHost + '/app/company/partner">입점/제휴 문의</a></li>' +
+                '               <li class="division"><a href="' + _config.magazineHost + '/?mod=private"><strong>개인정보처리방침</strong></a></li>' +
+                '               <li class="' + (_settings.isMobileDevice ? 'division' : '') + '">' +
+                '                   <a href="' + _config.magazineHost + '/?mod=agreement">이용약관</a>' +
                 '               </li>';
 
-            if (settings.isMobileDevice) {
-                htmlFragment += '<li><a href="' + config.magazineHost + '/?mod=agreement">모바일버전</a></li>';
+            if (_settings.isMobileDevice) {
+                htmlFragment += '<li><a href="' + _config.magazineHost + '/?mod=agreement">모바일버전</a></li>';
             }
 
             htmlFragment += '' +
@@ -61,8 +60,8 @@ mss.ui.footer = (function() {
                 '                <div class="cs-addressBox addressBox">' +
                 '                    <p class="title">고객센터' +
                 '                        <span class="brackets">' +
-                '					[ <a href="' + config.storeHost + '/app/cs/faq" class="division"><span>FAQ</span></a>' +
-                '					<a href="' + config.storeHost + '/app/cs/counsel" class="division"><span>1:1질문하기</span></a>' +
+                '					[ <a href="' + _config.storeHost + '/app/cs/faq" class="division"><span>FAQ</span></a>' +
+                '					<a href="' + _config.storeHost + '/app/cs/counsel" class="division"><span>1:1질문하기</span></a>' +
                 '					<a href="mailto:cs@musinsa.com"><span>이메일문의</span></a> ]' +
                 '				</span>' +
                 '                    </p>' +
@@ -70,7 +69,7 @@ mss.ui.footer = (function() {
                 '                        <p class="phoneNumber">' +
                 '                            <span class="tel_number">대표전화</span>' +
                 '                            <span class="number font-mss">1544-7199</span>' +
-                '                            <span class="phoneNumber_click"><a href="' + config.storeHost + '/app/cs/faq">전화문의 전 <strong>CLICK</strong></a></span>' +
+                '                            <span class="phoneNumber_click"><a href="' + _config.storeHost + '/app/cs/faq">전화문의 전 <strong>CLICK</strong></a></span>' +
                 '                        </p>' +
                 '                        <p class="description">1번 : 배송 / 교환 / 환불관련</p>' +
                 '                        <p class="description">2번 : 결제 / 회원 관련</p>' +
@@ -99,7 +98,7 @@ mss.ui.footer = (function() {
                 '                    </p>' +
                 '                    <p>' +
                 '                        이러한 콘텐츠는 출처를 밝히고(무신사닷컴 표기 및 www.musinsa.com 링크 포함 필수) 비상업적인 용도에서만 활용하실 수 있습니다.' +
-                '                        <a href="' + config.magazineHost + '/?m=forum&bid=event_notice&p=3&mod=view&uid=15974">자세히보기</a>' +
+                '                        <a href="' + _config.magazineHost + '/?m=forum&bid=event_notice&p=3&mod=view&uid=15974">자세히보기</a>' +
                 '                    </p>' +
                 '                    <p class="last">' +
                 '                        커뮤니티 및 중고장터, 댓글 등 무신사 회원이 올린 이미지가 저작권에 위배될 경우' +
@@ -124,10 +123,9 @@ mss.ui.footer = (function() {
                 '        </div>' +
                 '    </div>';
 
-            if (settings.isMobileDevice) {
+            if (_settings.isMobileDevice) {
                 var requestURI = window.location.pathname +
-                    window.location.search.replace('?device=pc', '')
-                        .replace('&device=pc', '');
+                    window.location.search.replace('?device=pc', '').replace('&device=pc', '');
 
                 htmlFragment += '' +
                     '        <div class="switch_mobile">' +
@@ -145,10 +143,10 @@ mss.ui.footer = (function() {
         return htmlFragment;
     }
 
-    function bindEvent() {
+    function _bindEvent() {
         $('#footer_notify').on('click',
             function() {
-                window.open(config.magazineHost + '/?m=bbs&bid=suggest','','left=0,top=0,width=600px,height=700px,statusbar=no,scrollbars=yes,toolbar=no');
+                window.open(_config.magazineHost + '/?m=bbs&bid=suggest','','left=0,top=0,width=600px,height=700px,statusbar=no,scrollbars=yes,toolbar=no');
             }
         );
 
@@ -167,8 +165,8 @@ mss.ui.footer = (function() {
 
     return {
         render : function() {
-            document.write(getHtmlFragment());
-            bindEvent();
+            document.write(_getHtmlFragment());
+            _bindEvent();
         }
     };
 }());
