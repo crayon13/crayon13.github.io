@@ -54,8 +54,19 @@
         <!-- mss.ui : global config start -->
         <script src="../config.js"></script>
         <script>
-            // mss.ui.config 내의 기본 속성값을 대치하기 위한 Object
-            // 서버쪽에서 출력해 줘야 합니다.
+            /**
+             * mss.ui.config 내의 기본 속성값을 대치하기 위한 Object
+             * 
+             * 필수 파라미터 : 서버쪽에서 출력해 줘야 합니다.
+             *  - service
+             *      - musinsa or wusinsa
+             *  - magazineHost
+             *      - 환경 (devel / prod)에 따른 매거진의 host 정의
+             *  - storeHost
+             *      - 환경 (devel / prod)에 따른 store의 host 정의
+             *  - wusinsaHost
+             *      - 환경 (devel / prod)에 따른 wusinsa의 host 정의
+             */ 
             var uiConfig = {
                 service : 'musinsa',
                 magazineHost : 'https://www.musinsa.com',
@@ -69,8 +80,15 @@
         <!-- mss.ui : gnb start -->
         <script src="../gnb.js"></script>
         <script>
-            // GNB Header group 노출 설정 : 기본은값은 true
-            // 서버쪽에서 출력해 줘야 합니다.
+            /**
+             * GNB 설정을 위한 Object
+             * 
+             * 옵션 파라미터
+             *  - showHeaderGroupArea
+             *      - showHeaderGroupArea
+             *          - true or false
+             *          - 기본은값은 true
+             */
             var gnbSettings = {
                 showHeaderGroupArea : false
             };
@@ -95,10 +113,20 @@
 <!-- mss.ui : timesale start -->
 <script src="../timesale.js"></script>
 <script>
-    // remainShapTimeSec는 현재시간과 다음 정시까지의 차이 (초) 입니다.
-    // 서버쪽에서 출력해 줘야 합니다.
+    /** 
+     * 무신사 타임세일 토스트 배너
+     * 
+     * 필수 파라미터 : 서버쪽에서 출력해 줘야 합니다.
+     *  - remainShapTimeSec :
+     *      - 현재시간과 다음 정시까지의 차이 (초) 입니다.
+     * 옵션 파라미터
+     *  - jsonpUrl 
+     *      - 테스트를 위해 dummy Jsonp를 사용할 경우 jsonp url을 설정 할 수 있습니다.
+     *      - 기본은 store.musinsa.com/app/svc/get_ad_time_sale_list/ 입니다.
+     */
     var timesaleSettings = {
         remainShapTimeSec : 5
+        , jsonpUrl : 'http://crayon13.musinsa.com:8000/member/v1/timesale'
     };
 
     mss.ui.timesale.render(timesaleSettings);

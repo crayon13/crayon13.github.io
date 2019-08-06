@@ -5,8 +5,9 @@ mss.ui.timesale = (function() {
         _settings = {
             sharpTimeCheckIntervalSec : 600,
             cookieKey : 'is_ad_time_sale',
-            remainShapTimeSec : 0
-        }, 
+            remainShapTimeSec : 1,
+            jsonpUrl : _config.storeHost + '/app/svc/get_ad_time_sale_list/'
+        },
         _fn = {
             isViewTimeSale : function() {
                 if ( getCookie(_settings.cookieKey) ) {
@@ -17,18 +18,22 @@ mss.ui.timesale = (function() {
             },
             countDownAdTimeSale : function (goodsNo, remainTimeSec) {
                 remainTimeSec = parseInt(remainTimeSec,10) - 1;
-                day = Math.floor(remainTimeSec / (3600 * 24)); mod = remainTimeSec % (3600 * 24);
-                hrs = Math.floor(mod / 3600); mod = mod % 3600;
-                min = Math.floor(mod / 60);
-                sec = mod % 60;
+                var day = Math.floor(remainTimeSec / (3600 * 24)),
+                    modForHour = remainTimeSec % (3600 * 24),
+                    hrs = Math.floor(modForHour / 3600),
+                    modForSec = modForHour % 3600,
+                    min = Math.floor(modForSec / 60),
+                    sec = modForSec % 60;
+
                 hrs = (hrs > 9) ? hrs.toString() : '0' + hrs.toString();
                 min = (min > 9) ? min.toString() : '0' + min.toString();
                 sec = (sec > 9) ? sec.toString() : '0' + sec.toString();
+
                 $('#ad_time_sale_day_' + goodsNo).text("D-" + day);
                 $('#ad_time_sale_time_' + goodsNo).text(hrs + ":" + min + ":" + sec);
 
                 if(remainTimeSec > 0) {
-                    setTimeout(function(){countDownAdTimeSale(goodsNo, remainTimeSec);},1000);
+                    setTimeout(function(){_fn.countDownAdTimeSale(goodsNo, remainTimeSec);},1000);
                 }
             },
             countDownSharpTime : function() {
@@ -50,8 +55,7 @@ mss.ui.timesale = (function() {
                 $.ajax({
                     type: 'GET',
                     dataType: 'jsonp',
-                    //jsonpCallback: 'getAdTimeSaleCallback',
-                    url: _config.storeHost + '/app/svc/get_ad_time_sale_list/',
+                    url : _settings.jsonpUrl,
                     success: function(json) {
                         if( json.length ) {
                             var contents = '';
@@ -74,7 +78,7 @@ mss.ui.timesale = (function() {
                                     contents += '<del class="del">' + Comma(json[i].normal_price) + '원</del>';
                                 }
 
-                                contents += + '' +
+                                contents += '' +
                                     '</span>' +
                                     '</a>';
                                 /* 20180405 타임세일 레이어 디자인 개선 END */
@@ -98,7 +102,6 @@ mss.ui.timesale = (function() {
                                     next : '#ad_time_sale_next',
                                     prev : '#ad_time_sale_prev'
                                 });
-                                
 
                                 if( !getCookie(_settings.cookieKey) ) {
                                     setCookie(_settings.cookieKey, 1, 1);
