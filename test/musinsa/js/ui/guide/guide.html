@@ -108,6 +108,59 @@
 
 <!-- mss.ui : ajax start -->
 <script src="../../ajax.js"></script>
+<script>
+    //로딩바 사용
+    mss.my.ajax.call(
+        {
+            url: 'ajax.json',
+            method: 'get',
+            dataType: 'json',
+            data: {
+                friendRelType: 1
+            },
+            done: function (data) {
+               console.log('done : ' + data.products.length);
+            },
+            fail: function (jqXHR, status, errorThrown) {
+                console.log("falil : code = " + jqXHR.status + " message = " + jqXHR.responseText + " error = " + errorThrown); // 실패 시 처리
+            },
+            success : function(data) {
+                console.log('success : ' + data.products.length);
+            },
+            error: function (jqXHR, status, errorThrown) {
+                console.log("error : code = " + jqXHR.status + " message = " + jqXHR.responseText + " error = " + errorThrown); // 실패 시 처리
+            },            
+        }
+        , true
+    );
+
+    //로딩바 사용
+    mss.my.ajax.call(
+        {
+            url: 'ajax.json',
+            method: 'get',
+            dataType: 'json',
+            data: {
+                friendRelType: 1
+            },
+            done: function (data) {
+               console.log('done : ' + data.products.length);
+            },
+            fail: function (jqXHR, status, errorThrown) {
+                console.log("falil : code = " + jqXHR.status + " message = " + jqXHR.responseText + " error = " + errorThrown); // 실패 시 처리
+            },
+            success : function(data) {
+                console.log('success : ' + data.products.length);
+            },
+            error: function (jqXHR, status, errorThrown) {
+                console.log("error : code = " + jqXHR.status + " message = " + jqXHR.responseText + " error = " + errorThrown); // 실패 시 처리
+            },            
+        }
+        , true
+    );
+
+</script>
+
 <!-- mss.ui : ajax end -->
 
 <!-- mss.ui : timesale start -->

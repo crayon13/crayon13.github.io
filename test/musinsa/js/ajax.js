@@ -41,7 +41,25 @@ mss.my.ajax = (function () {
                 }
             }
 
-            $.ajax(jQueryAjaxSettings);
+            var doneFunction = function() {},
+                failFunction = function() {};   
+
+            if ( jQueryAjaxSettings.done || jQueryAjaxSettings.success ) {
+                doneFunction = jQueryAjaxSettings.done || jQueryAjaxSettings.success;
+
+                jQueryAjaxSettings.done = jQueryAjaxSettings.success = '';
+            }
+
+            if ( jQueryAjaxSettings.fail || jQueryAjaxSettings.error ) {
+                failFunction = jQueryAjaxSettings.fail || jQueryAjaxSettings.error;
+
+                jQueryAjaxSettings.fail = jQueryAjaxSettings.error = '';
+            }
+
+            $.ajax(jQueryAjaxSettings)
+                .done(doneFunction)
+                .fail(failFunction)
+
         }
     }
 }());
