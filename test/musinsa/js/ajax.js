@@ -58,7 +58,7 @@ mss.my.ajax = (function () {
 
             $.ajax(jQueryAjaxSettings)
                 .done(doneFunction)
-                .fail(failFunction)
+                .fail(failFunction);
 
         }
     }
