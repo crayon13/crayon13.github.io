@@ -2,6 +2,7 @@ mss.ui.footer = (function() {
     'use strict';
 
     var _config = mss.ui.config.get(),
+        _serviceHost = mss.ui.config.getServiceHost(),
         _settings = {
             isStandardPage : (window.location.pathname.indexOf('/app/standards/') === 0),
             isMobileDevice : (function() {
@@ -16,7 +17,8 @@ mss.ui.footer = (function() {
 
                 return false;
             }())
-        }
+        };
+
 
     // footer는 gnb에 비해 단순하여 복잡한 HtmlFragment Object를 구현하지 않습니다.
     function _getHtmlFragment() {
@@ -30,8 +32,8 @@ mss.ui.footer = (function() {
                 '           <ul class="clearfix_store">' +
                 '               <li class="division"><a href="' + _config.magazineHost + '/company/" target="_blank">회사소개</a></li>' +
                 '               <li class="division"><a href="' + _config.magazineHost + '/?m=forum&bid=event_notice">공지사항</a></li>' +
-                '			    <li class="division"><a href="' + _config.storeHost + '/app/cs/notice_list">스토어공지</a></li>' +
-                '			    <li class="division"><a href="' + _config.storeHost + '/app/company/partner">입점/제휴 문의</a></li>' +
+                '			    <li class="division"><a href="' + _serviceHost + '/app/cs/notice_list">스토어공지</a></li>' +
+                '			    <li class="division"><a href="' + _serviceHost + '/app/company/partner">입점/제휴 문의</a></li>' +
                 '               <li class="division"><a href="' + _config.magazineHost + '/?mod=private"><strong>개인정보처리방침</strong></a></li>' +
                 '               <li class="' + (_settings.isMobileDevice ? 'division' : '') + '">' +
                 '                   <a href="' + _config.magazineHost + '/?mod=agreement">이용약관</a>' +
@@ -60,8 +62,8 @@ mss.ui.footer = (function() {
                 '                <div class="cs-addressBox addressBox">' +
                 '                    <p class="title">고객센터' +
                 '                        <span class="brackets">' +
-                '					[ <a href="' + _config.storeHost + '/app/cs/faq" class="division"><span>FAQ</span></a>' +
-                '					<a href="' + _config.storeHost + '/app/cs/counsel" class="division"><span>1:1질문하기</span></a>' +
+                '					[ <a href="' + _serviceHost + '/app/cs/faq" class="division"><span>FAQ</span></a>' +
+                '					<a href="' + _serviceHost + '/app/cs/counsel" class="division"><span>1:1질문하기</span></a>' +
                 '					<a href="mailto:cs@musinsa.com"><span>이메일문의</span></a> ]' +
                 '				</span>' +
                 '                    </p>' +
@@ -69,7 +71,7 @@ mss.ui.footer = (function() {
                 '                        <p class="phoneNumber">' +
                 '                            <span class="tel_number">대표전화</span>' +
                 '                            <span class="number font-mss">1544-7199</span>' +
-                '                            <span class="phoneNumber_click"><a href="' + _config.storeHost + '/app/cs/faq">전화문의 전 <strong>CLICK</strong></a></span>' +
+                '                            <span class="phoneNumber_click"><a href="' + _serviceHost + '/app/cs/faq">전화문의 전 <strong>CLICK</strong></a></span>' +
                 '                        </p>' +
                 '                        <p class="description">1번 : 배송 / 교환 / 환불관련</p>' +
                 '                        <p class="description">2번 : 결제 / 회원 관련</p>' +

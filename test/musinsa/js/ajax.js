@@ -42,7 +42,7 @@ mss.my.ajax = (function () {
             }
 
             var doneFunction = function() {},
-                failFunction = function() {};   
+                failFunction = function() {};
 
             if ( jQueryAjaxSettings.done || jQueryAjaxSettings.success ) {
                 doneFunction = jQueryAjaxSettings.done || jQueryAjaxSettings.success;
@@ -59,7 +59,6 @@ mss.my.ajax = (function () {
             $.ajax(jQueryAjaxSettings)
                 .done(doneFunction)
                 .fail(failFunction);
-
         }
     }
 }());

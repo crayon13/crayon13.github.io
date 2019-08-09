@@ -6,7 +6,8 @@ mss.ui.config = (function() {
         service : 'musinsa',
         magazineHost : 'https://www.musinsa.com',
         storeHost : 'https://store.musinsa.com',
-        wusinsaHost : 'https://wusinsa.musinsa.com'
+        wusinsaHost : 'https://wusinsa.musinsa.com',
+        serviceHost :''
     };
 
     function _replaceObjectValue(targetObject, sourceObject) {
@@ -22,12 +23,19 @@ mss.ui.config = (function() {
     }
 
     return {
-        get : function() {
+        get : function get() {
             return _config;
         },
-        set : function (uiConfig) {
+        set : function set(uiConfig) {
             _replaceObjectValue(_config, uiConfig);
         },
-        replaceObjectValue : _replaceObjectValue
+        replaceObjectValue : _replaceObjectValue,
+        getServiceHost : function getServiceHost() {
+            if ( !_config.serviceHost ) {
+                _config.serviceHost = ( _config.service === 'musinsa' ) ? _config.storeHost : _config.wusinsaHost;
+            }
+
+            return _config.serviceHost;
+        }
     }
 }());

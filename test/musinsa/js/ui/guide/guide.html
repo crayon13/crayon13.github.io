@@ -56,7 +56,7 @@
         <script>
             /**
              * mss.ui.config 내의 기본 속성값을 대치하기 위한 Object
-             * 
+             *
              * 필수 파라미터 : 서버쪽에서 출력해 줘야 합니다.
              *  - service
              *      - musinsa or wusinsa
@@ -66,7 +66,7 @@
              *      - 환경 (devel / prod)에 따른 store의 host 정의
              *  - wusinsaHost
              *      - 환경 (devel / prod)에 따른 wusinsa의 host 정의
-             */ 
+             */
             var uiConfig = {
                 service : 'musinsa',
                 magazineHost : 'https://www.musinsa.com',
@@ -82,7 +82,7 @@
         <script>
             /**
              * GNB 설정을 위한 Object
-             * 
+             *
              * 옵션 파라미터
              *  - showHeaderGroupArea
              *      - showHeaderGroupArea
@@ -119,7 +119,7 @@
                 friendRelType: 1
             },
             done: function (data) {
-               console.log('done : ' + data.products.length);
+                console.log('done : ' + data.products.length);
             },
             fail: function (jqXHR, status, errorThrown) {
                 console.log("falil : code = " + jqXHR.status + " message = " + jqXHR.responseText + " error = " + errorThrown); // 실패 시 처리
@@ -129,7 +129,7 @@
             },
             error: function (jqXHR, status, errorThrown) {
                 console.log("error : code = " + jqXHR.status + " message = " + jqXHR.responseText + " error = " + errorThrown); // 실패 시 처리
-            },            
+            },
         }
         , true
     );
@@ -144,7 +144,7 @@
                 friendRelType: 1
             },
             done: function (data) {
-               console.log('done : ' + data.products.length);
+                console.log('done : ' + data.products.length);
             },
             fail: function (jqXHR, status, errorThrown) {
                 console.log("falil : code = " + jqXHR.status + " message = " + jqXHR.responseText + " error = " + errorThrown); // 실패 시 처리
@@ -154,7 +154,7 @@
             },
             error: function (jqXHR, status, errorThrown) {
                 console.log("error : code = " + jqXHR.status + " message = " + jqXHR.responseText + " error = " + errorThrown); // 실패 시 처리
-            },            
+            },
         }
         , true
     );
@@ -166,14 +166,14 @@
 <!-- mss.ui : timesale start -->
 <script src="../timesale.js"></script>
 <script>
-    /** 
+    /**
      * 무신사 타임세일 토스트 배너
-     * 
+     *
      * 필수 파라미터 : 서버쪽에서 출력해 줘야 합니다.
      *  - remainShapTimeSec :
      *      - 현재시간과 다음 정시까지의 차이 (초) 입니다.
      * 옵션 파라미터
-     *  - jsonpUrl 
+     *  - jsonpUrl
      *      - 테스트를 위해 dummy Jsonp를 사용할 경우 jsonp url을 설정 할 수 있습니다.
      *      - 기본은 store.musinsa.com/app/svc/get_ad_time_sale_list/ 입니다.
      */

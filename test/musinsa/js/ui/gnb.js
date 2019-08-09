@@ -1,10 +1,11 @@
 mss.ui.gnb = (function() {
     'use strict';
 
-    var _config = mss.ui.config.get(), 
+    var _config = mss.ui.config.get(),
+        _serviceHost = mss.ui.config.getServiceHost(),
         _settings = {
             showHeaderGroupArea : false
-        }, 
+        },
         _datas = {
             extendBannerList : [],
             keywordRankList : [],
@@ -20,19 +21,19 @@ mss.ui.gnb = (function() {
                 _fn.log('addSearchKeywordAreaMsg', 'start')
                 $.ajax({
                     type: "POST",
-                    url: _fn.getServiceHost() + "/app/svc/search_kwd",
+                    url: _serviceHost + "/app/svc/search_kwd",
                     success: function(msg) {
                         $("#search_kwd").html(msg);
                     }
                 });
-            }, 
+            },
             closeLayer : function closeLayer(obj){
                 $('.layer-keyword-top').css('display','none');
                 if ( !obj.length ){
                     $('.layer-keyword-top').toggle();
                     $('#recommend_kwd').toggle();
                 }
-            }, 
+            },
             searchKeyword : function searchKeyword() {
                 // 검색
                 var ff = document.getElementById("search_form");
@@ -55,15 +56,8 @@ mss.ui.gnb = (function() {
 
                     ff.submit();
                 }
-            }, 
-            getServiceHost : function getServiceHost() {
-                if ( !_config.serviceHost ) {
-                    _config.serviceHost = ( _config.service === 'musinsa' ) ? _config.storeHost : _config.wusinsaHost;
-                }
-
-                return _config.serviceHost;
             }
-        }, 
+        },
         _htmlFragments = {
             // htmlFragment들이 등록될 Object 입니다.
         },
@@ -153,10 +147,10 @@ mss.ui.gnb = (function() {
                         setCookie("musinsa_banner_close", "1", 1);
                     }
                 )
-                /** 
+                /**
                  * html에 inline으로 선언 된 script를 bindEvent로 옮겼습니다.
                  *    - html에 inline으로 선언 된 script를 삭제 해야 합니다.
-                 */      
+                 */
                 $(function() {
                     var special_top_open_yn = getCookie("special_top_open_yn");
                     var musinsa_banner_close = getCookie("musinsa_banner_close");
@@ -190,7 +184,7 @@ mss.ui.gnb = (function() {
                 return (
                     '				<!--검색창-->' +
                     '				<div class="fl searchInput-box box">' +
-                    '					<form id="search_form" method="get" action="'+ _fn.getServiceHost() + '/app/product/search">' +
+                    '					<form id="search_form" method="get" action="'+ _serviceHost + '/app/product/search">' +
                     '						<input id="search_type" type="hidden" name="type" value="">' +
                     '						<input id="search_query" class="search head-search-inp" type="text" name="q" maxlength="30" autocomplete="off"/>' +
                     '						<span  id="search_button" class="search-btn btn ui-head-search-btn"><i class="ico ico-search">검색</i></span>' +
@@ -200,7 +194,7 @@ mss.ui.gnb = (function() {
                     '				</div>' +
                     '				<!--//검색창-->'
                 );
-            }, 
+            },
             bindEvent : function bindEvent() {
                 _fn.log('searchInput', 'bind');
 

@@ -1,0 +1,263 @@
+
+<script type="text/javascript">
+    var is_ad_time_sale = "0";
+    var ad_time_sale_time_diffs = "2652";
+
+    $(document).ready(function() {
+        if(is_ad_time_sale == 1) {
+            getAdTimeSale();
+        } else {
+            countDownSharpTime(ad_time_sale_time_diffs);
+        }
+    });
+
+    var call_domain = "https://1dstore.musinsa.com";
+
+    var url = call_domain + "/app/svc/get_ad_time_sale_list/?callback=getAdTimeSaleCallback";
+    // 타임세일 데이터 얻기
+    function getAdTimeSale() {
+        $.ajax({
+            type: "GET",
+            dataType: 'jsonp',
+            jsonpCallback: "getAdTimeSaleCallback",
+            url: url,
+            success: function(msg) {
+                var json = msg;
+                var contents = "";
+                if(json.length > 0) {
+                    for(var i=0; i<json.length; i++) {
+                        /* 20180405 타임세일 레이어 디자인 개선 START */
+                        contents += "<a href=\"" + call_domain + "/app/product/detail/"+ json[i].goods_no + "/" + json[i].goods_sub +"\" class=\"box_link\">";
+                        contents += "<span class=\"box_time font-mss\"><span id=\"ad_time_sale_day_" + json[i].goods_no +"\"></span><span id=\"ad_time_sale_time_" + json[i].goods_no +"\"></span></span>";
+                        contents += "<span class=\"img\"><img src=\"//image.msscdn.net/images/goods_img/" + json[i].reg_dm + "/" + json[i].goods_no +"/" + json[i].goods_no + "_" + json[i].img_idx + "_100." + json[i].img_ext + "\" alt=\"\" /></span>";
+                        contents += "<em class=\"brand\">" + json[i].brand_nm + "</em>";
+                        contents += "<span class=\"goods\">" + json[i].goods_nm + "</span>";
+                        contents += "<span class=\"price\"><strong>" + Comma(json[i].price) + "</strong><span class=\"unit\">원</span>";
+                        if(json[i].normal_price > json[i].price) {
+                            contents += "<del class=\"del\">" + Comma(json[i].normal_price) +"원</del>";
+                        }
+                        contents += "</span>";
+                        contents += "</a>";
+                        /* 20180405 타임세일 레이어 디자인 개선 END */
+                    }
+                    $("#ad_time_sale").html(contents).promise().done(function() {
+                        // 오픈시에 아래 주석 제거 필요
+                        $("#layer_timesale").show(200);
+                        if(json.length > 0) {
+                            for(var i=0; i<json.length; i++) {
+                                var goods_no = json[i].goods_no;
+                                var diff_time = json[i].time_diffs.diff_time;
+                                countDownAdTimeSale(goods_no, diff_time);
+                            }
+                        }
+
+                        $('#ad_time_sale').cycle({
+                            fx : 'none',
+                            speed : 500,
+                            timeout: 0,
+                            next : '#ad_time_sale_next',
+                            prev : '#ad_time_sale_prev'
+                        });
+
+                        if(getCookie("is_ad_time_sale") == "") {
+                            setCookie("is_ad_time_sale", 1, 1);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    function getAdTimeSaleCallback(){}
+
+    // 타임세일 카운트 다운
+    function countDownAdTimeSale(goods_no, r) {
+        r = parseInt(r,10) - 1;
+        day = Math.floor(r / (3600 * 24)); mod = r % (3600 * 24);
+        hrs = Math.floor(mod / 3600); mod = mod % 3600;
+        min = Math.floor(mod / 60);
+        sec = mod % 60;
+        hrs = (hrs > 9) ? hrs.toString() : '0' + hrs.toString();
+        min = (min > 9) ? min.toString() : '0' + min.toString();
+        sec = (sec > 9) ? sec.toString() : '0' + sec.toString();
+        $('#ad_time_sale_day_' + goods_no).text("D-" + day);
+        $('#ad_time_sale_time_' + goods_no).text(hrs + ":" + min + ":" + sec);
+
+        if(r > 0) {
+            setTimeout(function(){countDownAdTimeSale(goods_no, r);},1000);
+        } else {
+
+        }
+    }
+
+    var max_time = 600; // 최대 10분 동안만 카운트
+
+    // 정각 카운트 다운
+    function countDownSharpTime(r) {
+        r = parseInt(r,10) - 1;
+
+        if(max_time == 0) {
+            return false;
+        }
+
+        if(r > 0) {
+            setTimeout(function(){
+                countDownSharpTime(r);
+            }, 1000);
+            max_time--;
+        } else {
+            getAdTimeSale();
+        }
+    }
+
+    // 타임세일 레이어 닫기
+    function closeTimeSale() {
+        $("#layer_timesale").hide(200);
+        delCookie("is_ad_time_sale");
+    }
+
+</script>
+
+<!-- 20180405 타임세일 레이어 디자인 개선 -->
+<div class="layer_salebox" id="layer_timesale" style="display:none">
+    <strong class="box_tit">타임 세일</strong>
+    <div id="ad_time_sale" style="width:100%"></div>
+    <button class="btn nav-btn prev" id="ad_time_sale_prev">이전 상품 보기</button>
+    <button class="btn nav-btn next" id="ad_time_sale_next">다음 상품 보기</button>
+    <div class="box_btn">
+        <a href="javascript:void(0)" class="close" onclick="closeTimeSale(); return false;">닫기</a>
+        <a href="https://1dstore.musinsa.com/app/contents/onsale?sale_yn=Y&sale_dt_yn=Y&chk_timesale=on" class="all">전체 보기</a>
+    </div>
+</div>
+<!-- //20180405 타임세일 레이어 디자인 개선 -->
+
+<!-- 20180405 타임세일 레이어 디자인 개선
+<div class="layer_timesale" id="layer_timesale" style="display:none;">
+	<div class="box_title clearfix">
+		<div class="box_title_left">
+			<span class="txt_title">타임 세일</span>
+			<a href="/app/contents/onsale?sale_yn=Y&sale_dt_yn=Y&chk_timesale=on" class="all_view">전체보기</a>
+		</div>
+		<div class="box_title_right">
+			<a class="btn_close" href="javascript:void(0)" onclick="closeTimeSale(); return false;">닫기</a>
+			<div class="btn_wrap" style="width:45px;">
+				<span class="nav-btn btn btn_prev_left" id="ad_time_sale_prev">&lt;</span><span class="nav-btn btn" id="ad_time_sale_next">&gt;</span>
+			</div>
+		</div>
+	</div>
+	<div class="box_contents clearfix">
+		<div id="ad_time_sale"></div>
+	</div>
+</div>
+-->
+
+<footer id="bot" class="clear">
+    <div class="footer">
+        <div class="snb snb_store">
+            <ul class="clearfix_store">
+                <li class="division"><a href="https://www.musinsa.com/company/" target="_blank">회사소개</a></li>
+                <li class="division"><a href="https://www.musinsa.com/?m=forum&bid=event_notice">공지사항</a></li>
+                <li class="division"><a href="https://1dstore.musinsa.com/app/cs/notice_list">스토어공지</a></li>
+                <li class="division"><a href="https://1dstore.musinsa.com/app/company/partner">입점/제휴 문의</a></li>
+                <li class="division"><a href="https://www.musinsa.com/?mod=private"><strong>개인정보처리방침</strong></a></li>
+                <li >
+                    <a href="https://www.musinsa.com/?mod=agreement">이용약관</a>
+                </li>
+            </ul>
+        </div>
+        <div class="row1 row">
+            <div class="addressBox-wrapper clearfix">
+                <div class="editing-addressBox addressBox">
+                    <p class="title">무신사 편집팀</p>
+                    <p class="address">서울특별시 강남구 신사동 640-2<br />로빈명품관 지하1층, 무신사 편집팀</p>
+                    <p class="notice">(무신사 스토어 반송지 아님, 해당주소 반송불가)</p>
+                </div>
+                <div class="store-addressBox addressBox">
+                    <p class="title">무신사 스토어</p>
+                    <p class="address">(17759) 경기도 평택시 신장로 55 CJ대한통운 평택합정집배점 내 무신사 물류센터</p>
+                    <p class="notice">(무신사 스토어 자체 배송 상품 물류센터)</p>
+                    <p class="notice">(배송센터 직접 물건 수령 불가)</p>
+                </div>
+                <div class="cs-addressBox addressBox">
+                    <p class="title">고객센터
+                        <span class="brackets">
+							[ <a href="https://1dstore.musinsa.com/app/cs/faq" class="division"><span>FAQ</span></a>
+							<a href="https://1dstore.musinsa.com/app/cs/counsel" class="division"><span>1:1질문하기</span></a>
+							<a href="mailto:cs@musinsa.com"><span>이메일문의</span></a> ]
+						</span>
+                    </p>
+                    <div class="phoneNumberBox">
+                        <p class="phoneNumber">
+                            <span class="tel_number">대표전화</span>
+                            <span class="number font-mss">1544-7199</span>
+                            <span class="phoneNumber_click"><a href="https://1dstore.musinsa.com/app/cs/faq">전화문의 전 <strong>CLICK</strong></a></span>
+                        </p>
+                        <p class="description">1번 : 배송 / 교환 / 환불관련</p>
+                        <p class="description">2번 : 결제 / 회원 관련</p>
+                        <p class="subDescription">ㄴ상품 문의 > 각 상품 Q&A 이용</p>
+                    </div>
+                    <p class="notice">오전9시-오후6시(토,일, 공휴일 휴무)</p>
+                </div>
+            </div>
+            <span class="global-notice store_footer_notice">각 브랜드마다 물류센터가 다릅니다. 교환/환불 시 주문 조회 메뉴를 통해 해당 제품이 출고된 곳으로 반송하셔야 합니다.</span>
+        </div>
+        <div class="row2 row">
+            <div class="copyright-box box">
+                <div class="footer_social">
+                    <a href="https://youtube.com/musinsatv" target="_blank" class="youtube">youtube</a>
+                    <a href="https://instagram.com/musinsacom/" target="_blank" class="instagram">INSTAGRAM</a>
+                    <a href="https://www.facebook.com/musinsa" target="_blank" class="facebook">FACEBOOK</a>
+                    <a href="https://twitter.com/musinsacom" target="_blank" class="twitter">TWITTER</a>
+                    <a href="https://post.naver.com/musinsa_store" target="_blank" class="post">NAVER POST</a>
+                    <a href="https://www.musinsastudio.com/" target="_blank" class="studio">musinsa studio</a>
+                    <a href="http://tv.musinsa.com/" target="_blank" class="tv">MUSINSA TV</a>
+                </div>
+                <div class="title font-mss"><p>COPYRIGHT (C) MUSINSA ALL RIGHTS RESERVED.</p></div>
+                <div class="description">
+                    <p>
+                        무신사닷컴 내 매거진, 스트리트스냅, 스토어 등 무신사 자체 생성 콘텐츠는 무신사닷컴 및 무신사 계약업체에 저작권이 있습니다.
+                    </p>
+                    <p>
+                        이러한 콘텐츠는 출처를 밝히고(무신사닷컴 표기 및 www.musinsa.com 링크 포함 필수) 비상업적인 용도에서만 활용하실 수 있습니다.
+                        <a href="https://www.musinsa.com/?m=forum&bid=event_notice&p=3&mod=view&uid=15974">자세히보기</a>
+                    </p>
+                    <p class="last">
+                        커뮤니티 및 중고장터, 댓글 등 무신사 회원이 올린 이미지가 저작권에 위배될 경우
+                        <a onclick="javascript:window.open('https://www.musinsa.com/?m=bbs&bid=suggest','','left=0,top=0,width=600px,height=700px,statusbar=no,scrollbars=yes,toolbar=no');" href="javascript:void(0)">신고</a>
+                        하시면 검토 후 삭제하겠습니다.
+                    </p>
+                </div>
+                <a href="#top" class="bottom_top_btn"><span class="txt_scroll_footer font-mss">Top</span> <span class="txt_arrow_footer">▲</span></a>
+            </div>
+            <div class="authentication-box box clearfix">
+                <p class="authentication font-mss">100% AUTHENTIC</p>
+                <p class="description">무신사스토어에서 판매되는 모든 브랜드 제품은 정식제조, 정식수입원을 통해 유통되는 100% 정품임을 보증합니다.</p>
+                <p class="address">주식회사 무신사 (MUSINSA Co., Ltd.) | 서울특별시 강남구 신사동 640-2 로빈명품관 지하1층 | 사업자등록번호 : 211-88-79575 |<br>통신판매업 : 2012-서울강남-01897 | 대표 : 조만호 | 개인정보관리책임자 : 심준섭(<a href="mailto:help@musinsa.com">help@musinsa.com</a>) ｜ 호스팅사업자 : ㈜이호스트ICT</p>
+                <div class="imageBox">
+                    <a href="javascript:void(0)" onclick="window.open('http://admin.kcp.co.kr/Modules/escrow/kcp_pop.jsp?site_cd=N5624','escro','top=10.left=10,width=500,height=450')"><img src="https://1dstore.musinsa.com/skin/musinsa/images/footer/escrow.gif" alt="kcp에스크로확인"></a>
+                    <a href="javascript:void(0)" onclick="window.open('http://www.ftc.go.kr/info/bizinfo/communicationViewPopup.jsp?wrkr_no=2118879575','communicationViewPopup','top=10.left=10,width=750,height=700')"><img src="https://1dstore.musinsa.com/skin/musinsa/images/footer/ftc.gif" class="last" alt="사업자정보확인"></a>
+                </div>
+            </div>
+        </div>
+        <div class="row3 row">
+            <p class="title font-mss">FASHION WEB MAGAZINE / LIFE STYLE SELECT SHOP <span>WWW.MUSINSA.COM</span></p>
+        </div>
+    </div>
+
+</footer>
+<div class="ui-layer-close fixed"></div>
+
+<meta name="google-site-verification" content="NqB0BDAEWJTvAPCCxzrckJYnS7-xJILFU40FvSmh5S8" />
+<script type="text/javascript" src="https://1dstore.musinsa.com/skin/musinsa/js/jquery.url.packed.js?20160119" async="true"></script>
+
+
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-41566681-3', {cookieDomain: 'musinsa.com', sampleRate: 5});
+    ga('send', 'pageview');
+
+</script>
