@@ -938,8 +938,8 @@ Airbnb는 deprecated 시켰지만...
 ## <a name='type-coercion'>Type Casting & Coercion(강제)</a> [원문](https://github.com/airbnb/javascript#type-coercion)
 
   - 문의 시작 부분에서 형을 강제합니다.
-  - Strings:
-
+  - Strings: eslint: no-new-wrappers  
+  
     ```javascript
     //  => this.reviewScore = 9;
 
