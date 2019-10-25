@@ -1,0 +1,1187 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<title>검색어 관리</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3" />
+
+<!-- swiper //-->
+<script src="https://bizest.musinsa.com//image.msscdn.net/festival/2018black/resouce/swiper.min.js"></script>
+<link rel="stylesheet" href="//image.msscdn.net/festival/2018black/resouce/swiper.min.css">
+
+<link rel='shortcut icon' href='https://bizest.musinsa.com/ho/favicon.ico' />
+<link rel="stylesheet" media="all" href="https://bizest.musinsa.com/ho/application/views/css/jquery/jquery-ui-1.11.0.css?20170407" />
+<link rel="stylesheet" media="all" href="https://bizest.musinsa.com/ho/application/views/css/style.css?20191010_5" />
+<link rel="stylesheet" media="all" href="https://bizest.musinsa.com/ho/application/views/css/responsive.css?20190514" />
+
+<script type="text/javascript" src="https://bizest.musinsa.com/ho/application/views/js/jquery-1.11.1-ui-1.11.0-ujs-3.1.4.js?20170407"></script>
+<script type="text/javascript" src="https://bizest.musinsa.com/ho/application/views/js/jquery.ui.touch-punch.min.js"></script>
+<script type="text/javascript" src="https://bizest.musinsa.com/ho/application/views/js/clipboard-js.js"></script>
+<script type="text/javascript" src="https://bizest.musinsa.com/ho/application/views/js/datepicker-ko.js?20170206"></script>
+<script type="text/javascript" src="https://bizest.musinsa.com/ho/application/views/js/application.js?20180813"></script>
+<script type="text/javascript" src="https://bizest.musinsa.com/ho/application/views/js/responsive.js?20180401"></script>
+<script type="text/javascript" src="https://bizest.musinsa.com/ho/application/views/js/common.js?20190424"></script>
+
+<script type="text/javascript" src="https://bizest.musinsa.com/ho/share/uix2tools.js?20190920"></script>
+<script type="text/javascript" src="https://bizest.musinsa.com/ho/share/auto_complete.js?20180823"></script>
+<!-- highchart 7.0 버전 사용하는 페이지는 로딩 제외 -->
+    <script type="text/javascript" src="https://bizest.musinsa.com/ho/application/views/js/highcharts/highcharts.js"></script>
+
+<!-- vue js //-->
+<script src="https://bizest.musinsa.com/xf/vue/dist/vue-2.3.3.min.js"></script>
+<script type="text/javascript" src="https://bizest.musinsa.com/xf/lodash/lodash.min.js"></script>
+
+<!-- ad-grid  //-->
+<script src="https://bizest.musinsa.com/xf/aggrid/dist/ag-grid-enterprise.min.js?20180629"></script>
+<script src="https://bizest.musinsa.com/xf/aggrid/gridX2.js?20190409_01"></script>
+<script src="https://bizest.musinsa.com/xf/aggrid/gridX2Tools.js?20190409_03"></script>
+<script src="https://bizest.musinsa.com/xf/aggrid/gridX2Event.js?20180628_3"></script>
+<script src="https://bizest.musinsa.com/xf/aggrid/gridx2_lib.js?20190724"></script>
+
+<script type="text/javascript">
+//<![CDATA[ 
+var event_drag = "";
+var app_yn = "N";
+var head_notice_no = "126";
+var head_layout_type = "";
+
+
+$(document).ready(function() {
+	$(".btn_modify").click(function() {
+		$(".box-btn-modify .box_modify_btn").fadeToggle("fast");
+	});
+   
+	/*더보기 영역 토글*/
+	$(document).on("click", ".btn-extra-fn", function() {
+		if($(".wrapper-list-info .box-extra-fn-btn").hasClass("extra-fn-disp")) {
+			$(".wrapper-list-info .box-extra-fn-btn").toggleClass("extra-fn-disp");
+		} else {
+			$(".box-list-fn-contents").toggleClass("fn-contents-disp");
+		}
+		var dir = ($(this).find("span").text() == "↑") ? "↓" : "↑"  ;
+		$(this).find("span").text(dir);
+		
+		var pannel_id = $("div.autoscroll").parent("div").attr("id");
+		setFixListTableWidth(pannel_id);
+	});
+      
+	$(document).on("click", "#btn_close_search", function() {
+		$(".box_materials_form").fadeToggle("fast").promise().done(function(){
+			if($(".box_materials_form").css("display") == "none") {
+				$("#btn_close_search").html("열기");
+			} else {
+				$("#btn_close_search").html("닫기");
+			}
+			
+			var pannel_id = $("div.autoscroll").parent("div").attr("id");
+			resizeSearchItem($(".box_materials_form"));
+			setListHeight(pannel_id);
+			setFixListTableWidth(pannel_id);
+	   });
+	});
+   
+	$("body").click(function() {
+		$(".context-menu").hide();
+	});
+   
+	$(document).on("touchmove",".nav_new_object",function() {
+		$(".menu-children").hide();
+		$("div.menu-scroll").hide();
+
+	});
+      
+	// 팝업 공지사항
+	if(head_notice_no > 0 && head_layout_type != 'popup') {
+		popHeadNotice(head_notice_no);
+	}	
+	
+	
+	// 앱 다운로드 레이어 출력 부분
+	var app_down_open_yn = getCookie("ho_app_down_open_yn");
+	
+	if(app_down_open_yn != "N") {
+		showModal('layer-info-app', '300px', 'wrap-info', '');
+	}
+	
+	$(window).resize(function() {
+		resizeSearchItem($(".box_materials_form"));
+	});
+});
+//]]>
+</script>
+
+<script type="text/javascript" src="https://bizest.musinsa.com/xf/lib/jslib.js?20170420"></script><script type="text/javascript">
+//<![CDATA[
+var sch02_shop_domain = "bizest.musinsa.com";
+var sch02_list_data = "";
+var sch02_total_cnt = "";
+var sch02_save_data = "";
+var sch02_mobile_yn = "N";
+var sch02_layout_type = "";
+
+var sch02_gxt = new gridX2Tools();
+var sch02_gx;
+//]]>
+</script>
+</head>
+<body>
+<div class="wrapper">
+	<div class="flyout-menu js-flyout-menu">
+	<div class="js-wrap-flyout">
+		<div class="js-profile-menu"></div>
+		<div class="js-sidebar flyout-menu__sidebar"></div>
+		<div class="js-footer"></div>
+	</div>
+</div>	<div class="wrapper2">		
+		<div class="mask"></div>
+<div class="header">
+		<a href="#" class="mobile-toggle-button js-flyout-menu-toggle-button"><img src="https://bizest.musinsa.com/ho/application/views/images/btn_menu.gif" alt="flyout menu button"></a>
+		<div class="box_top_header">
+		<h1>
+			<span class="logo">MUSINSA</span>
+			                                    <span class="text_account"><a href="http://store.musinsa.com">Musinsa</a></span>
+                					</h1>
+		<div class="top_index" id="box_account">
+			<ul>
+								<li class="account_login"><span>로그인계정 : </span>김성겸(mss_454)</li>
+				<li><a href="http://store.musinsa.com" target="_blank">MUSINSA</a></li>
+								<li>
+									<a href="#" onclick="logout(); return false;">로그아웃</a>
+								</li>
+			</ul>
+		</div>
+	</div>
+
+	</div>	
+		<div class="main close_side">
+			<div id="sidebar" class="sidebar">
+	<div class="box_refresh_side">
+		<a href="#" onclick="getSummaryIngo(); return false;"><img src="https://bizest.musinsa.com/ho/application/views/images/btn_refresh.png" alt="정보 새로고침" /></a>
+	</div>
+	
+
+
+		</div>
+
+<div class="btn_knob">
+	<a href="#" onclick="toggleBtnKnob();return false;" id="right_area_btn"></a>
+</div>
+
+<script>
+$(document).ready(function() {
+	var target_height = $(window).height();
+	var header_height = ($("div.header").length == 0 || $("div.header").css("display") == "none") ? 0 : $("div.header").outerHeight();
+	var footer_height = ($("div.footer").length > 0) ? $("div.footer").outerHeight() : 10;
+	
+	// 초기 값 셋팅 리스트가 autoscroll사용하지 않는 경우 일때 처리
+	$('.sidebar').height(target_height - header_height - footer_height);
+});
+</script>
+			<div id="content" class="wrap_content">
+				<input type="hidden" name="CLIP" id="HCILP" value="" />
+				<form name="sch02_f1" method="POST" action="https://bizest.musinsa.com/ho/api/search/sch02/search" onsubmit="app_sch02_grid.search_list(); return false;">
+					<input type="hidden" name="C_ID" value="" />
+					<input type="hidden" name="C_NAME" value="" />
+					<input type="hidden" name="USR_SEARCH_ITEM_CNT" value="1" />
+					<input type="hidden" name="PAGE_CNT" value="" />
+					<input type="hidden" name="LIMIT" value="" />
+					<input type="hidden" name="PAGE" value="1" />
+					<input type="hidden" name="MENU_ID" value="https://bizest.musinsa.com/ho/search/sch02" />
+					<input type="hidden" name="DATA" />
+					<input type="hidden" name="LIST_DATA" />
+					<div class="box_layer_header">
+						<h2>검색어 관리</h2>
+						<div class="box_btn_left">
+							<a href="#" onclick="app_sch02_grid.close(); return false;"><strong>&lt;</strong></a>
+						</div>
+						<div class="box_btn_right">
+							<a href="#" onclick="app_sch02_grid.search_list(); return false;" class="btn_mobile_search">검색</a>
+						</div>
+						<div class="box_btn_menu">
+							<button type="submit" class="btn_important use-pc" href="#" onclick="app_sch02_grid.search_list(); return false;"><strong>검색</strong></button>
+							<a class="btn_default" href="#" onclick="app_sch02_grid.form_reset();">검색 초기화</a>							<a id="btn_close_search" class="btn_disable use-pc" href="javascript:void(0);">닫기</a>
+							<a class="btn_default use-pc" href="#" onclick="showModal('layer-edit-cell', '300px', 'modal', ''); return false;">설정</a>
+						</div>
+					</div>
+					<div class="box_materials_form splitcontent hide-when-print">
+						<ul id="SEARCH_ITEM_AREA" class="list_material">
+													<li id="SEARCH_ITEM_S_KWD">
+								<dl class="attribute">
+									<dt class="label">검색어</dt>
+									<dd class="value"><input type='text' class='input' name='S_KWD' id='S_KWD' value='' style='width:160px;'>
+</dd>
+								</dl>
+							</li>
+													<li id="SEARCH_ITEM_S_PV_1M" class="cell_range">
+								<dl class="attribute">
+									<dt class="label">검색횟수</dt>
+									<dd class="value"><input type="text" name="S_PV_1M_FR" value="" num_type="range" class="input_num align_center" style="width:70px"> ~ 
+						<input type="text" name="S_PV_1M_TO" value="" num_type="range" class="input_num align_center" style="width:70px"></dd>
+								</dl>
+							</li>
+													<li id="SEARCH_ITEM_S_SCH_CNT" class="cell_range" style="display: none;">
+								<dl class="attribute">
+									<dt class="label">검색 상품수</dt>
+									<dd class="value"><input type="text" name="S_SCH_CNT_FR" value="" num_type="range" class="input_num align_center" style="width:80px"> ~ 
+						<input type="text" name="S_SCH_CNT_TO" value="" num_type="range" class="input_num align_center" style="width:80px"></dd>
+								</dl>
+							</li>
+													<li id="SEARCH_ITEM_S_DISP_YN" style="display: none;">
+								<dl class="attribute">
+									<dt class="label">출력여부</dt>
+									<dd class="value"> <select class='select' name='S_DISP_YN' >
+<option value=''>선택</option>
+<option value="Y" >Y</option><option value="N" >N</option></select>
+</dd>
+								</dl>
+							</li>
+													<li id="SEARCH_ITEM_S_RECOMMEND_YN">
+								<dl class="attribute">
+									<dt class="label">추천 검색어 여부</dt>
+									<dd class="value"> <select class='select' name='S_RECOMMEND_YN' >
+<option value=''>선택</option>
+<option value="Y" >Y</option><option value="N" >N</option></select>
+</dd>
+								</dl>
+							</li>
+													<li id="SEARCH_ITEM_S_EX_POP_YN" style="display: none;">
+								<dl class="attribute">
+									<dt class="label">인기제외여부</dt>
+									<dd class="value"> <select class='select' name='S_EX_POP_YN' >
+<option value=''>선택</option>
+<option value="Y" >Y</option><option value="N" >N</option></select>
+</dd>
+								</dl>
+							</li>
+													<li id="SEARCH_ITEM_S_SEX" style="display: none;">
+								<dl class="attribute">
+									<dt class="label">성별</dt>
+									<dd class="value"> <select class='select' name='S_SEX' >
+<option value="A" >전체</option><option value="F" >여성</option></select>
+</dd>
+								</dl>
+							</li>
+													<li id="SEARCH_ITEM_S_ORD_FIELD" style="display: none;">
+								<dl class="attribute">
+									<dt class="label">정렬순서</dt>
+									<dd class="value"> <select class='select' name='ORD_FIELD' >
+<option value="s.rank" selected>순위</option><option value="s.point" >점수</option><option value="s.pv_1m" >검색횟수(1달)</option><option value="s.tags" >태그수</option></select>
+<input type='radio' name='ORD' value='asc' id='ORD_asc'  checked><label for='ORD_asc'>오름</label>
+<input type='radio' name='ORD' value='desc' id='ORD_desc'  ><label for='ORD_desc'>내림</label>
+</dd>
+								</dl>
+							</li>
+												</ul>
+					</div>
+				</form>
+				<form name="sch02_f2" method="POST">		
+					<div id="app_sch02_grid" class="wrap_contents">
+						<div class="wrapper-list-info">
+														<div class="text-counter">총 {{Comma(data_cnt)}}/{{Comma(total_cnt)}} 건</div>
+														<div class="box-list-fn">
+								<div class="box-btn-modify">
+									<ul class="box-btn-uncover">
+																				<li class="btn-extra-fn btn_fn"><a href="javascript:void(0);" class="btn_default btn_underplay" ><strong>더보기 <span>↓</span></strong></a></li>
+									</ul>
+								</div>
+								<div class="box-list-fn-contents">
+									<div class="box-extra-fn-btn box-more-fn-btn extra-fn-disp">
+										<ul>
+											<li>
+												<select name="DISP_YN">
+													<option value="">선택</option>
+													<option value="Y">Y</option>
+													<option value="N">N</option>
+												</select>
+												<a class="btn_default" href="javascript:void(0)" v-on:click="save_disp_yn();"><strong>출력여부 변경</strong></a>
+											</li>
+											<li>
+												<select name="RECOMMEND_YN">
+													<option value="">선택</option>
+													<option value="Y">Y</option>
+													<option value="N">N</option>
+												</select>
+												<a class="btn_default" href="javascript:void(0)" v-on:click="save_recommend_yn();"><strong>추천 검색어 여부 변경</strong></a>
+											</li>
+											<li>
+												<select name="EX_POP_YN">
+													<option value="">선택</option>
+													<option value="Y">Y</option>
+													<option value="N">N</option>
+												</select>
+												<a class="btn_default" href="javascript:void(0)" v-on:click="save_ex_pop_yn();"><strong>인기제외여부 변경</strong></a>
+											</li>
+										</ul>
+										<ul>
+											<li><a class="btn_default btn_primary" href="javascript:void(0)" v-on:click="save_mpv();"><strong>관리자점수 저장</strong></a></li>
+										</ul>
+										<ul>
+											<li>
+												<input type="text" name="F_PV" v-bind:value="detail_data.pv" v-on:blur="save_num($event.currentTarget, 'pv');" class="input_num align_center" num_type="count" style="width:50px;" maxlength="2" /> * 검색횟수(3시간) +
+												<input type="text" name="F_TAGS" v-bind:value="detail_data.tags" v-on:blur="save_num($event.currentTarget, 'tags');" class="input_num align_center" num_type="count" style="width:50px;" maxlength="2" /> * 태그수 +
+												<input type="text" name="F_MPV" v-bind:value="detail_data.mpv" v-on:blur="save_num($event.currentTarget, 'mpv');" class="input_num align_center" num_type="count" style="width:50px;" maxlength="2" /> * 관리자점수 = &nbsp;
+												<a class="btn_default btn_primary" href="javascript:void(0)" v-on:click="save_point();"><strong>점수 저장</strong></a>
+											</li>
+										</ul>
+										<ul>
+											<li>
+												<a class="btn_default btn_primary" href="javascript:void(0)" v-on:click="save_rank();"><strong>순위 변경</strong></a>
+											</li>
+										</ul>
+																				<ul>
+										</ul>
+																			</div>
+								</div>
+							</div>
+						</div>
+						<div id="sch02SearchResult">
+														<div id="sch02_grid" class="ag-theme-balham autoscroll resizeHeight"></div>
+							
+													</div>
+					</div>
+					<div class="other-formats">
+						<div class="box-formats"></div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<!--
+<div class="footer">
+	<span>© Musinsa / Powered by Bizest</span>
+</div>
+//-->
+
+
+
+<script type="text/javascript">
+//<![CDATA[
+function closeAppDownLayer(obj)
+{
+	if(obj.checked) {
+		if(getCookie("ho_app_down_open_yn")){
+			delCookie("ho_app_down_open_yn");
+		}
+		setCookie("ho_app_down_open_yn", "N", 1);
+	} else {
+		if(getCookie("ho_app_down_open_yn")){
+			delCookie("ho_app_down_open_yn");
+		}
+		setCookie("ho_app_down_open_yn", "Y", 1);
+	}
+}
+//]]>
+</script>
+	</div>
+</div>
+<!--layer:항목설정-->
+<div id="layer-edit-cell" class="ui-dialog-content ui-widget-content wrap-edit-column" style="display:none;">
+	<h3 class="title">검색 항목 설정</h3>
+	<div class="box-edit-cell">
+		<ul>
+			<li><label><input type="checkbox" onclick="checkSearchItemAll(this);" name="chk_all"/>전체선택</label></li>
+			<li><label><input type="checkbox" onclick="checkBasicSearchItem(this);" name="chk_basic" />기본설정</label></li>
+		</ul>
+		<ul>
+					<li>
+				<label><input type="checkbox" name="MGR_USER_SEARCH_ITEM" value="S_KWD" checked="checked" disabled="disabled" />검색어</label>
+				<ul id="SET_SEARCH_ITEM_S_KWD" style="display: none;">
+					<li id="SEARCH_ITEM_S_KWD">
+						<dl class="attribute">
+							<dt class="label">검색어</dt>
+							<dd class="value"><input type='text' class='input' name='S_KWD' id='S_KWD' value='' style='width:160px;'>
+</dd>
+						</dl>
+					</li>
+				</ul>
+			</li>
+					<li>
+				<label><input type="checkbox" name="MGR_USER_SEARCH_ITEM" value="S_PV_1M" checked="checked" disabled="disabled" />검색횟수</label>
+				<ul id="SET_SEARCH_ITEM_S_PV_1M" style="display: none;">
+					<li id="SEARCH_ITEM_S_PV_1M" class="cell_range">
+						<dl class="attribute">
+							<dt class="label">검색횟수</dt>
+							<dd class="value"><input type="text" name="S_PV_1M_FR" value="" num_type="range" class="input_num align_center" style="width:70px"> ~ 
+						<input type="text" name="S_PV_1M_TO" value="" num_type="range" class="input_num align_center" style="width:70px"></dd>
+						</dl>
+					</li>
+				</ul>
+			</li>
+					<li>
+				<label><input type="checkbox" name="MGR_USER_SEARCH_ITEM" value="S_SCH_CNT" />검색 상품수</label>
+				<ul id="SET_SEARCH_ITEM_S_SCH_CNT" style="display: none;">
+					<li id="SEARCH_ITEM_S_SCH_CNT" class="cell_range">
+						<dl class="attribute">
+							<dt class="label">검색 상품수</dt>
+							<dd class="value"><input type="text" name="S_SCH_CNT_FR" value="" num_type="range" class="input_num align_center" style="width:80px"> ~ 
+						<input type="text" name="S_SCH_CNT_TO" value="" num_type="range" class="input_num align_center" style="width:80px"></dd>
+						</dl>
+					</li>
+				</ul>
+			</li>
+					<li>
+				<label><input type="checkbox" name="MGR_USER_SEARCH_ITEM" value="S_DISP_YN" />출력여부</label>
+				<ul id="SET_SEARCH_ITEM_S_DISP_YN" style="display: none;">
+					<li id="SEARCH_ITEM_S_DISP_YN">
+						<dl class="attribute">
+							<dt class="label">출력여부</dt>
+							<dd class="value"> <select class='select' name='S_DISP_YN' >
+<option value=''>선택</option>
+<option value="Y" >Y</option><option value="N" >N</option></select>
+</dd>
+						</dl>
+					</li>
+				</ul>
+			</li>
+					<li>
+				<label><input type="checkbox" name="MGR_USER_SEARCH_ITEM" value="S_RECOMMEND_YN" checked="checked" disabled="disabled" />추천 검색어 여부</label>
+				<ul id="SET_SEARCH_ITEM_S_RECOMMEND_YN" style="display: none;">
+					<li id="SEARCH_ITEM_S_RECOMMEND_YN">
+						<dl class="attribute">
+							<dt class="label">추천 검색어 여부</dt>
+							<dd class="value"> <select class='select' name='S_RECOMMEND_YN' >
+<option value=''>선택</option>
+<option value="Y" >Y</option><option value="N" >N</option></select>
+</dd>
+						</dl>
+					</li>
+				</ul>
+			</li>
+					<li>
+				<label><input type="checkbox" name="MGR_USER_SEARCH_ITEM" value="S_EX_POP_YN" />인기제외여부</label>
+				<ul id="SET_SEARCH_ITEM_S_EX_POP_YN" style="display: none;">
+					<li id="SEARCH_ITEM_S_EX_POP_YN">
+						<dl class="attribute">
+							<dt class="label">인기제외여부</dt>
+							<dd class="value"> <select class='select' name='S_EX_POP_YN' >
+<option value=''>선택</option>
+<option value="Y" >Y</option><option value="N" >N</option></select>
+</dd>
+						</dl>
+					</li>
+				</ul>
+			</li>
+					<li>
+				<label><input type="checkbox" name="MGR_USER_SEARCH_ITEM" value="S_SEX" />성별</label>
+				<ul id="SET_SEARCH_ITEM_S_SEX" style="display: none;">
+					<li id="SEARCH_ITEM_S_SEX">
+						<dl class="attribute">
+							<dt class="label">성별</dt>
+							<dd class="value"> <select class='select' name='S_SEX' >
+<option value="A" >전체</option><option value="F" >여성</option></select>
+</dd>
+						</dl>
+					</li>
+				</ul>
+			</li>
+					<li>
+				<label><input type="checkbox" name="MGR_USER_SEARCH_ITEM" value="S_ORD_FIELD" />정렬순서</label>
+				<ul id="SET_SEARCH_ITEM_S_ORD_FIELD" style="display: none;">
+					<li id="SEARCH_ITEM_S_ORD_FIELD">
+						<dl class="attribute">
+							<dt class="label">정렬순서</dt>
+							<dd class="value"> <select class='select' name='ORD_FIELD' >
+<option value="s.rank" selected>순위</option><option value="s.point" >점수</option><option value="s.pv_1m" >검색횟수(1달)</option><option value="s.tags" >태그수</option></select>
+<input type='radio' name='ORD' value='asc' id='ORD_asc'  checked><label for='ORD_asc'>오름</label>
+<input type='radio' name='ORD' value='desc' id='ORD_desc'  ><label for='ORD_desc'>내림</label>
+</dd>
+						</dl>
+					</li>
+				</ul>
+			</li>
+				</ul>
+	</div>
+	<p class="buttons box-layer-buttons">
+		<a href="#" class="btn_default btn_primary" onclick="setMgrUserSearchItem(this); return false;"><strong>확인</strong></a>
+		<a href="#" class="btn_default" onclick="saveMgrUserSearchItem(this); return false;"><strong>설정 저장</strong></a>
+	</p>
+</div>
+<!--//layer:항목설정-->
+
+<!--layer:모바일 리스트 관련 기능 메뉴-->
+<div class="ui-dialog-content ui-widget-content" id="function_menu" style="display:none"></div>
+<!--//layer:모바일 리스트 관련 기능 메뉴-->
+
+<!-- vue 스크립트 선언 영역 //-->
+
+<script type="text/javascript">
+var app_sch02_grid = new Vue({
+	el: '#app_sch02_grid',
+	data: {
+		total_cnt: 0,
+		list_data: [],
+		detail_data: [],
+		data_cnt: 0,
+		edit_cols:["mpv", "synonym"],
+		search_after : ''
+	},
+	methods: {
+		get_detail: function() {
+			// 리스트 페이지 정보 얻기
+			var url = "https://bizest.musinsa.com/ho/api/search/sch02/get_detail";
+			ajaxExec(url, "", "", "app_sch02_grid.cb_get_detail");
+		},
+		
+		cb_get_detail : function(msg){
+			eval("var json = " + msg);
+			Vue.set(app_sch02_grid, "detail_data", json.detail_data);
+		},
+
+		search_list: function(init_page) {
+			// 검색
+			init_page = typeof init_page !== 'undefined' ? init_page : "Y";
+
+			if(init_page == "Y") {
+				var form_page = 1;
+				if(sch02_mobile_yn != "Y") {
+					sch02_gx._page = 1;
+				}
+				$("form[name='sch02_f1'] input[name='PAGE']").val(form_page);
+			} else {
+				if(sch02_mobile_yn != "Y") {
+					// 스크롤 후
+					if(sch02_gx._isLoading) { // 로딩중 일때 return
+						return false;
+					}
+
+					if(sch02_gx.getRows() > 0 && sch02_gx.getRows() == app_sch02_grid.total_cnt) { // 모든 데이터 불러왔을때,
+						return false;
+					}
+				
+					sch02_gx._page++;
+					
+					$("form[name='sch02_f1'] input[name='PAGE']").val(sch02_gx._page);
+				}
+			}
+
+			var param = $("form[name='sch02_f1']").serialize();
+			param +="&SEARCH_AFTER=" + app_sch02_grid.search_after;
+			var url = "https://bizest.musinsa.com/ho/api/search/sch02/search";
+			
+			if(sch02_mobile_yn == "Y") {
+				// 페이지 리스트 출력
+				var limit = $("form[name='sch02_f1'] input[name=LIMIT]").val();
+				var page = $("form[name='sch02_f1'] input[name=PAGE]").val();
+				var page_cnt = $("form[name='sch02_f1'] input[name=PAGE_CNT]").val();
+
+				gridListDraw(app_sch02_grid, url, param, "sch02SearchResult", "sch02_total_cnt", "sch02_list_data", limit, page_cnt, page, "Y", "page_cnt_text", "sch02_page_list_content", sch02_mobile_yn, "app_sch02_grid.switch_page", ""); 
+			} else {
+				sch02_gxt.gridLoadUrl(sch02_gx, url, param, app_sch02_grid, "sch02_list_data", "app_sch02_grid.cb_search_list");
+			}
+		},
+		
+		cb_search_list :function(msg) {
+			var select_val = $("select[name='ORD_FIELD']").val();
+			var last_row = sch02_gx.getRows()-1;
+			var kwd = sch02_gx.getCellValue(last_row, 'kwd');
+
+			if (select_val == 's.rank') {
+				app_sch02_grid.search_after = sch02_gx.getCellValue(last_row, 'rank') + "|" + kwd;
+			} else if(select_val == 's.point') {
+				app_sch02_grid.search_after = sch02_gx.getCellValue(last_row, 'point') + "|" + kwd;
+			} else if(select_val == 's.pv_1m') {
+				app_sch02_grid.search_after = sch02_gx.getCellValue(last_row, 'pv_1m') + "|" + kwd;
+			} else if(select_val == 's.tags') {
+				app_sch02_grid.search_after = sch02_gx.getCellValue(last_row, 'tags') + "|" + kwd;
+			}
+		},
+
+		switch_page: function(page) {
+			// 페이징
+
+			$("form[name='sch02_f1'] input[name='PAGE']").val(page);
+			app_sch02_grid.search_list("N");	
+		},
+
+		check_ac : function(obj) {
+			if($("#sch02AC").is(":checked")) {
+				// 전체선택이 체크되어있으면 체크 풀리지 않음.
+				$(obj).prop("checked", true);
+			} else {
+				if(sch02_mobile_yn == "Y") {
+					if($(obj).is(":checked")) {
+						$(obj).parents(".mobile_list_contents").addClass("selected-row");
+					} else {
+						$(obj).parents(".mobile_list_contents").removeClass("selected-row");
+					}
+				} else {
+					if($(obj).is(":checked")) {
+						$(obj).parent().parent("tr").addClass("selected-row");
+					} else {
+						$(obj).parent().parent("tr").removeClass("selected-row");
+					}
+				}
+			}
+		},
+
+		all_check: function(obj) {
+			if($(obj).is(":checked")) {
+				$("form[name='sch02_f2'] input[name='chk']").prop("checked", true);
+			} else {
+				$("form[name='sch02_f2'] input[name='chk']").prop("checked", false);
+			}
+		},
+
+		select_check: function (index) {
+			if($("form[name='sch02_f2'] input[name='chk']").eq(index).is(":checked")) {
+				$("form[name='sch02_f2'] input[name='chk']").eq(index).prop("checked", true);
+			} else {
+				$("form[name='sch02_f2'] input[name='chk']").eq(index).prop("checked", false);
+			}
+		},
+
+		save_data: function(val) {
+			sch02_save_data = val;
+		},
+
+		save_num: function(obj, data_nm) {
+			var val = obj.value;
+			if(trim(val) != "") {
+				Vue.set(app_sch02_grid.detail_data, data_nm, val);
+			}
+		},
+		
+		edit_column: function (idx, col_nm, obj, type) {
+			
+			var chk_obj = $("form[name='sch02_f2'] input[name='chk']");
+			var val = obj.value; // 입력값
+
+			if(col_nm == "synonym") {
+				if(val != "" && val != sch02_save_data) {
+					if(confirm("변경하신 내용을 저장 하시겠습니까?")) {
+						var kwd = $("#sch02_kwd_" + idx).text();
+						
+						var url = "https://bizest.musinsa.com/ho/api/search/sch02/edit_synonym";
+
+						var param = "SEX=" + document.sch02_f1.S_SEX.value + "&KWD=" + urlEncode(kwd) + "&SYNONYM=" + val;
+						
+						ajaxExec(url, param, "P", "app_sch02_grid.cb_edit_column");
+
+					}
+				}
+			} else {
+				if(val == "") {
+					chk_obj.eq(idx).prop("checked", false);
+					Vue.set(app_sch02_grid.list_data[idx], "mpv", "0");
+				} else if (isNaN(unComma(val))) {
+					alert("수정금액은 숫자만 입력하실 수 있습니다.");
+					chk_obj.eq(idx).prop("checked", false);
+					$("form[name='sch02_f2'] input[name='mpv']").eq(idx).val("0");
+					Vue.set(app_sch02_grid.list_data[idx], "mpv", "0");
+				} else {
+					chk_obj.eq(idx).prop("checked", true);
+					Vue.set(app_sch02_grid.list_data[idx], "mpv", unComma(val));
+				}
+			}
+		},
+		
+		cb_edit_column : function(msg){
+			eval("var json = " + msg);
+			var cd = json.cd;
+
+			if(cd == 1) {
+				app_sch02_grid.search_list();
+			} else {
+				alert("저장 시 문제가 발생하였습니다. 다시 저장하여 주십시오.");
+			}
+		},
+
+		save_disp_yn: function() {
+			if(document.sch02_f2.DISP_YN.value == "") {
+				alert("출력여부를 선택 해 주십시오.");
+				if(sch02_mobile_yn != "Y") {
+					document.sch02_f2.DISP_YN.focus();
+				}
+				return false;
+			}
+
+			if(confirm("출력여부를 변경하시겠습니까?")) {
+				var data = "";
+
+				if(sch02_mobile_yn == "Y") {
+					var checkbox = $("form[name='sch02_f2'] input[name='chk']");
+					for(var i=0; i < checkbox.length; i++) {
+						if(checkbox.eq(i).is(":checked")) {
+							var kwd = $("#sch02_kwd_" + i).text();
+							data += kwd + "\t";
+						}
+					}
+				} else {
+					for(var row=sch02_gx.getFixedRows(); row<sch02_gx.getRows(); row++) {
+						if(sch02_gx.getIsSelectedNode(row)) {
+							var kwd = sch02_gx.getCellValue(row, 'kwd');
+							data += kwd + "\t";
+						}
+					}
+				}
+
+				if(data == "") {
+					alert("변경할 데이터가 없습니다.");
+					return false;
+				}
+
+				var url = "https://bizest.musinsa.com/ho/api/search/sch02/edit_disp_yn";
+
+				var param = "SEX=" + document.sch02_f1.S_SEX.value + "&DATA=" + urlEncode(data) + "&DISP_YN=" + document.sch02_f2.DISP_YN.value;
+				
+				ajaxExec(url, param, "P", "app_sch02_grid.cb_save_disp_yn");
+			}
+		},
+		
+		cb_save_disp_yn : function(msg){
+			eval("var json = " + msg);
+			var cd = json.cd;
+
+			if(cd == 1) {
+				app_sch02_grid.search_list();
+			} else {
+				alert("저장 시 장애가 발생했습니다. 다시 시도하여 주십시오.");
+			}
+		},
+
+		save_recommend_yn: function() {
+			if(document.sch02_f2.RECOMMEND_YN.value == "") {
+				alert("추천 검색어 여부를 선택해 주십시오.");
+				if(sch02_mobile_yn != "Y") {
+					document.sch02_f2.RECOMMEND_YN.focus();
+				}
+				return false;
+			}
+
+			if(confirm("추천 검색어 여부를 변경하시겠습니까?")) {
+				var data = "";
+
+				if(sch02_mobile_yn == "Y") {
+					var checkbox = $("form[name='sch02_f2'] input[name='chk']");
+					for(var i=0; i < checkbox.length; i++) {
+						if(checkbox.eq(i).is(":checked")) {
+							var kwd = $("#sch02_kwd_" + i).text();
+							data += kwd + "\t";
+						}
+					}
+				} else {
+					for(var row=sch02_gx.getFixedRows(); row<sch02_gx.getRows(); row++) {
+						if(sch02_gx.getIsSelectedNode(row)) {
+							var kwd = sch02_gx.getCellValue(row, 'kwd');
+							data += kwd + "\t";
+						}
+					}
+				}
+
+				if(data == "") {
+					alert("변경할 데이터가 없습니다.");
+					return false;
+				}
+
+
+				var url = "https://bizest.musinsa.com/ho/api/search/sch02/edit_recommend_yn";
+				var param = "SEX=" + document.sch02_f1.S_SEX.value + "&DATA=" + urlEncode(data) + "&RECOMMEND_YN=" + document.sch02_f2.RECOMMEND_YN.value;
+				ajaxExec(url, param, "P", "app_sch02_grid.cb_save_recommend_yn");
+				
+			}
+		},
+		
+		cb_save_recommend_yn : function(msg){
+			eval("var json = " + msg);
+			var cd = json.cd;
+
+			if(cd == 1) {
+				app_sch02_grid.search_list();
+			} else {
+				alert("저장 시 장애가 발생했습니다. 다시 시도하여 주십시오.");
+			}
+		},
+
+		save_ex_pop_yn: function() {
+			if(document.sch02_f2.EX_POP_YN.value == "") {
+				alert("인기제외여부를 선택해 주십시오.");
+				if(sch02_mobile_yn != "Y") {
+					document.sch02_f2.EX_POP_YN.focus();
+				}
+				return false;
+			}
+
+			if(confirm("인기제외여부를 변경하시겠습니까?")) {
+				var data = "";
+
+				if(sch02_mobile_yn == "Y") {
+					var checkbox = $("form[name='sch02_f2'] input[name='chk']");
+					for(var i=0; i < checkbox.length; i++) {
+						if(checkbox.eq(i).is(":checked")) {
+							var kwd = $("#sch02_kwd_" + i).text();
+							data += kwd + "\t";
+						}
+					}
+				} else {
+					for(var row=sch02_gx.getFixedRows(); row<sch02_gx.getRows(); row++) {
+						if(sch02_gx.getIsSelectedNode(row)) {
+							var kwd = sch02_gx.getCellValue(row, 'kwd');
+							data += kwd + "\t";
+						}
+					}
+				}
+
+				if(data == "") {
+					alert("변경할 데이터가 없습니다.");
+					return false;
+				}
+				
+				var url = "https://bizest.musinsa.com/ho/api/search/sch02/edit_ex_pop_yn";
+
+				var param = "SEX=" + document.sch02_f1.S_SEX.value + "&DATA=" + urlEncode(data) + "&EX_POP_YN=" + document.sch02_f2.EX_POP_YN.value;
+				
+				ajaxExec(url, param, "P", "app_sch02_grid.cb_save_ex_pop_yn");
+				
+			}
+		},
+		
+		cb_save_ex_pop_yn : function(msg){
+			eval("var json = " + msg);
+			var cd = json.cd;
+
+			if(cd == 1) {
+				app_sch02_grid.search_list();
+			} else {
+				alert("저장 시 장애가 발생했습니다. 다시 시도하여 주십시오.");
+			}
+		},
+
+		save_mpv: function() {
+			if(confirm("수정한 관리자 점수를 저장하시겠습니까?")) {
+				var data = "";
+
+				var kwd = "";
+				var mpv = "";
+
+				if(sch02_mobile_yn == "Y") {
+					var checkbox = $("form[name='sch02_f2'] input[name='chk']");
+					for(var i=0; i < checkbox.length; i++) {
+						if(checkbox.eq(i).is(":checked")) {
+							kwd = $("#sch02_kwd_" + i).text();
+							mpv = unComma($("form[name='sch02_f2'] input[name='mpv']").eq(i).val());
+							data += kwd + "\t" + mpv + "\n";
+						}
+					}
+				} else {
+					for(var row=sch02_gx.getFixedRows(); row<sch02_gx.getRows(); row++) {
+						if(sch02_gx.getIsSelectedNode(row)) {
+							kwd = sch02_gx.getCellValue(row, 'kwd');
+							mpv = unComma(sch02_gx.getCellValue(row, 'mpv'));
+							data += kwd + "\t" + mpv + "\n";
+						}
+					}
+				}
+				
+				if(data == "") {
+					alert("변경할 데이터가 없습니다.");
+					return false;
+				}
+
+				var url = "https://bizest.musinsa.com/ho/api/search/sch02/edit_mpv";
+				var param = "SEX=" + document.sch02_f1.S_SEX.value + "&DATA=" + urlEncode(data);
+				
+				ajaxExec(url, param, "P", "app_sch02_grid.cb_save_mpv");
+			}
+		},
+		
+		cb_save_mpv : function(msg){
+			eval("var json = " + msg);
+			var cd = json.cd;
+
+			if(cd == 1) {
+				app_sch02_grid.search_list();
+			} else {
+				alert("저장 시 장애가 발생했습니다. 다시 시도하여 주십시오.");
+			}
+		},
+
+		save_point: function() {
+			if(confirm("점수를 변경하시겠습니까?")) {
+				var f1 = document.sch02_f1;
+				var f2 = document.sch02_f2;
+				
+				var url = "https://bizest.musinsa.com/ho/api/search/sch02/edit_point";
+				
+				var param = "F_PV=" + f2.F_PV.value + "&F_TAGS=" + f2.F_TAGS.value + "&F_MPV=" + f2.F_MPV.value + "&SEX=" + f1.S_SEX.value;
+				
+				ajaxExec(url, param, "P", "app_sch02_grid.cb_save_point");
+			}
+		},
+		
+		cb_save_point : function(msg){
+			eval("var json = " + msg);
+			var cd = json.cd;
+
+			if(cd == 1) {
+				app_sch02_grid.search_list();
+			} else {
+				alert("저장 시 장애가 발생했습니다. 다시 시도하여 주십시오.");
+			}
+		},
+
+		save_rank: function() {
+			if(confirm("순위를 변경하시겠습니까?")) {
+				var url = "https://bizest.musinsa.com/ho/api/search/sch02/edit_rank";
+						
+				var param = "SEX=" + document.sch02_f1.S_SEX.value;
+				
+				ajaxExec(url, param, "P", "app_sch02_grid.cb_save_rank");
+			}
+		},
+		
+		cb_save_rank : function(msg){
+			eval("var json = " + msg);
+			var cd = json.cd;
+
+			if(cd == 1) {
+				app_sch02_grid.search_list();
+			} else {
+				alert("저장 시 장애가 발생했습니다. 다시 시도하여 주십시오.");
+			}
+		},
+
+		open_search_keyword: function(kwd) {
+			var url = "http://" + sch02_shop_domain + "/app/product/search?q=" + urlEncode(kwd);
+			openWindow(url,"","toolbar=1,location=1,directories=1,status=1,resizable=1,menubar=1,scrollbars=1", 1280, 768);
+		},
+
+		show_extra_function : function(kwd) {
+			var function_html = "<a href=\"#\" onclick=\"hideFunctionBtn(); return false;\" class=\"btn-function-close\">";
+			function_html += "<span>부가 기능 닫기</span>";
+			function_html += "</a>";
+			function_html += "<ul>";
+			function_html += "<li><a href=\"#\" onclick=\"app_sch02_grid.open_search_keyword('" + kwd + "'); hideFunctionBtn(); return false;\">쇼핑몰 검색결과</a></li>";
+			function_html += "</ul>";
+			$("#function_menu").html(function_html);
+
+			showModal("function_menu", "250px", "wrap-function-menu", '');
+		},
+
+		close: function() {
+			if(sch02_layout_type == "layer") {
+				closeLayer($("form[name='sch02_f1']"));
+			} else if(sch02_layout_type == "popup") {
+				self.close();
+			}
+		},
+		
+		columnPinned: function(pinned_cnt) {
+			sch02_gxt.setColumnPinneds(sch02_gx, pinned_cnt);
+		},
+		
+		after_scroll: function() { // 스크롤 후 이벤트
+			if(sch02_gx.getBottomRow() > 0 && sch02_gx.getBottomRow() ==  sch02_gx.getRows() -1) {
+				app_sch02_grid.search_list("N");
+			}
+		},
+				
+		click: function() {		// link cutomize.
+			var row = sch02_gx.getRow();
+			var colId = sch02_gx.getColumnId();
+			var kwd = sch02_gx.getCellValue(row, 'kwd');
+			
+			if(colId ==  'kwd') {
+				app_sch02_grid.open_search_keyword(kwd);
+			}
+		},
+		
+		form_reset: function() {
+			formReset(document.sch02_f1);
+		},
+		
+		get_context_menu: function() {
+			return sch02_gx._context_menu;
+		},
+
+		evt_val_edit: function(params) {
+
+			var row = sch02_gx.getRowIndex(params);
+			var colId = sch02_gx.getColId(params);
+
+			if(app_sch02_grid.edit_cols.indexOf(colId) > -1) {
+				var old_val = sch02_gx.getOldValue(params);
+				var new_val = sch02_gx.getNewValue(params);
+
+				if(colId == 'synonym'){
+					var kwd = sch02_gx.getCellValue(row, 'kwd');
+					if(confirm("변경하신 내용을 저장 하시겠습니까?")) {
+						app_sch02_grid.edit_synonym(kwd, new_val);
+					} else {
+						new_val = old_val;
+						sch02_gx.setCellValue(row, colId, new_val);
+					}
+				}
+
+				if(old_val != new_val) {
+					sch02_gx.rowSelected(row, true);
+					sch02_gx.setCellMark(row, colId);
+				}
+			}
+		},
+
+		edit_synonym: function(kwd, val) {
+			var url = "https://bizest.musinsa.com/ho/api/search/sch02/edit_synonym";
+			var param = "SEX=" + document.sch02_f1.S_SEX.value + "&KWD=" + urlEncode(kwd) + "&SYNONYM=" + urlEncode(val);
+			ajaxExec(url, param, "P", "app_sch02_grid.cb_edit_synonym");
+		},
+
+		cb_edit_synonym : function(msg) {
+			eval("var json = " + msg);
+			var cd = json.cd;
+			if(cd == 1) {
+				app_sch02_grid.search_list();
+			} else {
+				alert("저장 시 문제가 발생하였습니다. 다시 저장하여 주십시오.");
+			}
+		},
+
+		editable_mpv : function(params) {
+			var row = sch02_gx.getRowIndex(params);
+			var ut = sch02_gx.getCellValue(row, 'ut').split(" ")[0];
+
+			var date = new Date();
+			// 2자리수로 맞춰주기 위함 ex) 1 -> 01, 2 -> 02, 3 -> 003
+			var month = app_sch02_grid.leadingZeros(date.getMonth()+1, 2);
+			var currentDt = date.getFullYear() + "-" + month + "-" + date.getDate();
+
+			// 당일 날짜에 대해서만 관리자 점수 수정 가능
+			if(ut === currentDt) {
+				return true;
+			} else {
+				return false;
+			}
+		},
+
+		style_mpv : function(params) {
+			if(params.data[params.column.colId + "_change_yn"] == "Y") {
+				return {"background-color":"red !important", "font-weight":"bold","color":"#fff"};
+			}
+
+			var row = sch02_gx.getRowIndex(params);
+			var ut = sch02_gx.getCellValue(row, 'ut').split(" ")[0];
+
+			var date = new Date();
+			// 2자리수로 맞춰주기 위함 ex) 1 -> 01, 2 -> 02, 3 -> 003
+			var month = app_sch02_grid.leadingZeros(date.getMonth()+1, 2);
+			var currentDt = date.getFullYear() + "-" + month + "-" + date.getDate();
+
+			// 당일 날짜에 대해서만 관리자 점수 수정 가능
+			if(ut === currentDt) {
+				return {"background-color": "#ffd !important"};
+			}
+		},
+
+		/*
+		 * @params n		=> 숫자
+		 * @params digits	=> 자리수
+		 */
+		leadingZeros : function (n, digits) {
+			var zero = '';
+			n = n.toString();
+			if (n.length < digits) {
+				for (var i = 0; i < digits - n.length; i++)
+					zero += '0';
+			}
+			return zero + n;
+		}
+	}
+});
+
+app_sch02_grid.$watch("list_data", function() {
+	
+	if(sch02_list_data.length > 0) {
+		if($("#sch02_list_data").css("display") == "none") {
+			$("#sch02_list_data").show();
+		}
+		
+		// 숫자 입력 input 에 대한 이벤트 처리
+		initInputNum();
+	} else {	// 검색 결과가 없을 경우
+
+		// 검색 결과 없음 레이어
+		showNotFoundLayer();
+	}
+});
+
+app_sch02_grid.$watch("detail_data", function() {
+	// 숫자 입력 input 에 대한 이벤트 처리
+	initInputNum();
+});
+
+$(document).ready(function() {
+	
+	// 날짜 검색 설정
+	setDatePicker();
+		
+	// 숫자 입력 input 에 대한 이벤트 처리
+	initInputNum();
+
+	// 그리드 높이
+	setListHeight("sch02SearchResult");
+
+	$(window).resize(function() {
+		setListHeight("sch02SearchResult");
+	});
+
+	app_sch02_grid.get_detail();
+});
+</script>
+
+
+<script type="text/javascript">
+if(sch02_mobile_yn != "Y") {
+	var sch02_columnDefs = [
+		{field:'chk', headerName:'', width:40, headerCheckboxSelection:true, checkboxSelection:true, /*rowDrag:true*/},
+		{field:"kwd", headerName:"검색어", width:130, cellStyle:styleLink},
+		{field:"rank", headerName:"순위", width:130, cellClass:['align_right'], format:"#,###", valueFormatter:setValueFormat},
+		{field:"rank_inc", headerName:"순위증감", width:100, cellClass:['align_right'], format:"#,###", valueFormatter:setValueFormat},
+		{headerName:"검색횟수", children: [
+			{field: "pv_3h", headerName: "3시간", width:100, cellClass:['align_right'], format:"#,###", valueFormatter:setValueFormat},
+			{field: "pv_1d", headerName: "1일", width:100, cellClass:['align_right'], format:"#,###", valueFormatter:setValueFormat},
+			{field: "pv_1w", headerName: "7일", width:100, cellClass:['align_right'], format:"#,###", valueFormatter:setValueFormat},
+			{field: "pv_1m", headerName: "1달", width:100, cellClass:['align_right'], format:"#,###", valueFormatter:setValueFormat},
+			{field: "pv", headerName: "누적", width:100, cellClass:['align_right'], format:"#,###", valueFormatter:setValueFormat}
+		]},
+		{headerName:"검색 상품수(평균)", children: [
+			{field: "sch_cnt_1d", headerName: "1일", width:100, cellClass:['align_right'], format:"#,###", valueFormatter:setValueFormat},
+			{field: "sch_cnt_1w", headerName: "7일", width:100, cellClass:['align_right'], format:"#,###", valueFormatter:setValueFormat},
+			{field: "sch_cnt_1m", headerName: "1달", width:100, cellClass:['align_right'], format:"#,###", valueFormatter:setValueFormat},
+		]},
+		{field:"tags", headerName:"태그수", width:120, cellClass:['align_right'], format:"#,###", valueFormatter:setValueFormat},
+		{field:"mpv", headerName:"관리자점수", width:120, editable:app_sch02_grid.editable_mpv, cellClass:['align_right'], format:"#,###", valueFormatter:setValueFormat, cellStyle:app_sch02_grid.style_mpv},
+		{field:"point", headerName:"점수", width:120, cellClass:['align_right'], format:"#,###", valueFormatter:setValueFormat},
+		{field:"disp_yn", headerName:"출력여부", width:120, cellClass:['align_center']},
+		{field:"recommend_yn", headerName:"추천검색어여부", width:120, cellClass:['align_center']},
+		{field:"ex_pop_yn", headerName:"인기제외여부", width:120, cellClass:['align_center']},
+		{field:"synonym", headerName:"동의어", width:120, editable:true, cellClass:['edit-cell'], cellStyle:changeMark},
+		{field:"kwd_rel", headerName:"연관검색어", width:120},
+		{field:"admin_nm", headerName:"관리자 이름", width:100},
+		{field:"admin_id", headerName:"관리자 아이디", width:100},
+		{field:"rt", headerName:"등록일시", width:140},
+		{field:"ut", headerName:"변경일시", width:140},
+	];
+
+	sch02_gx = new gridX2(sch02_columnDefs, 'sch02_grid');
+	sch02_gx._page = 1;
+	sch02_gx._data_cnt = 0;
+	sch02_gx._fixed_column = 4;
+
+	sch02_gxt = new gridX2Tools();
+	sch02_gxt.gridInit(sch02_gx);
+	
+	sch02_gx.grid_options.suppressContextMenu = false;
+	sch02_gx.grid_options.getContextMenuItems = app_sch02_grid.get_context_menu; // context menu
+	sch02_gx.setFixedColumnContextMenu(app_sch02_grid, 10); // 틀고정 셋팅	
+	
+	// scroll event
+	gridX2Event.add(sch02_gx, "bodyScroll", app_sch02_grid.after_scroll);
+	// click
+	gridX2Event.add(sch02_gx, "cellClicked", app_sch02_grid.click);
+	// editor event
+	gridX2Event.add(sch02_gx, "cellValueChanged", app_sch02_grid.evt_val_edit);
+}
+</script>
+
+</body>
+</html>
