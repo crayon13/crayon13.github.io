@@ -1,0 +1,138 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<title>direct content json builder</title>
+    <style>
+        table,th,td {
+            border: 1px solid black;
+            border-spacing: 0px 0px;
+        }
+    </style>
+    <script>
+        function getJsonElement(name, value) {
+            return '"' + name + '" : ' + value;
+        }
+
+        function val(name) {
+            return document['jsonForm'][name].value;
+        }
+
+        function documentString(name) {
+            return getJsonElement(name, '"' + val(name) + '"');
+        }
+
+        function documentNumber(name) {
+            return getJsonElement(name, val(name));
+        }
+
+        function documentCheckBox(name) {
+            var value = '';
+            document['jsonForm'][name].forEach(
+                function(el) {
+                    if (el.checked) {
+                        if (value != '') {
+                            value += ' ';
+                        }
+                        value += el.value;
+                    }
+                }
+            )
+
+            return getJsonElement(name, '"' + value + '"');
+        }
+        
+        function makeBulkBody() {
+            var form = document['jsonForm'];
+            var arrDirectKeywords = form.direct_keyword.value.split('\n');
+
+            var arrBulkBody = [];
+
+            for ( var index = 0; index < arrDirectKeywords.length; index++ ) {
+                arrBulkBody.push('{"index" : {"_index" : "direct-contents", "_type" : "data", "_id" : "' + index + '"}}');
+
+                var arrField = [];   
+                arrField.push('"direct_keyword_no" : ' + index);
+                arrField.push('"direct_keyword" : "' + arrDirectKeywords[index] + '"');
+                arrField.push('"direct_content_no" : ' + index);
+                arrField.push(documentString('type'));
+                arrField.push(documentCheckBox('channel'));
+                arrField.push(documentNumber('rank'));
+                arrField.push(documentString('link_url'));
+                arrField.push(documentString('start_date'));
+                arrField.push(documentString('end_date'));
+                arrField.push(documentString('mobile_image_url'));
+                arrField.push(documentString('pc_image_url'));
+
+                arrBulkBody.push('{' + arrField.join(', ') + '}');
+            }
+            
+            var bulkBody = arrBulkBody.join('\n') + '\n';
+            console.log(bulkBody);
+
+            form.request_body.value = bulkBody;
+        }
+    </script>
+</head>
+<body>
+    <form name="jsonForm">
+    <table cellpadding="10">
+        <tr>
+            <td>타이틀</td>
+            <td><input type="text" name="title" size="100"></td>
+        </tr>
+        <tr>
+            <td>유형</td>
+            <td>
+                <input type="radio" name="type" value="PROMOTION" checked> 프로모션 
+                <input type="radio" name="type" value="MENU"> 메뉴 
+            </td>
+        </tr>   
+        <tr>
+            <td>노출채널</td>
+            <td>
+                <input type="checkbox" name="channel" value="MUSINSA"> 무신사 
+                <input type="checkbox" name="channel" value="WUSINSA"> 우신사
+            </td>
+        </tr>
+        <tr>
+            <td>rank</td>
+            <td><input type="text" name="rank" size="100" value="1"></td>
+        </tr>                           
+        <tr>
+            <td>link_url</td>
+            <td><input type="text" name="link_url" size="100"></td>
+        </tr>    
+        <tr>
+            <td>시작시간</td>
+            <td><input type="text" name="start_date" size="100"></td>
+        </tr> 
+        <tr>
+            <td>종료시간</td>
+            <td><input type="text" name="end_date" size="100"></td>
+        </tr> 
+        <tr>
+            <td>mobile image URL</td>
+            <td><input type="text" name="mobile_image_url" size="100"></td>
+        </tr> 
+        <tr>
+            <td>pc image URL</td>
+            <td><input type="text" name="pc_image_url" size="100"></td>
+        </tr> 
+        <tr>
+            <td colspan="2" align="right"><input type="button" name="생성1" value="생성2" onclick="makeBulkBody()"></td>
+        </tr> 
+        <tr>
+            <td>키워드</td>
+            <td><textarea name="direct_keyword" cols="80" rows="30"></textarea></td>
+        </tr> 
+        <tr>
+            <td>request body</td>
+            <td><textarea name="request_body" cols="100" rows="30"></textarea></td>
+        </tr>         
+    </table>
+    </form>
+</body>
+</html>
