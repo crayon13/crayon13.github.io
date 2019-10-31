@@ -82,7 +82,7 @@
     <table cellpadding="10">
         <tr>
             <td>타이틀</td>
-            <td><input type="text" name="title" size="100"></td>
+            <td><input type="text" name="title" size="100" value="2019 아우터 페스티벌"></td>
         </tr>
         <tr>
             <td>유형</td>
@@ -94,8 +94,8 @@
         <tr>
             <td>노출채널</td>
             <td>
-                <input type="checkbox" name="channel" value="MUSINSA"> 무신사 
-                <input type="checkbox" name="channel" value="WUSINSA"> 우신사
+                <input type="checkbox" name="channel" value="MUSINSA" checked> 무신사 
+                <input type="checkbox" name="channel" value="WUSINSA" checked> 우신사
             </td>
         </tr>
         <tr>
@@ -104,29 +104,33 @@
         </tr>                           
         <tr>
             <td>link_url</td>
-            <td><input type="text" name="link_url" size="100"></td>
+            <td><input type="text" name="link_url" size="100" value="/app/campaign/event/outerfestival2019/100"></td>
         </tr>    
         <tr>
             <td>시작시간</td>
             <td>
-                <input type="text" name="start_date" size="100"><br>
+                <input type="text" name="start_date" size="100" value="2019-11-01 00:00:00"><br>
                 형식 : 2019-11-01 00:00:00
             </td>
         </tr> 
         <tr>
             <td>종료시간</td>
             <td>
-                <input type="text" name="end_date" size="100"><br>
+                <input type="text" name="end_date" size="100" value="2020-01-02 11:59:59"><br>
                 형식 : 2019-11-01 00:00:00
             </td>
         </tr> 
         <tr>
             <td>mobile image URL</td>
-            <td><input type="text" name="mobile_image_url" size="100"></td>
+            <td>
+                <input type="text" name="mobile_image_url" size="100" value="/data/search/direct/mobile/20191101_outer_mobile.jpg">
+            </td>
         </tr> 
         <tr>
             <td>pc image URL</td>
-            <td><input type="text" name="pc_image_url" size="100"></td>
+            <td>
+                <input type="text" name="pc_image_url" size="100" value="/data/search/direct/pc/20191101_outer_pc.jpg">
+            </td>
         </tr> 
         <tr>
             <td colspan="2" align="right"><input type="button" name="생성1" value="생성2" onclick="makeBulkBody()"></td>
