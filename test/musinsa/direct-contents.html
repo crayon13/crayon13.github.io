@@ -44,18 +44,34 @@
             return getJsonElement(name, '"' + value + '"');
         }
         
+        var keywords = [];
+        var duplicatedKeywords = [];
+        
         function makeBulkBody() {
+            keywords = [];
+            duplicatedKeywords = [];
+
             var form = document['jsonForm'];
-            var arrDirectKeywords = form.direct_keyword.value.split('\n');
+            var directKeywords = form.direct_keyword.value.split('\n');
 
-            var arrBulkBody = [];
+            var bulkBodies = [];
 
-            for ( var index = 0; index < arrDirectKeywords.length; index++ ) {
-                arrBulkBody.push('{"index" : {"_index" : "direct-contents", "_type" : "data", "_id" : "' + index + '"}}');
+            for ( var index = 0; index < directKeywords.length; index++ ) {
+                var directKeyword = directKeywords[index];
+                var keyword = directKeyword.replace(/\s/g, '').toLowerCase();
+
+                if ( keywords[keyword] ) {
+                    duplicatedKeywords.push('"' + directKeyword + '" -> "' + keyword + '" from "' + keywords[keyword] + '"');
+                    continue;
+                } else {
+                    keywords[keyword] = directKeyword;
+                }
+
+                bulkBodies.push('{"index" : {"_index" : "direct-contents", "_type" : "data", "_id" : "' + index + '"}}');
 
                 var arrField = [];   
                 arrField.push('"direct_keyword_no" : ' + index);
-                arrField.push('"direct_keyword" : "' + arrDirectKeywords[index] + '"');
+                arrField.push('"direct_keyword" : "' + keyword + '"');
                 arrField.push('"direct_content_no" : ' + index);
                 arrField.push(documentString('type'));
                 arrField.push(documentCheckBox('channel'));
@@ -67,13 +83,15 @@
                 arrField.push(documentString('mobile_image_url'));
                 arrField.push(documentString('pc_image_url'));
 
-                arrBulkBody.push('{' + arrField.join(', ') + '}');
+                bulkBodies.push('{' + arrField.join(', ') + '}');
             }
             
-            var bulkBody = arrBulkBody.join('\n') + '\n';
+            var bulkBody = bulkBodies.join('\n') + '\n';
             console.log(bulkBody);
 
             form.request_body.value = bulkBody;
+
+            document.getElementById('duplicatedKeywords').innerHTML = duplicatedKeywords.join('<br>');
         }
     </script>
 </head>
@@ -142,8 +160,13 @@
         <tr>
             <td>request body</td>
             <td><textarea name="request_body" cols="100" rows="30"></textarea></td>
-        </tr>         
+        </tr>   
+        <tr>
+        <td>중복 키워드</td>
+            <td><span id="duplicatedKeywords"></span></td>
+        </tr>                
     </table>
     </form>
 </body>
 </html>
+
