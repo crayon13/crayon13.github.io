@@ -59,6 +59,7 @@
                 arrField.push('"direct_content_no" : ' + index);
                 arrField.push(documentString('type'));
                 arrField.push(documentCheckBox('channel'));
+                arrField.push(documentString('title'));
                 arrField.push(documentNumber('rank'));
                 arrField.push(documentString('link_url'));
                 arrField.push(documentString('start_date'));
@@ -107,11 +108,17 @@
         </tr>    
         <tr>
             <td>시작시간</td>
-            <td><input type="text" name="start_date" size="100"></td>
+            <td>
+                <input type="text" name="start_date" size="100"><br>
+                형식 : 2019-11-01 00:00:00
+            </td>
         </tr> 
         <tr>
             <td>종료시간</td>
-            <td><input type="text" name="end_date" size="100"></td>
+            <td>
+                <input type="text" name="end_date" size="100"><br>
+                형식 : 2019-11-01 00:00:00
+            </td>
         </tr> 
         <tr>
             <td>mobile image URL</td>
