@@ -56,6 +56,10 @@
 
             var bulkBodies = [];
 
+            var beginIndexNo = Number(form.begin_index_no.value);
+
+            alert(beginIndexNo);
+
             for ( var index = 0; index < directKeywords.length; index++ ) {
                 var directKeyword = directKeywords[index];
                 var keyword = directKeyword.replace(/\s/g, '').toLowerCase();
@@ -66,13 +70,15 @@
                 } else {
                     keywords[keyword] = directKeyword;
                 }
+                
+                var documentId = index + beginIndexNo;
 
-                bulkBodies.push('{"index" : {"_index" : "direct-contents", "_type" : "data", "_id" : "' + index + '"}}');
+                bulkBodies.push('{"index" : {"_index" : "direct-contents", "_type" : "data", "_id" : "' + documentId + '"}}');
 
                 var arrField = [];   
-                arrField.push('"direct_keyword_no" : ' + index);
+                arrField.push('"direct_keyword_no" : ' + documentId);
                 arrField.push('"direct_keyword" : "' + keyword + '"');
-                arrField.push('"direct_content_no" : ' + index);
+                arrField.push('"direct_content_no" : ' + documentId);
                 arrField.push(documentString('type'));
                 arrField.push(documentCheckBox('channel'));
                 arrField.push(documentString('title'));
@@ -150,6 +156,12 @@
                 <input type="text" name="pc_image_url" size="100" value="/data/search/direct/pc/20191101_outer_pc.jpg">
             </td>
         </tr> 
+        <tr>
+            <td>begin_index_no</td>
+            <td>
+                <input type="text" name="begin_index_no" size="10" value="0 ">
+            </td>
+        </tr>         
         <tr>
             <td colspan="2" align="right"><input type="button" name="생성1" value="생성2" onclick="makeBulkBody()"></td>
         </tr> 

@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<title>direct content json builder</title>
+    <style>
+        table,th,td {
+            border: 1px solid black;
+            border-spacing: 0px 0px;
+        }
+    </style>
+    <script>
+        function build() {
+            var form = document['queryForm'];
+            var logString = form['logString'].value;
+            var arrayLogLine = logString.split('\n')
+
+            var queryMarker = 'Hibernate: ';
+            var parameterMarker = 'binding parameter ';
+            var query = '';
+
+            for (var index = 0; index < arrayLogLine.length; index++) {
+                var logLine = arrayLogLine[index];
+
+                if (logLine.indexOf(queryMarker) > -1) {
+                    query = logLine.replace(queryMarker, '');
+                }
+
+                if (logLine.indexOf(parameterMarker) > -1) {
+                    var value = logLine.substring(logLine.lastIndexOf('\[') + 1, logLine.length -1);
+                    query = query.replace('?', ' \'' + value + '\'');
+                }
+            }
+
+
+            form['bindedQuery'].value = query;
+        }
+        
+    </script>
+</head>
+<body>
+    <form name="queryForm">
+    <table cellpadding="10">
+        <tr>
+            <td>Log</td>
+            <td><textarea name="logString" cols="80" rows="30"></textarea>
+                <a href="javascript:build()">만들기</a>
+            </td>
+        </tr> 
+        <tr>
+            <td>query</td>
+            <td><textarea name="bindedQuery" cols="100" rows="30" readonly></textarea></td>
+        </tr>   
+    </table>
+    
+    </form>
+</body>
+</html>
+
