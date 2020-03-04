@@ -23,15 +23,22 @@
 
             for (var index = 0; index < arrayLogLine.length; index++) {
                 var logLine = arrayLogLine[index];
+                console.log(logLine);
+
+                if (logLine.indexOf('202') != 0) {
+                    query += '\n' + logLine;
+                }
 
                 if (logLine.indexOf(queryMarker) > -1) {
                     query = logLine.replace(queryMarker, '');
                 }
 
-                if (logLine.indexOf(parameterMarker) > -1) {
+                if (logLine.indexOf(parameterMarker) > -1)  {
                     var value = logLine.substring(logLine.lastIndexOf('\[') + 1, logLine.length -1);
                     query = query.replace('?', ' \'' + value + '\'');
                 }
+
+                console.log('>>>' + query);
             }
 
 
