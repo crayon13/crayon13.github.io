@@ -18,12 +18,17 @@
 
                 if (current - timestamp > 1000) {
                     // 2초가 지났어...
-                    console.log('2초가 지났어.... 해야할 일을 해야해.')
+                    init();
                 }
 
                 timestamp = current;
             }
 
+            function init() {
+                console.log('꼭 해야 할일');
+            }
+
+            init(); 
 
             var intervalId = setInterval(check, 500);
         </script>
