@@ -1,0 +1,32 @@
+<html>
+    <head>
+
+    </head>
+    <body>
+        <script>
+            var timestamp = 0;
+
+            function check() {
+                var current = new Date().getTime();
+
+                if (timestamp === 0) {
+                    timestamp = current;
+
+                    return;
+                }
+
+                if (current - timestamp > 1000) {
+                    // 2초가 지났어...
+                    console.log('2초가 지났어.... 해야할 일을 해야해.')
+                }
+
+                timestamp = current;
+            }
+
+
+            int intervalId = setInterval(check, 500);
+        </script>
+
+        <a href="http://www.naver.com">네이버로 가보자</a>
+    </body>
+</html>
